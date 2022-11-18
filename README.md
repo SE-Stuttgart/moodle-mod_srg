@@ -9,7 +9,6 @@ Das Plugin wurde entwickelt, um die Evaluation eines Kurses zu unterstützen. Es
 
 Wenn die Lernenden auf diese Art von Arbeitsmaterial klicken, wird ihnen eine konfigurierbare Beschreibung angezeigt. Außerdem gibt es zwei Schaltflächen: zum einen eine Schaltfläche, um die anonymisierten Protokolldaten, die zum Download bereitstehen, anzusehen. Eine zweite Schaltfläche ermöglicht es, diese Daten als Datei herunterzuladen. Die Protokolldaten enthalten keine Personennamen, und auch die Benutzer-ID wurde entfernt. Daher ist es nicht möglich, aus den Daten Rückschlüsse auf die jeweilige Person zu ziehen. Die heruntergeladene Protokolldatei hat die Endung .kib3. Wenn Sie also den Inhalt einer solchen .kib3-Datei überprüfen wollen, ändern Sie einfach die Endung in .zip und entpacken Sie sie.
 
-Übersetzt mit www.DeepL.com/Translator (kostenlose Version)
 
  
 ## English description

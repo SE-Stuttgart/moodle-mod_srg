@@ -1,20 +1,33 @@
 <?php
-// This file is part of the scientific work at the University of Stuttgart
+// This file is part of Moodle - https://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Version details
+ * List of Hardcoded SQL Query Params
  *
- * @package    mod_srg
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     mod_srg
+ * @copyright   2022 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 
 defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/db_conn.php');
 
-/**
- * List of Hardcoded SQL Query Params
- */
+
 class srg_log
 {
     public static function GetCourseLog($USER, $course)
@@ -85,7 +98,7 @@ class srg_log
                         action="viewed" or action="failed" or action="started" or action="submitted"
                         )
                     and (
-                        target="course_module" or target="course_content" or target="course_bin_item" 
+                        target="course_module" or target="course_content" or target="course_bin_item"
                         or target="h5p" or target="attempt" or target="chapter" or target="question"
                     )',
             $params = array(
@@ -162,7 +175,7 @@ class srg_log
                         action="viewed" or action="failed" or action="started" or action="submitted"
                         )
                     and (
-                        target="course_module" or target="course_content" or target="course_bin_item" 
+                        target="course_module" or target="course_content" or target="course_bin_item"
                         or target="h5p" or target="attempt" or target="chapter" or target="question"
                     )',
             $params = array(
@@ -238,12 +251,12 @@ class srg_log
             $table_type = SRG_TABLE_STATIC,
             $select = 'userid = ? and courseid = ?
             and (
-                eventname="\\\\mod_assign\\\\event\\\\grading_table_viewed" 
-                or eventname="\\\\mod_assign\\\\event\\\\grading_form_viewed" 
-                or eventname="\\\\gradereport_user\\\\event\\\\grade_report_viewed" 
-                or eventname="\\\\gradereport_overview\\\\event\\\\grade_report_viewed" 
+                eventname="\\\\mod_assign\\\\event\\\\grading_table_viewed"
+                or eventname="\\\\mod_assign\\\\event\\\\grading_form_viewed"
+                or eventname="\\\\gradereport_user\\\\event\\\\grade_report_viewed"
+                or eventname="\\\\gradereport_overview\\\\event\\\\grade_report_viewed"
                 or eventname="\\\\gradereport_grader\\\\event\\\\grade_report_viewed"
-                or eventname="\\\\gradereport_outcomes\\\\event\\\\grade_report_viewed" 
+                or eventname="\\\\gradereport_outcomes\\\\event\\\\grade_report_viewed"
                 or eventname="\\\\gradereport_singleview\\\\event\\\\grade_report_viewed"
             )',
             $params = array(
@@ -270,7 +283,7 @@ class srg_log
         return srg_db_conn::build_simple_DB_table(new srg_db_query(
             $table = 'logstore_standard_log',
             $table_type = SRG_TABLE_STATIC,
-            $select = 'userid = ? and courseid = ? 
+            $select = 'userid = ? and courseid = ?
             and component="mod_forum"',
             $params = array(
                 'userid' => $USER->id,

@@ -1,12 +1,27 @@
 <?php
-// This file is part of the scientific work at the University of Stuttgart
+// This file is part of Moodle - https://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Version details
+ * Version details and info
  *
- * @package    mod_srg
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     mod_srg
+ * @copyright   2022 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 
 
 require_once(__DIR__ . '/../../config.php');
@@ -114,7 +129,7 @@ else if ($mode == 'view') {
         .active, .srg_collapsible:hover {
           background-color: #555;
         }
-        
+
         .srg_collapsible:before {
           content: "\002B";
           color: white;
@@ -122,7 +137,7 @@ else if ($mode == 'view') {
           float: right;
           margin-right: 5px;
         }
-        
+
         .active:before {
           content: "\2212";
         }
@@ -173,7 +188,7 @@ else if ($mode == 'view') {
                     srg_content.style.maxHeight = srg_content.scrollHeight + "px";
                 } else {
                     srg_content.style.maxHeight = null;
-                } 
+                }
             });
         }
     ');

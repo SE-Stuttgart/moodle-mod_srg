@@ -19,7 +19,7 @@
  *
  * @package     mod_srg
  * @category    string
- * @copyright   2022 University of Stuttgart
+ * @copyright   2022 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -67,3 +67,8 @@ $string['zipfilename'] = 'moodle_student_report';
  */
 $string['view_all_button_name'] = 'View log data';
 $string['print_all_button_name'] = 'Download log data';
+
+
+
+$string['srg:addinstance'] = 'Add a new Student Report Generation activity';
+$string['srg:view'] = 'View the Student Report Generation activity';

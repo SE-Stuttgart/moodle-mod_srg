@@ -1,6 +1,6 @@
 # Student Report Generation (SRG) #
 
-## English description
+## English Description
 
 **German version please see below**
 
@@ -10,7 +10,7 @@ The plugin is developed to support the evaluation of a course. It provides "stud
 When learners click on this type of work material, they are shown a configurable description. There are also two buttons: on the one hand, a button to view the anonymized log data available for download. A second button allows to download this data as a file. The log data does not contain any names of persons, and the user ID has also been removed. Therefore, it is not possible to draw any conclusions about the respective person from the data. The downloaded log file has the extension .kib3. Therefore, if you want to check the contents of such a .kib3 file, simply change the extension to .zip and unzip it.
 
 
-## German description
+## German Description
 
 Das Plugin wurde entwickelt, um die Evaluation eines Kurses zu unterstützen. Es bietet Arbeitsmaterialien vom Typ "Logdatenerstellung", die es den Lernenden ermöglichen, einen Teil ihrer Moodle-Logdaten in anonymisierter Form herunterzuladen.
 
@@ -22,7 +22,7 @@ Wenn die Lernenden auf diese Art von Arbeitsmaterial klicken, wird ihnen eine ko
 
 
 
-### Installing via uploaded ZIP file ##
+### Installing via Uploaded ZIP File ##
 
 1. Log in to your Moodle site as an admin and go to _Site administration >
    Plugins > Install plugins_.
@@ -30,7 +30,7 @@ Wenn die Lernenden auf diese Art von Arbeitsmaterial klicken, wird ihnen eine ko
    extra details if your plugin type is not automatically detected.
 3. Check the plugin validation report and finish the installation.
 
-## Installing manually ##
+## Installing Manually ##
 
 The plugin can be also installed by putting the contents of this directory to
 

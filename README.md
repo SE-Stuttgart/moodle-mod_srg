@@ -1,8 +1,16 @@
 # Student Report Generation (SRG) #
 
-## German description
+## English description
 
-**English version please see below**
+**German version please see below**
+
+The plugin is developed to support the evaluation of a course. It provides "student report generation" type work material that allows learners to download a portion of their Moodle log data in anonymized form.
+
+
+When learners click on this type of work material, they are shown a configurable description. There are also two buttons: on the one hand, a button to view the anonymized log data available for download. A second button allows to download this data as a file. The log data does not contain any names of persons, and the user ID has also been removed. Therefore, it is not possible to draw any conclusions about the respective person from the data. The downloaded log file has the extension .kib3. Therefore, if you want to check the contents of such a .kib3 file, simply change the extension to .zip and unzip it.
+
+
+## German description
 
 Das Plugin wurde entwickelt, um die Evaluation eines Kurses zu unterstützen. Es bietet Arbeitsmaterialien vom Typ "Logdatenerstellung", die es den Lernenden ermöglichen, einen Teil ihrer Moodle-Logdaten in anonymisierter Form herunterzuladen.
 
@@ -11,12 +19,7 @@ Wenn die Lernenden auf diese Art von Arbeitsmaterial klicken, wird ihnen eine ko
 
 
  
-## English description
 
-The plugin is developed to support the evaluation of a course. It provides "student report generation" type work material that allows learners to download a portion of their Moodle log data in anonymized form.
-
-
-When learners click on this type of work material, they are shown a configurable description. There are also two buttons: on the one hand, a button to view the anonymized log data available for download. A second button allows to download this data as a file. The log data does not contain any names of persons, and the user ID has also been removed. Therefore, it is not possible to draw any conclusions about the respective person from the data. The downloaded log file has the extension .kib3. Therefore, if you want to check the contents of such a .kib3 file, simply change the extension to .zip and unzip it.
 
 
 ### Installing via uploaded ZIP file ##

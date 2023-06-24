@@ -37,6 +37,11 @@ $string['modulenameplural'] = 'Logdaten-Erstellungen';
 
 $string['no$srginstances'] = 'Keine Logdaten-Erstellung Instanzen';
 
+$string['privacy:metadata'] = 'Das Logdaten-Erstellung Plugin zeigt oder lädt nur Daten herunter welche von anderen Plugins gesammelt werden. Es sammelt selbst keine Daten.';
+
+$string['srg:addinstance'] = 'Füge ein neues Logdaten-Erstellungs-Modul hinzu';
+$string['srg:view'] = 'Sehe die das Logdaten Modul an.';
+
 /**
  * Error
  */
@@ -67,9 +72,3 @@ $string['zipfilename'] = 'moodle_student_report';
  */
 $string['view_all_button_name'] = 'Logdaten ansehen';
 $string['print_all_button_name'] = 'Logdaten herunterladen';
-
-
-
-
-$string['srg:addinstance'] = 'Füge ein neues Logdaten-Erstellungs-Modul hinzu';
-$string['srg:view'] = 'Sehe die das Logdaten Modul an.';

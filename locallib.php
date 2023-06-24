@@ -25,7 +25,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/sql.php');
-require_once(__DIR__ . '/db_conn.php');
 
 /**
  * Checks if a user is actively enrolled in a given course.
@@ -102,44 +101,4 @@ function srg_get_file_list($USER, $course)
     );
 
     return $filelist;
-}
-
-/**
- * Class holding helper methods corresponding to .csv
- */
-class srg_CSV
-{
-    // Transforms simple table (from db_conn) into .csv
-    public static function simple_table_to_CSV($table)
-    {
-        $csv = '';
-
-        if (!$table) return $csv;
-        $first_row = array_shift($table);
-        if (!$first_row) return $csv;
-        $first_cell = array_shift($first_row);
-
-        $csv .= '"' . preg_replace(array('/\n/', '/"/'), array('', '""'), $first_cell) . '"';
-
-        foreach ($first_row as $cell) {
-            $csv .= ",";
-            $csv .= '"' . preg_replace(array('/\n/', '/"/'), array('', '""'), $cell) . '"';
-        }
-
-        foreach ($table as $row) {
-            $csv .= "\n";
-
-            if (!$row) return $csv;
-            $first_cell = array_shift($row);
-
-            $csv .= '"' . preg_replace(array('/\n/', '/"/'), array('', '""'), $first_cell) . '"';
-
-            foreach ($row as $cell) {
-                $csv .= ",";
-                $csv .= '"' . preg_replace(array('/\n/', '/"/'), array('', '""'), $cell) . '"';
-            }
-        }
-
-        return $csv;
-    }
 }

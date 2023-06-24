@@ -18,38 +18,49 @@
  * Version details and info
  *
  * @package     mod_srg
- * @copyright   2022 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @copyright   2023 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-
 
 require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
 require_once(__DIR__ . '/locallib.php');
-
-require_login();
-$context = context_user::instance($USER->id);
+require_once(__DIR__ . '/classes/csv.php');
 
 global $CFG, $USER, $DB;
 
-$mode = required_param('mode', PARAM_ALPHAEXT);         // Mode is view or print. Should the data be viewed or downloaded.
-$course_id = required_param('course_id', PARAM_INT);    // Course ID of data source course
+#region Page setup
 
-// Is course ID connected to a course.
-if (!$course = $DB->get_record('course', array('id' => $course_id))) {
-    print_error(get_string('error_course_not_found', 'mod_srg'));
-}
+// Course module id form param
+$cmid = required_param('id', PARAM_INT);
+// Mode is view or print. Should the data be viewed or downloaded.
+$mode = required_param('mode', PARAM_ALPHAEXT);
 
+// Course Module
+if (!$cm = get_coursemodule_from_id('srg', $cmid))
+    throw new Exception(get_string('error_course_module_id', 'mod_srg'));
+// Course
+if (!$course = $DB->get_record('course', array('id' => $cm->course)))
+    throw new Exception(get_string('error_course_not_found', 'mod_srg'));
+// Activity
+if (!$srg = $DB->get_record('srg', array('id' => $cm->instance)))
+    throw new Exception(get_string('error_course_module', 'mod_srg'));
 // Does the user have access to the course?
-if (!srg_enrolled_in($USER->id, $course->id)) {
-    print_error(get_string('error_course_access_denied', 'mod_srg'));
-}
+if (!srg_enrolled_in($USER->id, $course->id))
+    throw new Exception(get_string('error_course_access_denied', 'mod_srg'));
 
-$PAGE->set_url(new moodle_url($CFG->wwwroot . '/mod/srg/info.php', array('mode' => $mode, 'course_id' => $course_id)));
-$PAGE->set_context(context_system::instance());
+require_login($course, true, $cm);
+
+$system_context = context_system::instance();
+$module_context = context_module::instance($cm->id);
+$user_context = context_user::instance($USER->id);
+
+$PAGE->set_url('/mod/srg/info.php',  array('id' => $cm->id, 'mode' => $mode));
 $PAGE->set_title(get_string('info_title', 'mod_srg'));
 $PAGE->set_heading(get_string('info_heading', 'mod_srg'));
+$PAGE->set_context($module_context);
+
+#endregion
 
 // SQL Queries -> get Data;
 $filelist = srg_get_file_list($USER, $course);
@@ -58,6 +69,9 @@ $filelist = srg_get_file_list($USER, $course);
 // Download Data as CSV in .zip
 #region Create and Download filelist as .kib3 (zip) file.
 if ($mode == 'print') {
+    // Trigger event\log_data_downloaded
+    srg_log_data_download($srg, $module_context);
+
     $zipfilename = get_string('zipfilename', 'mod_srg') . '_courseID' . '_' . $course_id . '.kib3';
 
     // Use Moodle 3.11 functionality
@@ -110,6 +124,9 @@ if ($mode == 'print') {
 
 #region Page Output
 else if ($mode == 'view') {
+    // Trigger event\log_data_viewed
+    srg_log_data_view($srg, $module_context);
+
     echo $OUTPUT->header();
 
     echo html_writer::tag('style', '

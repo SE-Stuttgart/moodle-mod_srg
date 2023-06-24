@@ -37,6 +37,11 @@ $string['modulenameplural'] = 'Student Report Generations';
 
 $string['no$srginstances'] = 'No Student Report Generation instances';
 
+$string['privacy:metadata'] = 'The Student Report Generation Plugin only shows or downloads existing data from other Plugins. It does not store any data itself.';
+
+$string['srg:addinstance'] = 'Add a new Student Report Generation activity';
+$string['srg:view'] = 'View the Student Report Generation activity';
+
 /**
  * Error
  */
@@ -67,8 +72,3 @@ $string['zipfilename'] = 'moodle_student_report';
  */
 $string['view_all_button_name'] = 'View log data';
 $string['print_all_button_name'] = 'Download log data';
-
-
-
-$string['srg:addinstance'] = 'Add a new Student Report Generation activity';
-$string['srg:view'] = 'View the Student Report Generation activity';

@@ -18,14 +18,11 @@
  * Library of interface functions and constants.
  *
  * @package     mod_srg
- * @copyright  2022 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @copyright  2023 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
-
-require_once(__DIR__ . '/sql.php');
-require_once(__DIR__ . '/db_conn.php');
 
 #region activity requirements
 
@@ -140,6 +137,70 @@ function srg_delete_instance($id)
     $DB->delete_records('srg', array('id' => $id));
 
     return true;
+}
+
+#endregion
+
+#region Events
+
+/**
+ * Trigger the course_module_viewed event.
+ *
+ * @param  stdClass $srg     srg object
+ * @param  stdClass $course  course object
+ * @param  stdClass $cm      course module object
+ * @param  stdClass $context context object
+ */
+function srg_view($srg, $context)
+{
+    $params = array(
+        'context' => $context,
+        'objectid' => $srg->id
+    );
+
+    $event = \mod_srg\event\course_module_viewed::create($params);
+    $event->add_record_snapshot('srg', $srg);
+    $event->trigger();
+}
+
+/**
+ * Trigger the log data viewed event
+ *
+ * @param  stdClass $srg     srg object
+ * @param  stdClass $course  course object
+ * @param  stdClass $cm      course module object
+ * @param  stdClass $context context object
+ */
+function srg_log_data_view($srg, $context)
+{
+    $params = array(
+        'context' => $context,
+        'objectid' => $srg->id
+    );
+
+    $event = \mod_srg\event\log_data_viewed::create($params);
+    $event->add_record_snapshot('srg', $srg);
+    $event->trigger();
+}
+
+/**
+ * Trigger the log data downloaded event
+ *
+ * @param  stdClass $srg     srg object
+ * @param  stdClass $course  course object
+ * @param  stdClass $cm      course module object
+ * @param  stdClass $context context object
+ */
+function srg_log_data_download($srg, $context)
+{
+    $params = array(
+        'context' => $context,
+        'objectid' => $srg->id
+    );
+
+    $event = \mod_srg\event\log_data_downloaded::create($params);
+    $event->add_record_snapshot('srg', $srg);
+    $event->trigger();
 }
 
 #endregion

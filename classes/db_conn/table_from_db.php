@@ -27,8 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * This class is used to create a table based on the data of a DB query result and further manipulations.
  */
-class table_from_db
-{
+class table_from_db {
     /** This const marks default behaviour, which is accessed if there is no specified behaviour. */
     public const DEFAULT = 0;
 
@@ -341,8 +340,7 @@ class table_from_db
      * @param array $namedatapairs Array of column heading => value pairs.
      * @return table_from_db object.
      */
-    public function add_constant_columns(array $namedatapairs)
-    {
+    public function add_constant_columns(array $namedatapairs) {
         foreach ($namedatapairs as $name => $data) {
             $this->tableheading[$name] = $name;
             foreach ($this->table as $id => $row) {
@@ -359,8 +357,7 @@ class table_from_db
      * @param array $keyvaluepair Array of column heading key and new column heading value.
      * @return table_from_db object.
      */
-    public function rename_columns(array $keyvaluepair)
-    {
+    public function rename_columns(array $keyvaluepair) {
         foreach ($keyvaluepair as $key => $value) {
             $this->tableheading[$key] = $value;
         }
@@ -373,8 +370,7 @@ class table_from_db
      * @param string $name Name is the column heading for the new column.
      * @return table_from_db object.
      */
-    public function add_human_time(string $name)
-    {
+    public function add_human_time(string $name) {
         $this->tableheading[$name] = $name;
         foreach ($this->table as $id => $row) {
             $this->table[$id][$name] = date("Y-m-d H:i:s", $this->get_time($id));
@@ -388,8 +384,7 @@ class table_from_db
      * @param array $columns Array of table columns to check.
      * @return table_from_db object.
      */
-    public function prune_table(array $columns)
-    {
+    public function prune_table(array $columns) {
         $deleteids = array();
         foreach ($this->table as $id => $row) {
             foreach ($columns as $column) {
@@ -411,8 +406,7 @@ class table_from_db
      * Returns the public table. Array keys of row items are internal header, value of first row is public header.
      * @return array Array of rows representing the table. First row and column keys are the column headings.
      */
-    public function get_table()
-    {
+    public function get_table() {
         return array(0 => $this->tableheading) + $this->table;
     }
 
@@ -421,8 +415,7 @@ class table_from_db
      * @param int $seconds
      * @return string x hours y minutes z seconds
      */
-    private function format_time(int $seconds)
-    {
+    private function format_time(int $seconds) {
 
         $totalsecs = abs($seconds);
 
@@ -474,8 +467,7 @@ class table_from_db
      * @param int $id row id
      * @return int timecreated
      */
-    private function get_time(int $id)
-    {
+    private function get_time(int $id) {
         return (int)($this->hiddentable[$id]['timecreated']);
     }
 }

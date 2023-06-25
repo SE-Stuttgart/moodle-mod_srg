@@ -24,8 +24,6 @@
 
 namespace mod_srg\privacy;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The mod_srg module does not store any data.
  */

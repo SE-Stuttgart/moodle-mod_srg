@@ -24,8 +24,6 @@
 
 namespace mod_srg\event;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The mod_srg log data downloaded event class.
  */

@@ -65,7 +65,10 @@ srg_view($srg, $modulecontext);
 
 echo $OUTPUT->header();
 
-echo html_writer::start_div('', array('style' => 'flex-direction: row;align-items: center;text-align: center;justify-content: center;'));
+echo html_writer::start_div(
+    '',
+    array('style' => 'flex-direction: row;align-items: center;text-align: center;justify-content: center;')
+);
 
 // Display results on info page.
 echo $OUTPUT->single_button(

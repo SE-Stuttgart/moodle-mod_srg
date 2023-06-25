@@ -27,10 +27,8 @@ defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/classes/db_conn/table_from_db.php');
 
 
-class srg_log
-{
-    public static function GetCourseLog($USER, $course)
-    {
+class srg_log {
+    public static function get_course_log($USER, $course) {
         return (new table_from_db(
             'logstore_standard_log',
             array(
@@ -62,8 +60,7 @@ class srg_log
             ->get_table();
     }
 
-    public static function GetCourseDedication($USER, $course)
-    {
+    public static function get_course_dedication($USER, $course) {
         return (new table_from_db(
             'logstore_standard_log',
             array(
@@ -84,14 +81,14 @@ class srg_log
             ->get_table();
     }
 
-    public static function GetCourseModuleLog($USER, $course)
-    {
+    public static function get_course_module_log($USER, $course) {
         return (new table_from_db(
             'logstore_standard_log',
             array(
                 'userid = ' . $USER->id,
                 'courseid = ' . $course->id,
-                '(target="course_module" or target="course_content" or target="course_bin_item" or target="h5p" or target="attempt" or target="chapter" or target="question")',
+                '(target="course_module" or target="course_content" or target="course_bin_item"'
+                    . ' or target="h5p" or target="attempt" or target="chapter" or target="question")',
                 '(action="viewed" or action="failed" or action="started" or action="submitted")'
             ),
             array(
@@ -142,8 +139,7 @@ class srg_log
             ->get_table();
     }
 
-    public static function GetCourseModuleDedication($USER, $course)
-    {
+    public static function get_course_module_dedication($USER, $course) {
         return (new table_from_db(
             'logstore_standard_log',
             array(
@@ -204,8 +200,7 @@ class srg_log
             ->get_table();
     }
 
-    public static function GetGradingInterest($USER, $course)
-    {
+    public static function get_grading_interest($USER, $course) {
         return (new table_from_db(
             'logstore_standard_log',
             array(
@@ -240,8 +235,7 @@ class srg_log
             ->get_table();
     }
 
-    public static function GetForumActivity($USER, $course)
-    {
+    public static function get_forum_activity($USER, $course) {
         return (new table_from_db(
             'logstore_standard_log',
             array(
@@ -305,8 +299,7 @@ class srg_log
             ->get_table();
     }
 
-    public static function GETHVP($USER, $course)
-    {
+    public static function get_hvp($USER, $course) {
         return (new table_from_db(
             'hvp_xapi_results',
             array(
@@ -353,8 +346,7 @@ class srg_log
             ->get_table();
     }
 
-    public static function GETBadges($USER, $course)
-    {
+    public static function get_badges($USER, $course) {
         return (new table_from_db(
             'badge_issued',
             array(

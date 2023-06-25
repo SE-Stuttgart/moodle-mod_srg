@@ -19,7 +19,7 @@
  *
  * @package     mod_srg
  * @category    backup
- * @copyright  2022 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @copyright   2023 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -31,22 +31,20 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Defines the structure step to restore one mod_srg activity.
  */
-class restore_srg_activity_structure_step extends restore_activity_structure_step
-{
+class restore_srg_activity_structure_step extends restore_activity_structure_step {
 
     /**
      * Defines the structure to be restored.
      *
      * @return restore_path_element[].
      */
-    protected function define_structure()
-    {
+    protected function define_structure() {
         $paths = array();
         $userinfo = $this->get_setting_value('userinfo');
 
         $paths[] = new restore_path_element('srg', '/activity/srg');
 
-        // Return the paths wrapped into standard activity structure
+        // Return the paths wrapped into standard activity structure.
         return $this->prepare_activity_structure($paths);
     }
 
@@ -55,8 +53,7 @@ class restore_srg_activity_structure_step extends restore_activity_structure_ste
      *
      * @param array $data Parsed element data.
      */
-    protected function process_srg($data)
-    {
+    protected function process_srg($data) {
         global $DB;
 
         $data = (object)$data;
@@ -66,18 +63,17 @@ class restore_srg_activity_structure_step extends restore_activity_structure_ste
         $data->timecreated = $this->apply_date_offset($data->timecreated);
         $data->timemodified = $this->apply_date_offset($data->timemodified);
 
-        // insert the srg record
+        // Insert the srg record.
         $newitemid = $DB->insert_record('srg', $data);
-        // immediately after inserting "activity" record, call this
+        // Immediately after inserting "activity" record, call this.
         $this->apply_activity_instance($newitemid);
     }
 
     /**
      * Defines post-execution actions.
      */
-    protected function after_execute()
-    {
-        // Add srg related files, no need to match by itemname (just internally handled context)
+    protected function after_execute() {
+        // Add srg related files, no need to match by itemname (just internally handled context).
         $this->add_related_files('mod_srg', 'intro', null);
         $this->add_related_files('mod_srg', 'content', null);
     }

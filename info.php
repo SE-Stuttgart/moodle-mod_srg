@@ -29,52 +29,49 @@ require_once(__DIR__ . '/classes/csv.php');
 
 global $CFG, $USER, $DB;
 
-#region Page setup
-
-// Course module id form param
+// Course module id form param.
 $cmid = required_param('id', PARAM_INT);
 // Mode is view or print. Should the data be viewed or downloaded.
 $mode = required_param('mode', PARAM_ALPHAEXT);
 
-// Course Module
-if (!$cm = get_coursemodule_from_id('srg', $cmid))
-    throw new Exception(get_string('error_course_module_id', 'mod_srg'));
-// Course
-if (!$course = $DB->get_record('course', array('id' => $cm->course)))
-    throw new Exception(get_string('error_course_not_found', 'mod_srg'));
-// Activity
-if (!$srg = $DB->get_record('srg', array('id' => $cm->instance)))
-    throw new Exception(get_string('error_course_module', 'mod_srg'));
+// Course Module.
+if (!$cm = get_coursemodule_from_id('srg', $cmid)) {
+    throw new moodle_exception(get_string('error_course_module_id', 'mod_srg'));
+}
+// Course.
+if (!$course = $DB->get_record('course', array('id' => $cm->course))) {
+    throw new moodle_exception(get_string('error_course_not_found', 'mod_srg'));
+}
+// Activity.
+if (!$srg = $DB->get_record('srg', array('id' => $cm->instance))) {
+    throw new moodle_exception(get_string('error_course_module', 'mod_srg'));
+}
 // Does the user have access to the course?
-if (!srg_enrolled_in($USER->id, $course->id))
-    throw new Exception(get_string('error_course_access_denied', 'mod_srg'));
+if (!srg_enrolled_in($USER->id, $course->id)) {
+    throw new moodle_exception(get_string('error_course_access_denied', 'mod_srg'));
+}
 
 require_login($course, true, $cm);
 
-$system_context = context_system::instance();
-$module_context = context_module::instance($cm->id);
-$user_context = context_user::instance($USER->id);
+$systemcontext = context_system::instance();
+$modulecontext = context_module::instance($cm->id);
+$usercontext = context_user::instance($USER->id);
 
 $PAGE->set_url('/mod/srg/info.php',  array('id' => $cm->id, 'mode' => $mode));
 $PAGE->set_title(get_string('info_title', 'mod_srg'));
 $PAGE->set_heading(get_string('info_heading', 'mod_srg'));
-$PAGE->set_context($module_context);
+$PAGE->set_context($modulecontext);
 
-#endregion
-
-// SQL Queries -> get Data;
+// SQL Queries -> get Data.
 $filelist = srg_get_file_list($USER, $course);
 
+if ($mode == 'print') { // Download data as CSV in .zip.
+    // Trigger event\log_data_downloaded.
+    srg_log_data_download($srg, $modulecontext);
 
-// Download Data as CSV in .zip
-#region Create and Download filelist as .kib3 (zip) file.
-if ($mode == 'print') {
-    // Trigger event\log_data_downloaded
-    srg_log_data_download($srg, $module_context);
+    $zipfilename = get_string('zipfilename', 'mod_srg') . '_courseID' . '_' . $course->id . '.kib3';
 
-    $zipfilename = get_string('zipfilename', 'mod_srg') . '_courseID' . '_' . $course_id . '.kib3';
-
-    // Use Moodle 3.11 functionality
+    // Use Moodle 3.11 functionality.
     if ($CFG->version >= 2021050000) {
         require_once($CFG->dirroot . '/files/classes/archive_writer.php');
         require_once($CFG->dirroot . '/files/classes/local/archive_writer/zip_writer.php');
@@ -83,7 +80,7 @@ if ($mode == 'print') {
         if ($zipwriter instanceof \core_files\local\archive_writer\zip_writer) {
             // Stream the files into the zip.
             foreach ($filelist as $file) {
-                $zipwriter->add_file_from_string($file['filename'], srg_CSV::simple_table_to_CSV($file['content']));
+                $zipwriter->add_file_from_string($file['filename'], srg_CSV::simple_table_to_csv($file['content']));
                 unset($file);
             }
 
@@ -93,9 +90,7 @@ if ($mode == 'print') {
         } else {
             throw new Exception("Wrong Writer!");
         }
-    }
-    // Use Moodle 3.10 functionality
-    else {
+    } else { // Use Moodle 3.10 functionality.
         require_once($CFG->dirroot . '/lib/filelib.php');
 
         $zip = new \zip_packer();
@@ -104,11 +99,13 @@ if ($mode == 'print') {
         $exporttmpdir = make_request_directory();
 
         foreach ($filelist as $file) {
-            if (!$file['content']) continue;
+            if (!$file['content']) {
+                continue;
+            }
 
             $csvfilepath = $exporttmpdir . DIRECTORY_SEPARATOR . $file['filename'];
-            if (!file_put_contents($csvfilepath, srg_CSV::simple_table_to_CSV($file['content']))) {
-                print_error(get_string('error_creating_csv_file', 'mod_srg'));
+            if (!file_put_contents($csvfilepath, srg_CSV::simple_table_to_csv($file['content']))) {
+                throw new moodle_exception(get_string('error_creating_csv_file', 'mod_srg'));
             }
             $zipfiles[$file['filename']] = $csvfilepath;
             unset($file);
@@ -118,56 +115,16 @@ if ($mode == 'print') {
         send_temp_file($zipfilepath, $zipfilename);
         gc_collect_cycles();
     }
-    die; //Important!
-}
-#endregion
-
-#region Page Output
-else if ($mode == 'view') {
-    // Trigger event\log_data_viewed
-    srg_log_data_view($srg, $module_context);
+    die; // Important!
+} else if ($mode == 'view') { // View data in browser.
+    // Trigger event\log_data_viewed.
+    srg_log_data_view($srg, $modulecontext);
 
     echo $OUTPUT->header();
 
-    echo html_writer::tag('style', '
-        .srg_collapsible {
-            background-color: #777;
-            color: white;
-            cursor: pointer;
-            padding: 18px;
-            width: 100%;
-            border: 5px;
-            border-color: black;
-            text-align: left;
-            outline: none;
-            font-size: 24px;
-        }
-
-        .active, .srg_collapsible:hover {
-          background-color: #555;
-        }
-
-        .srg_collapsible:before {
-          content: "\002B";
-          color: white;
-          font-weight: bold;
-          float: right;
-          margin-right: 5px;
-        }
-
-        .active:before {
-          content: "\2212";
-        }
-
-        .srg_content {
-            padding: 0 18px;
-            max-height: 0;
-            overflow-y: hidden;
-            overflow-y: scroll;
-            transition: max-height 0.2s ease-out;
-            background-color: #f1f1f1;
-        }
-    ');
+    echo html_writer::start_tag('style');
+    echo file_get_contents('style/styles.css');
+    echo html_writer::end_tag('style');
 
     foreach ($filelist as $file) {
         $table = $file['content'];
@@ -179,39 +136,23 @@ else if ($mode == 'view') {
             html_writer::tag(
                 'h2',
                 html_writer::span(
-                    html_writer::tag('i', '', array('class' => 'srg_icon_dropdown', 'aria-hidden' => 'true')),
+                    html_writer::tag('i', '', array('class' => 'srg-icon-dropdown', 'aria-hidden' => 'true')),
                     'media-left'
                 )
                     . $file['name'],
-                array('class' => 'srg_collapsible media')
+                array('class' => 'srg-collapsible media')
             )
                 . html_writer::div(
                     html_writer::table($t),
-                    'srg_content'
+                    'srg-content'
                 )
         );
         unset($file);
     }
 
-    echo html_writer::script('
-        var coll = document.getElementsByClassName("srg_collapsible");
-        var i;
-
-        for (i = 0; i < coll.length; i++) {
-            coll[i].addEventListener("click", function() {
-                this.classList.toggle("active");
-                var srg_content = this.nextElementSibling;
-                if (this.classList.contains("active")){
-                    srg_content.style.maxHeight = srg_content.scrollHeight + "px";
-                } else {
-                    srg_content.style.maxHeight = null;
-                }
-            });
-        }
-    ');
+    echo html_writer::script('', new moodle_url('/mod/srg/scripts/collapse.js'));
 
     echo $OUTPUT->footer();
 
     gc_collect_cycles();
 }
-#endregion

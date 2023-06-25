@@ -18,7 +18,7 @@
  * Library of interface functions and constants.
  *
  * @package     mod_srg
- * @copyright  2023 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @copyright   2023 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -28,8 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 
 class provider implements
     // This plugin does not store any personal user data.
-    \core_privacy\local\metadata\null_provider
-{
+    \core_privacy\local\metadata\null_provider {
 
     /**
      * Get the language string identifier with the component's language
@@ -37,8 +36,7 @@ class provider implements
      *
      * @return  string
      */
-    public static function get_reason(): string
-    {
+    public static function get_reason(): string {
         return 'privacy:metadata';
     }
 }

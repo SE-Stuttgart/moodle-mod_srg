@@ -26,16 +26,14 @@ namespace mod_srg\event;
 
 defined('MOODLE_INTERNAL') || die();
 
-class log_data_viewed extends \core\event\base
-{
+class log_data_viewed extends \core\event\base {
 
     /**
      * Init method.
      *
      * @return void
      */
-    protected function init()
-    {
+    protected function init() {
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
         $this->data['objecttable'] = 'srg';
@@ -46,8 +44,7 @@ class log_data_viewed extends \core\event\base
      *
      * @return string
      */
-    public function get_description()
-    {
+    public function get_description() {
         return "The user with id '$this->userid' has viewed his generated logs.";
     }
 
@@ -56,8 +53,7 @@ class log_data_viewed extends \core\event\base
      *
      * @return string
      */
-    public static function get_name()
-    {
+    public static function get_name() {
         return get_string('eventsrglogviewed', 'mod_srg');
     }
 
@@ -66,8 +62,7 @@ class log_data_viewed extends \core\event\base
      *
      * @return \moodle_url
      */
-    public function get_url()
-    {
+    public function get_url() {
         return new \moodle_url('/mod/srg/view.php', array('id' => $this->objectid));
     }
 
@@ -77,8 +72,7 @@ class log_data_viewed extends \core\event\base
      * @throws \coding_exception
      * @return void
      */
-    protected function validate_data()
-    {
+    protected function validate_data() {
         parent::validate_data();
 
         if ($this->contextlevel != CONTEXT_MODULE) {
@@ -86,8 +80,7 @@ class log_data_viewed extends \core\event\base
         }
     }
 
-    public static function get_objectid_mapping()
-    {
+    public static function get_objectid_mapping() {
         return array('db' => 'srg', 'restore' => 'srg');
     }
 }

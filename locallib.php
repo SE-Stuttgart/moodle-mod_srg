@@ -18,7 +18,7 @@
  * Library of interface functions and constants.
  *
  * @package     mod_srg
- * @copyright  2022 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @copyright   2023 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -28,76 +28,87 @@ require_once(__DIR__ . '/sql.php');
 
 /**
  * Checks if a user is actively enrolled in a given course.
- * @param int $user_id ID of the user
- * @param int $course_id ID of the course
+ * @param int $userid ID of the user
+ * @param int $courseid ID of the course
+ * 
+ * @return bool True if the user with given id is enrolled in course with given id.
  */
-function srg_enrolled_in($user_id, $course_id)
-{
+function srg_enrolled_in($userid, $courseid) {
     global $DB;
 
-    $params = array('userid' => $user_id, 'courseid' => $course_id);
+    $params = array('userid' => $userid, 'courseid' => $courseid);
     $sql = "SELECT e.courseid FROM  {enrol} e
             JOIN {user_enrolments} ue ON e.id = ue.enrolid
             WHERE ue.status = 0 AND ue.userid = :userid AND e.courseid = :courseid";
-    $enrolled_courses = $DB->get_records_sql($sql, $params);
+    $enrolledcourses = $DB->get_records_sql($sql, $params);
 
-    if (!$enrolled_courses) return false;
+    if (!$enrolledcourses) {
+        return false;
+    }
     return true;
 }
 
-// Hardcoded Selected Logs Metadata
-function srg_get_file_list($USER, $course)
-{
+/**
+ * Hardcoded Selected Logs Metadata
+ * 
+ * @param mixed $USER The current user.
+ * @param Course $course The course of this activity.
+ * 
+ * @return array Array of log data packets. Each packet has a name an advised filename and the log as array.
+ */
+function srg_get_file_list($USER, $course) {
     $filelist = array();
 
-    // $filelist[] = array(
-    //     'name' => 'Detailed Course Log',
-    //     'filename' => 'detailed_course_log.csv',
-    //     'content' => srg_log::GetCourseLog($USER, $course)
-    // );
+    /*
+    $filelist[] = array(
+        'name' => 'Detailed Course Log',
+        'filename' => 'detailed_course_log.csv',
+        'content' => srg_log::get_course_log($USER, $course)
+    );
+    */
 
     $filelist[] = array(
         'name' => 'Course Dedication Report',
         'filename' => 'course_dedication.csv',
-        'content' => srg_log::GetCourseDedication($USER, $course)
+        'content' => srg_log::get_course_dedication($USER, $course)
     );
 
     $filelist[] = array(
         'name' => 'Course Module Log',
         'filename' => 'course_module_log.csv',
-        'content' => srg_log::GetCourseModuleLog($USER, $course)
+        'content' => srg_log::get_course_module_log($USER, $course)
     );
 
     $filelist[] = array(
         'name' => 'Course Module Dedication Report',
         'filename' => 'course_module_dedication.csv',
-        'content' => srg_log::GetCourseModuleDedication($USER, $course)
+        'content' => srg_log::get_course_module_dedication($USER, $course)
     );
 
     $filelist[] = array(
         'name' => 'Grade Inspection Report',
         'filename' => 'grade_inspections.csv',
-        'content' => srg_log::GetGradingInterest($USER, $course)
+        'content' => srg_log::get_grading_interest($USER, $course)
     );
 
     $filelist[] = array(
         'name' => 'Forum Activity Report',
         'filename' => 'forum_activities.csv',
-        'content' => srg_log::GetForumActivity($USER, $course)
+        'content' => srg_log::get_forum_activity($USER, $course)
     );
 
     if (core_plugin_manager::instance()->get_plugin_info('mod_hvp')) {
         $filelist[] = array(
             'name' => 'HVP Score Report',
             'filename' => 'hvp_scores.csv',
-            'content' => srg_log::GETHVP($USER, $course)
+            'content' => srg_log::get_hvp($USER, $course)
         );
     }
 
     $filelist[] = array(
         'name' => 'User Earned Badges',
         'filename' => 'badges.csv',
-        'content' => srg_log::GETBadges($USER, $course)
+        'content' => srg_log::get_badges($USER, $course)
     );
 
     return $filelist;

@@ -1,0 +1,38 @@
+.srg-collapsible {
+    background-color: #777;
+    color: white;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: 5px;
+    border-color: black;
+    text-align: left;
+    outline: none;
+    font-size: 24px;
+}
+
+.srg-active,
+.srg-collapsible:hover {
+    background-color: #555;
+}
+
+.srg-collapsible:before {
+    content: "\002B";
+    color: white;
+    font-weight: bold;
+    float: right;
+    margin-right: 5px;
+}
+
+.srg-active:before {
+    content: "\2212";
+}
+
+.srg-content {
+    padding: 0 18px;
+    max-height: 0;
+    overflow-y: hidden;
+    overflow-y: scroll;
+    transition: max-height 0.2s ease-out;
+    background-color: #f1f1f1;
+}

@@ -26,16 +26,14 @@ namespace mod_srg\event;
 
 defined('MOODLE_INTERNAL') || die();
 
-class course_module_viewed extends \core\event\course_module_viewed
-{
+class course_module_viewed extends \core\event\course_module_viewed {
 
     /**
      * Init method.
      *
      * @return void
      */
-    protected function init()
-    {
+    protected function init() {
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
         $this->data['objecttable'] = 'srg';
@@ -46,13 +44,11 @@ class course_module_viewed extends \core\event\course_module_viewed
      *
      * @return \moodle_url
      */
-    public function get_url()
-    {
+    public function get_url() {
         return new \moodle_url('/mod/srg/view.php', array('id' => $this->objectid));
     }
 
-    public static function get_objectid_mapping()
-    {
+    public static function get_objectid_mapping() {
         return array('db' => 'srg', 'restore' => 'srg');
     }
 }

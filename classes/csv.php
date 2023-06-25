@@ -27,21 +27,27 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Class holding helper methods corresponding to .csv
  */
-class srg_CSV
-{
-    // Transforms simple table (from db_conn) into .csv
-    public static function simple_table_to_CSV($table)
-    {
+class srg_CSV {
+    /**
+     * Transforms simple table (from db_conn) into .csv.
+     * @param array $table Array of rows (first is header) to be turned into an csv file.
+     * @return string CSV type string.
+     */
+    public static function simple_table_to_csv(array $table) {
         $csv = '';
 
-        if (!$table) return $csv;
-        $first_row = array_shift($table);
-        if (!$first_row) return $csv;
-        $first_cell = array_shift($first_row);
+        if (!$table) {
+            return $csv;
+        }
+        $firstrow = array_shift($table);
+        if (!$firstrow) {
+            return $csv;
+        }
+        $firstcell = array_shift($firstrow);
 
-        $csv .= '"' . preg_replace(array('/\n/', '/"/'), array('', '""'), $first_cell) . '"';
+        $csv .= '"' . preg_replace(array('/\n/', '/"/'), array('', '""'), $firstcell) . '"';
 
-        foreach ($first_row as $cell) {
+        foreach ($firstrow as $cell) {
             $csv .= ",";
             $csv .= '"' . preg_replace(array('/\n/', '/"/'), array('', '""'), $cell) . '"';
         }
@@ -49,10 +55,12 @@ class srg_CSV
         foreach ($table as $row) {
             $csv .= "\n";
 
-            if (!$row) return $csv;
-            $first_cell = array_shift($row);
+            if (!$row) {
+                return $csv;
+            }
+            $firstcell = array_shift($row);
 
-            $csv .= '"' . preg_replace(array('/\n/', '/"/'), array('', '""'), $first_cell) . '"';
+            $csv .= '"' . preg_replace(array('/\n/', '/"/'), array('', '""'), $firstcell) . '"';
 
             foreach ($row as $cell) {
                 $csv .= ",";

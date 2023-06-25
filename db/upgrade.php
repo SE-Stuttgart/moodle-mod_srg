@@ -24,8 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-function xmldb_srg_upgrade($oldversion)
-{
+function xmldb_srg_upgrade($oldversion) {
     global $CFG;
 
     // Automatically generated Moodle v3.6.0 release upgrade line.

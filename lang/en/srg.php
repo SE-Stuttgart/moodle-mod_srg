@@ -25,9 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-/**
- * System text
- */
+// System text.
 $string['pluginname'] = 'Student Report Generation';
 $string['pluginadministration'] = 'Student Report Generation module administration';
 
@@ -42,33 +40,26 @@ $string['privacy:metadata'] = 'The Student Report Generation Plugin only shows o
 $string['srg:addinstance'] = 'Add a new Student Report Generation activity';
 $string['srg:view'] = 'View the Student Report Generation activity';
 
-/**
- * Error
- */
+// Error.
 $string['error_course_module_id'] = 'Course Module ID misconfigured.';
 $string['error_course_module'] = 'Course Module misconfigured.';
 $string['error_course_not_found'] = 'Course is misconfigured';
 $string['error_course_access_denied'] = 'Access to course denied. You are not enrolled.';
 $string['error_creating_csv_file'] = 'There was an error creating the .csv file.';
 
-/**
- * Form Text
- */
+// Form Text.
 $string['info_title'] = 'Data Overview';
 $string['info_heading'] = 'Data Overview';
 $string['content_title'] = 'Instructions';
-$string['content_default'] = 'Here, you can view part of your anonymized log data in this Moodle course or download it if needed. <br><br>
-Hint: The downloaded file is actually a file in the .zip format.
-It is, however, downloaded with .kib3 as the extension to prevent automatic unpacking by your operating system.
-If you want to unpack and view it, please change the extension to .zip after downloading and then unpack it.';
+$string['content_default'] = 'Here, you can view part of your anonymized log data in this Moodle course or download it if needed.'
+    . ' <br><br>'
+    . 'Hint: The downloaded file is actually a file in the .zip format.'
+    . 'It is, however, downloaded with .kib3 as the extension to prevent automatic unpacking by your operating system.'
+    . 'If you want to unpack and view it, please change the extension to .zip after downloading and then unpack it.';
 
-/**
- * File Text
- */
+// File Text.
 $string['zipfilename'] = 'moodle_student_report';
 
-/**
- * View Text
- */
+// View Text.
 $string['view_all_button_name'] = 'View log data';
 $string['print_all_button_name'] = 'Download log data';

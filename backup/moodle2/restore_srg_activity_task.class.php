@@ -19,7 +19,7 @@
  *
  * @package     mod_srg
  * @category    backup
- * @copyright  2022 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @copyright   2022 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -33,22 +33,19 @@ require_once($CFG->dirroot . '/mod/srg/backup/moodle2/restore_srg_stepslib.php')
 /**
  * Restore task for mod_srg.
  */
-class restore_srg_activity_task extends restore_activity_task
-{
+class restore_srg_activity_task extends restore_activity_task {
 
     /**
      * Define (add) particular settings this activity can have
      */
-    protected function define_my_settings()
-    {
+    protected function define_my_settings() {
         // No particular settings for this activity
     }
 
     /**
      * Define (add) particular steps this activity can have
      */
-    protected function define_my_steps()
-    {
+    protected function define_my_steps() {
         $this->add_step(new restore_srg_activity_structure_step('srg_structure', 'srg.xml'));
     }
 
@@ -57,8 +54,7 @@ class restore_srg_activity_task extends restore_activity_task
      *
      * @return array.
      */
-    public static function define_decode_contents()
-    {
+    public static function define_decode_contents() {
         $contents = array();
 
         $contents[] = new restore_decode_content('srg', array('intro', 'content'), 'srg');
@@ -71,13 +67,12 @@ class restore_srg_activity_task extends restore_activity_task
      *
      * @return array.
      */
-    public static function define_decode_rules()
-    {
+    public static function define_decode_rules() {
         $rules = array();
 
-        // srg by cm->id
+        // Srg by cm->id.
         $rules[] = new restore_decode_rule('SRGVIEWBYID', '/mod/srg/view.php?id=$1', 'course_module');
-        // List of srgs in course
+        // List of srgs in course.
         $rules[] = new restore_decode_rule('SRGINDEX', '/mod/srg/index.php?id=$1', 'course');
 
         return $rules;
@@ -90,8 +85,7 @@ class restore_srg_activity_task extends restore_activity_task
      *
      * @return array.
      */
-    public static function define_restore_log_rules()
-    {
+    public static function define_restore_log_rules() {
         $rules = array();
 
         // $rules[] = new restore_log_rule('srg', 'add', 'view.php?id={course_module}', '{srg}');
@@ -111,8 +105,7 @@ class restore_srg_activity_task extends restore_activity_task
      * by the restore final task, but are defined here at
      * activity level. All them are rules not linked to any module instance (cmid = 0)
      */
-    static public function define_restore_log_rules_for_course()
-    {
+    public static function define_restore_log_rules_for_course() {
         $rules = array();
 
 
@@ -122,8 +115,7 @@ class restore_srg_activity_task extends restore_activity_task
         return $rules;
     }
 
-    public function after_restore()
-    {
-        // Do something at end of restore
+    public function after_restore() {
+        // Do something at end of restore.
     }
 }

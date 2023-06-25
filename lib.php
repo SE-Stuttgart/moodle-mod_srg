@@ -24,16 +24,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-#region activity requirements
-
 /**
  * Supported features
  *
- * @param string $feature FEATURE_xx constant for requested feature
- * @return mixed True if module supports feature, false if not, null if doesn't know
+ * @param string $feature FEATURE_xx constant for requested feature.
+ * @return mixed True if module supports feature, false if not, null if doesn't know.
  */
-function srg_supports($feature)
-{
+function srg_supports($feature) {
     switch ($feature) {
         case FEATURE_MOD_ARCHETYPE:
             return MOD_ARCHETYPE_RESOURCE;
@@ -70,8 +67,7 @@ function srg_supports($feature)
  * @param object $data An object from the form.
  * @return int The id of the newly inserted record.
  */
-function srg_add_instance($data)
-{
+function srg_add_instance($data) {
     global $DB;
 
     $data->timemodified = $data->timecreated = time();
@@ -79,7 +75,7 @@ function srg_add_instance($data)
     $data->content       = $data->instruction['text'];
     $data->contentformat = $data->instruction['format'];
 
-    // Create and add instance of srg
+    // Create and add instance of srg.
     $id = $DB->insert_record('srg', $data);
 
     $completiontimeexpected = !empty($data->completionexpected) ? $data->completionexpected : null;
@@ -95,11 +91,9 @@ function srg_add_instance($data)
  * this function will update an existing instance with new data.
  *
  * @param object $data An object from the form in mod_form.php.
- * @param mod_srg_mod_form $mform The form.
  * @return bool True if successful, false otherwise.
  */
-function srg_update_instance($data)
-{
+function srg_update_instance($data) {
     global $DB;
 
     $data->timemodified = time();
@@ -122,8 +116,7 @@ function srg_update_instance($data)
  * @param int $id Id of the module instance.
  * @return bool True if successful, false on failure.
  */
-function srg_delete_instance($id)
-{
+function srg_delete_instance($id) {
     global $DB;
 
     $exists = $DB->get_record('srg', array('id' => $id));
@@ -139,20 +132,13 @@ function srg_delete_instance($id)
     return true;
 }
 
-#endregion
-
-#region Events
-
 /**
  * Trigger the course_module_viewed event.
  *
  * @param  stdClass $srg     srg object
- * @param  stdClass $course  course object
- * @param  stdClass $cm      course module object
  * @param  stdClass $context context object
  */
-function srg_view($srg, $context)
-{
+function srg_view($srg, $context) {
     $params = array(
         'context' => $context,
         'objectid' => $srg->id
@@ -167,12 +153,9 @@ function srg_view($srg, $context)
  * Trigger the log data viewed event
  *
  * @param  stdClass $srg     srg object
- * @param  stdClass $course  course object
- * @param  stdClass $cm      course module object
  * @param  stdClass $context context object
  */
-function srg_log_data_view($srg, $context)
-{
+function srg_log_data_view($srg, $context) {
     $params = array(
         'context' => $context,
         'objectid' => $srg->id
@@ -187,12 +170,9 @@ function srg_log_data_view($srg, $context)
  * Trigger the log data downloaded event
  *
  * @param  stdClass $srg     srg object
- * @param  stdClass $course  course object
- * @param  stdClass $cm      course module object
  * @param  stdClass $context context object
  */
-function srg_log_data_download($srg, $context)
-{
+function srg_log_data_download($srg, $context) {
     $params = array(
         'context' => $context,
         'objectid' => $srg->id
@@ -202,5 +182,3 @@ function srg_log_data_download($srg, $context)
     $event->add_record_snapshot('srg', $srg);
     $event->trigger();
 }
-
-#endregion

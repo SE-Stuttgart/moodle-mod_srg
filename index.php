@@ -18,7 +18,7 @@
  * Display information about all the mod_srg modules in the requested course.
  *
  * @package     mod_srg
- * @copyright  2022 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @copyright   2023 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,28 +27,28 @@ require_once(__DIR__ . '/lib.php');
 
 $id = required_param('id', PARAM_INT); // Course ID.
 
-// Ensure that the course specified is valid
+// Ensure that the course specified is valid.
 if (!$course = $DB->get_record('course', array('id' => $id))) {
-    print_error('Course ID is incorrect');
+    throw new moodle_exception('Course ID is incorrect');
 }
 
 require_course_login($course, true);
 
-// Get all required strings
-$modulename_plural  = get_string('modulenameplural', 'mod_srg');
+// Get all required strings.
+$modulenameplural   = get_string('modulenameplural', 'mod_srg');
 $modulename         = get_string('modulename', 'mod_srg');
 $strname            = get_string('name');
 $strintro           = get_string('moduleintro');
 $strlastmodified    = get_string('lastmodified');
 
 $PAGE->set_url('/mod/srg/index.php', array('id' => $id));
-$PAGE->set_title(format_string($course->shortname) . ':' . $modulename_plural);
+$PAGE->set_title(format_string($course->shortname) . ':' . $modulenameplural);
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->navbar->add($modulename);
 
 echo $OUTPUT->header();
 
-// Get all the appropriate data
+// Get all the appropriate data.
 if (!$srgs = get_all_instances_in_course('srg', $course)) {
     $srg = array();
 }
@@ -86,7 +86,7 @@ foreach ($srgs as $srg) {
         $printsection = html_writer::tag('span', userdate($srg->timemodified), array('class' => 'smallinfo'));
     }
 
-    $class = $srg->visible ? null : array('class' => 'dimmed'); // hidden modules are dimmed
+    $class = $srg->visible ? null : array('class' => 'dimmed'); // Hidden modules are dimmed.
 
     $table->data[] = array(
         $printsection,

@@ -26,8 +26,18 @@
 defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/classes/db_conn/table_from_db.php');
 
-
+/**
+ * Class that has multiple static hard coded function, each creating and returning one set of log data.
+ */
 class srg_log {
+    /**
+     * This function returns all entries from the course log db table.
+     *
+     * @param mixed $USER The current user.
+     * @param Course $course The course this activity belongs to.
+     *
+     * @return array Table containing set of log data.
+     */
     public static function get_course_log($USER, $course) {
         return (new table_from_db(
             'logstore_standard_log',
@@ -60,6 +70,17 @@ class srg_log {
             ->get_table();
     }
 
+    /**
+     * This function returns all entries from the course log db table.
+     * The entries are grouped by "dedication". 
+     * This means, entries that are timed close together get grouped together 
+     * and the time difference in this group is "dedication", how much time was spent on this group.
+     *
+     * @param mixed $USER The current user.
+     * @param Course $course The course this activity belongs to.
+     *
+     * @return array Table containing set of log data.
+     */
     public static function get_course_dedication($USER, $course) {
         return (new table_from_db(
             'logstore_standard_log',
@@ -81,6 +102,15 @@ class srg_log {
             ->get_table();
     }
 
+    /**
+     * This function returns all entries from the course log db table that have selected targets and actions.
+     * This data is expanded by information not found in the standard log db table.
+     *
+     * @param mixed $USER The current user.
+     * @param Course $course The course this activity belongs to.
+     *
+     * @return array Table containing set of log data.
+     */
     public static function get_course_module_log($USER, $course) {
         return (new table_from_db(
             'logstore_standard_log',
@@ -139,13 +169,27 @@ class srg_log {
             ->get_table();
     }
 
+
+    /**
+     * This function returns all entries from the course log db table.
+     * The entries are grouped by "dedication". 
+     * This means, entries that are timed close together and belonging to the same component get grouped together 
+     * and the time difference in this group is "dedication", how much time was spent on this group.
+     * This data is expanded by information not found in the standard log db table.
+     *
+     * @param mixed $USER The current user.
+     * @param Course $course The course this activity belongs to.
+     *
+     * @return array Table containing set of log data.
+     */
     public static function get_course_module_dedication($USER, $course) {
         return (new table_from_db(
             'logstore_standard_log',
             array(
                 'userid = ' . $USER->id,
                 'courseid = ' . $course->id,
-                '(target="course_module" or target="course_content" or target="course_bin_item" or target="h5p" or target="attempt" or target="chapter" or target="question")',
+                '(target="course_module" or target="course_content" or target="course_bin_item"'
+                    . ' or target="h5p" or target="attempt" or target="chapter" or target="question")',
                 '(action="viewed" or action="failed" or action="started" or action="submitted")'
             ),
             array(
@@ -200,6 +244,15 @@ class srg_log {
             ->get_table();
     }
 
+    /**
+     * This function returns all entries from the course log db table 
+     * that have information about the user accessing their grades.
+     *
+     * @param mixed $USER The current user.
+     * @param Course $course The course this activity belongs to.
+     *
+     * @return array Table containing set of log data.
+     */
     public static function get_grading_interest($USER, $course) {
         return (new table_from_db(
             'logstore_standard_log',
@@ -235,6 +288,15 @@ class srg_log {
             ->get_table();
     }
 
+    /**
+     * This function returns all entries from the course log db table 
+     * that have information about the user using a forum.
+     *
+     * @param mixed $USER The current user.
+     * @param Course $course The course this activity belongs to.
+     *
+     * @return array Table containing set of log data.
+     */
     public static function get_forum_activity($USER, $course) {
         return (new table_from_db(
             'logstore_standard_log',
@@ -299,6 +361,15 @@ class srg_log {
             ->get_table();
     }
 
+    /**
+     * This function returns all entries from the course log db table 
+     * that have information about the users interaction with hvp content.
+     *
+     * @param mixed $USER The current user.
+     * @param Course $course The course this activity belongs to.
+     *
+     * @return array Table containing set of log data.
+     */
     public static function get_hvp($USER, $course) {
         return (new table_from_db(
             'hvp_xapi_results',
@@ -346,6 +417,15 @@ class srg_log {
             ->get_table();
     }
 
+    /**
+     * This function returns all entries from the course log db table 
+     * that have information about the users badges.
+     *
+     * @param mixed $USER The current user.
+     * @param Course $course The course this activity belongs to.
+     *
+     * @return array Table containing set of log data.
+     */
     public static function get_badges($USER, $course) {
         return (new table_from_db(
             'badge_issued',

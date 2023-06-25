@@ -25,19 +25,20 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * This class is used to create an array based on the data of a DB query result.
- * The query will be performed by the constructor using constructor parameters.
- * This class has multiple function working with and altering the array.
+ * This class is used to create a table based on the data of a DB query result and further manipulations.
  */
 class table_from_db {
+    // This const marks default behaviour, which is accessed if there is no specified behaviour.
     public const DEFAULT = 0;
-    public const PUBLIC = 1;
-    public const HIDDEN = 2;
 
+    // This array holds the internal => public names for the heading of the public table.
     private array $tableheading;
+    // This array holds the id => row data of the public table. Values are optional.
     private array $table;
 
+    // This array holds the internal => internal names for the heading of the hidden table.
     private array $hiddentableheadings;
+    // This array holds the id => row data of the hidden table. Values are required. Base of many further expansions.
     private array $hiddentable;
 
     /**
@@ -62,8 +63,9 @@ class table_from_db {
         array   $hiddencolumns,
         string  $sort = 'id ASC'
     ) {
-        if (!isset($hiddencolumns['id'])) $hiddencolumns['id'] = 'id';
-
+        if (!isset($hiddencolumns['id'])) {
+            $hiddencolumns['id'] = 'id';
+        }
 
         global $DB;
         $this->tableheading = $publiccolumns;
@@ -120,27 +122,26 @@ class table_from_db {
 
     /**
      * Make a query using information from the first query and combine the it into the table.
-     * @param bool $is_const True if parameter $table_source is a constant. 
-     * False if parameter $table_source is a column in the table.
-     * @param string $table_source Option 1: Table name of table to query. 
+     * @param bool $isconst True if parameter $tablesource is a constant.
+     * False if parameter $tablesource is a column in the table.
+     * @param string $tablesource Option 1: Table name of table to query.
      * Option 2: Column name of table where to find the table name (Hidden Table Only).
      * @param string $idsource Column name where to find the IDs corresponding to the new table. (Hidden Table Only).
      * @param array $requirements set requirements that the table row has to have to be able to count for this nest_query.
      * Array(column => value)
      * @param array $where Array of where clauses, will be connected via and.
      * @param array $publiccolumns Array of Array of columns we want to add top the local table.
-     * Array ('table_source' / table_from_db::DEFAULT => Array('sourcecolumn' => 'internaltablecolumn'))
+     * Array ('tablesource' / table_from_db::DEFAULT => Array('sourcecolumn' => 'internaltablecolumn'))
      * Public columns are always optional.
      * If you want a required public column, have the column in BOTH public and hidden columns.
      * @param array $hiddencolumns of columns we need, but do not want returned.
-     * Array ('table_source' / table_from_db::DEFAULT => Array('sourcecolumn' => 'internaltablecolumn'))
+     * Array ('tablesource' / table_from_db::DEFAULT => Array('sourcecolumn' => 'internaltablecolumn'))
      * Hidden columns are always required.
-     *  
      * @return table_from_db object.
      */
     public function nest_query(
-        bool $is_const,
-        string $table_source,
+        bool $isconst,
+        string $tablesource,
         string $idsource,
         array $requirements,
         array $where,
@@ -165,10 +166,10 @@ class table_from_db {
             }
 
             // Set target table to query.
-            if ($is_const) {
-                $targettable = $table_source;
+            if ($isconst) {
+                $targettable = $tablesource;
             } else {
-                $targettable = $row[$table_source];
+                $targettable = $row[$tablesource];
             }
 
             // Create two arrays, with ids referencing each other.
@@ -176,7 +177,7 @@ class table_from_db {
             $subqueries[$targettable][$querytotable][$row[$idsource]][] = $id;
         }
 
-        // loop over the tables, that need to be searched.
+        // Loop over the tables, that need to be searched.
         foreach ($subqueries as $table => $ids) {
             // Missing information.
             if (
@@ -260,10 +261,10 @@ class table_from_db {
      * Collapse a the table based on $dedication_targen and the timecreated of the DB entries.
      * Create a new column $name which holds the timedifference of each collapsed entry.
      * This timedifference represents the the time actively spent on each $dedicationtarget.
-     * To consider the closing of the website or the pause of working, 
+     * To consider the closing of the website or the pause of working,
      * a min time (of total dedication) and max time (of time between entries) is required.
      * @param string $name Name of the new column
-     * @param string $dedicationtarget [default =''] Name of the column to collapse into. 
+     * @param string $dedicationtarget [default =''] Name of the column to collapse into.
      * This column represents what represents a single task.
      * If empty, all entries count as the same task.
      * @param int $dedicationmintime [default = 60] Minimal time in seconds spend on a task to count as working on it.
@@ -336,7 +337,7 @@ class table_from_db {
 
     /**
      * Add a new column to the table with a given constant value for all rows.
-     * @param array of column heading and value pairs.
+     * @param array $namedatapairs Array of column heading => value pairs.
      * @return table_from_db object.
      */
     public function add_constant_columns(array $namedatapairs) {
@@ -402,6 +403,7 @@ class table_from_db {
     }
 
     /**
+     * Returns the public table. Array keys of row items are internal header, value of first row is public header.
      * @return array Array of rows representing the table. First row and column keys are the column headings.
      */
     public function get_table() {

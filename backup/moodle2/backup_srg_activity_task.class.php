@@ -29,12 +29,12 @@ defined('MOODLE_INTERNAL') || die();
 // More information about the restore process: {@link https://docs.moodle.org/dev/Restore_API}.
 
 require_once($CFG->dirroot . '/mod/srg/backup/moodle2/backup_srg_stepslib.php'); // Because it exists (must).
-require_once($CFG->dirroot . '/mod/srg/backup/moodle2/backup_srg_settingslib.php'); // Because it exists (optional).
 
 /**
  * Provides all the settings and steps to perform a complete backup of mod_srg.
  */
 class backup_srg_activity_task extends backup_activity_task {
+
     /**
      * Define (add) particular settings this activity can have
      */
@@ -52,6 +52,7 @@ class backup_srg_activity_task extends backup_activity_task {
     /**
      * Code the transformations to perform in the activity in
      * order to get transportable (encoded) links
+     * @param string $content
      */
     public static function encode_content_links($content) {
         global $CFG;

@@ -26,6 +26,9 @@ namespace mod_srg\event;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * The mod_srg course module viewed event class.
+ */
 class course_module_viewed extends \core\event\course_module_viewed {
 
     /**
@@ -48,6 +51,11 @@ class course_module_viewed extends \core\event\course_module_viewed {
         return new \moodle_url('/mod/srg/view.php', array('id' => $this->objectid));
     }
 
+    /**
+     * Object id mapping
+     *
+     * @return array
+     */
     public static function get_objectid_mapping() {
         return array('db' => 'srg', 'restore' => 'srg');
     }

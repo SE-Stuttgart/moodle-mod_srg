@@ -26,6 +26,9 @@ namespace mod_srg\event;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * The mod_srg log data downloaded event class.
+ */
 class log_data_downloaded extends \core\event\base {
 
     /**
@@ -80,6 +83,11 @@ class log_data_downloaded extends \core\event\base {
         }
     }
 
+    /**
+     * Object id mapping
+     *
+     * @return array
+     */
     public static function get_objectid_mapping() {
         return array('db' => 'srg', 'restore' => 'srg');
     }

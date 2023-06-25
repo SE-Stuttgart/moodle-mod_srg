@@ -30,7 +30,6 @@ require_once(__DIR__ . '/sql.php');
  * Checks if a user is actively enrolled in a given course.
  * @param int $userid ID of the user
  * @param int $courseid ID of the course
- * 
  * @return bool True if the user with given id is enrolled in course with given id.
  */
 function srg_enrolled_in($userid, $courseid) {
@@ -50,10 +49,8 @@ function srg_enrolled_in($userid, $courseid) {
 
 /**
  * Hardcoded Selected Logs Metadata
- * 
  * @param mixed $USER The current user.
  * @param Course $course The course of this activity.
- * 
  * @return array Array of log data packets. Each packet has a name an advised filename and the log as array.
  */
 function srg_get_file_list($USER, $course) {

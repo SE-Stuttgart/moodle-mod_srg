@@ -44,7 +44,11 @@ class backup_srg_activity_structure_step extends backup_activity_structure_step 
         $userinfo = $this->get_setting_value('userinfo');
 
         // Define each element separated.
-        $srg = new backup_nested_element('srg', array('id'), array('name', 'timecreated', 'timemodified', 'intro', 'introformat', 'content', 'contentformat'));
+        $srg = new backup_nested_element(
+            'srg',
+            array('id'),
+            array('name', 'timecreated', 'timemodified', 'intro', 'introformat', 'content', 'contentformat')
+        );
 
         // Build the tree.
 

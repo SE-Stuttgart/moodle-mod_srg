@@ -24,6 +24,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Srg module upgrade task
+ *
+ * @param int $oldversion the version we are upgrading from
+ * @return bool always true
+ */
 function xmldb_srg_upgrade($oldversion) {
     global $CFG;
 

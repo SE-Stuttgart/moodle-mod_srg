@@ -57,7 +57,7 @@ $usercontext = context_user::instance($USER->id);
 $PAGE->set_url('/mod/srg/view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($srg->name));
 $PAGE->set_heading(format_string($course->fullname));
-$PAGE->set_context($module_context);
+$PAGE->set_context($modulecontext);
 
 // Trigger event\course_module_viewed.
 srg_view($srg, $modulecontext);

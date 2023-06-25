@@ -88,9 +88,11 @@ class restore_srg_activity_task extends restore_activity_task {
     public static function define_restore_log_rules() {
         $rules = array();
 
-        // $rules[] = new restore_log_rule('srg', 'add', 'view.php?id={course_module}', '{srg}');
-        // $rules[] = new restore_log_rule('srg', 'update', 'view.php?id={course_module}', '{srg}');
-        // $rules[] = new restore_log_rule('srg', 'view', 'view.php?id={course_module}', '{srg}');
+        /*
+        $rules[] = new restore_log_rule('srg', 'add', 'view.php?id={course_module}', '{srg}');
+        $rules[] = new restore_log_rule('srg', 'update', 'view.php?id={course_module}', '{srg}');
+        $rules[] = new restore_log_rule('srg', 'view', 'view.php?id={course_module}', '{srg}');
+        */
 
         return $rules;
     }
@@ -108,8 +110,10 @@ class restore_srg_activity_task extends restore_activity_task {
     public static function define_restore_log_rules_for_course() {
         $rules = array();
 
-        // $rules[] = new restore_log_rule('srg', 'view all', 'index?id={course}', null, null, null, 'index.php?id={course}');
-        // $rules[] = new restore_log_rule('srg', 'view all', 'index.php?id={course}', null);
+        /*
+        $rules[] = new restore_log_rule('srg', 'view all', 'index?id={course}', null, null, null, 'index.php?id={course}');
+        $rules[] = new restore_log_rule('srg', 'view all', 'index.php?id={course}', null);
+        */
 
         return $rules;
     }

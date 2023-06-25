@@ -72,8 +72,8 @@ class srg_log {
 
     /**
      * This function returns all entries from the course log db table.
-     * The entries are grouped by "dedication". 
-     * This means, entries that are timed close together get grouped together 
+     * The entries are grouped by "dedication".
+     * This means, entries that are timed close together get grouped together
      * and the time difference in this group is "dedication", how much time was spent on this group.
      *
      * @param mixed $USER The current user.
@@ -172,8 +172,8 @@ class srg_log {
 
     /**
      * This function returns all entries from the course log db table.
-     * The entries are grouped by "dedication". 
-     * This means, entries that are timed close together and belonging to the same component get grouped together 
+     * The entries are grouped by "dedication".
+     * This means, entries that are timed close together and belonging to the same component get grouped together
      * and the time difference in this group is "dedication", how much time was spent on this group.
      * This data is expanded by information not found in the standard log db table.
      *
@@ -245,7 +245,7 @@ class srg_log {
     }
 
     /**
-     * This function returns all entries from the course log db table 
+     * This function returns all entries from the course log db table
      * that have information about the user accessing their grades.
      *
      * @param mixed $USER The current user.
@@ -289,7 +289,7 @@ class srg_log {
     }
 
     /**
-     * This function returns all entries from the course log db table 
+     * This function returns all entries from the course log db table
      * that have information about the user using a forum.
      *
      * @param mixed $USER The current user.
@@ -362,7 +362,7 @@ class srg_log {
     }
 
     /**
-     * This function returns all entries from the course log db table 
+     * This function returns all entries from the course log db table
      * that have information about the users interaction with hvp content.
      *
      * @param mixed $USER The current user.
@@ -418,7 +418,7 @@ class srg_log {
     }
 
     /**
-     * This function returns all entries from the course log db table 
+     * This function returns all entries from the course log db table
      * that have information about the users badges.
      *
      * @param mixed $USER The current user.

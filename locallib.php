@@ -22,6 +22,8 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once(__DIR__ . '/sql.php');
 
 /**
@@ -53,14 +55,6 @@ function srg_enrolled_in($userid, $courseid) {
  */
 function srg_get_file_list($USER, $course) {
     $filelist = array();
-
-    /*
-    $filelist[] = array(
-        'name' => 'Detailed Course Log',
-        'filename' => 'detailed_course_log.csv',
-        'content' => srg_log::get_course_log($USER, $course)
-    );
-    */
 
     $filelist[] = array(
         'name' => 'Course Dedication Report',

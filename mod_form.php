@@ -25,6 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
+require_once(__DIR__ . '/locallib.php');
 
 /**
  * Module instance settings form.
@@ -64,7 +65,7 @@ class mod_srg_mod_form extends moodleform_mod {
         // Content.
         $mform->addElement('editor', 'instruction', get_string('content_title', 'mod_srg'));
         $mform->setType('instruction', PARAM_RAW);
-        $mform->setDefault('instruction', array('text' => get_string('content_default', 'mod_srg')));
+        $mform->setDefault('instruction', array('text' => srg_get_instruction($this->current->id)));
 
         // Add standard elements.
         $this->standard_coursemodule_elements();

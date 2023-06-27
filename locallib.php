@@ -27,6 +27,19 @@ defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/sql.php');
 
 /**
+ * Get the saved insctruction to be displayed on the view page.
+ * @param int $id Id of the activity.
+ * @return string Instruction
+ */
+function srg_get_instruction($id) {
+    if (empty($id)) return get_string('content_default', 'mod_srg');
+
+    global $DB;
+    $record = $DB->get_record('srg', ['id' => $id]);
+    return $record->instruction;
+}
+
+/**
  * Checks if a user is actively enrolled in a given course.
  * @param int $userid ID of the user
  * @param int $courseid ID of the course

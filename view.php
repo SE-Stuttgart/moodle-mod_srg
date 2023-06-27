@@ -86,6 +86,6 @@ echo $OUTPUT->single_button(
 
 echo html_writer::end_div();
 
-echo html_writer::tag('p', $srg->content);
+echo html_writer::tag('p', $srg->instruction);
 
 echo $OUTPUT->footer();

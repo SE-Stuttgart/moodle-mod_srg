@@ -70,8 +70,8 @@ function srg_add_instance($data) {
 
     $data->timemodified = $data->timecreated = time();
 
-    $data->content       = $data->instruction['text'];
-    $data->contentformat = $data->instruction['format'];
+    $data->instruction       = $data->instruction['text'];
+    $data->instructionformat = 1;
 
     // Create and add instance of srg.
     $id = $DB->insert_record('srg', $data);
@@ -97,8 +97,8 @@ function srg_update_instance($data) {
     $data->timemodified = time();
     $data->id = $data->instance;
 
-    $data->content       = $data->instruction['text'];
-    $data->contentformat = $data->instruction['format'];
+    $data->instruction       = $data->instruction['text'];
+    $data->instructionformat = 1;
 
     $DB->update_record('srg', $data);
 

@@ -32,7 +32,9 @@ require_once(__DIR__ . '/sql.php');
  * @return string Instruction
  */
 function srg_get_instruction($id) {
-    if (empty($id)) return get_string('content_default', 'mod_srg');
+    if (empty($id)) {
+        return get_string('content_default', 'mod_srg');
+    }
 
     global $DB;
     $record = $DB->get_record('srg', ['id' => $id]);

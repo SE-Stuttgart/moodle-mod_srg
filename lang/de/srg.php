@@ -58,7 +58,7 @@ $string['content_default'] = 'Sie können hier einen Teil Ihrer Logdaten in dies
     . 'Falls Sie den Inhalt einer solchen .kib3-Datei überprüfen wollen, ändern Sie daher nach dem Download einfach die Endung auf .zip und entpacken Sie sie.';
 
 // File Text.
-$string['zipfilename'] = 'moodle_student_report';
+$string['zipfilename'] = 'moodle-mod_srg';
 
 // View Text.
 $string['view_all_button_name'] = 'Logdaten ansehen';

@@ -69,7 +69,7 @@ if ($mode == 'print') { // Download data as CSV in .zip.
     // Trigger event\log_data_downloaded.
     srg_log_data_download($srg, $modulecontext);
 
-    $zipfilename = get_string('zipfilename', 'mod_srg') . '_courseID' . '_' . $course->id . '.kib3';
+    $zipfilename = get_string('zipfilename', 'mod_srg') . '.kib3';
 
     // Use Moodle 3.11 functionality.
     if ($CFG->version >= 2021050000) {

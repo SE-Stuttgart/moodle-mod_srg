@@ -58,7 +58,7 @@ $string['content_default'] = 'Here, you can view part of your anonymized log dat
     . 'If you want to unpack and view it, please change the extension to .zip after downloading and then unpack it.';
 
 // File Text.
-$string['zipfilename'] = 'moodle_student_report';
+$string['zipfilename'] = 'moodle-mod_srg';
 
 // View Text.
 $string['view_all_button_name'] = 'View log data';

@@ -45,7 +45,7 @@ class backup_srg_activity_structure_step extends backup_activity_structure_step 
         $srg = new backup_nested_element(
             'srg',
             array('id'),
-            array('name', 'timecreated', 'timemodified', 'intro', 'introformat', 'content', 'contentformat')
+            array('name', 'timecreated', 'timemodified', 'intro', 'introformat', 'instruction', 'instructionformat')
         );
 
         // Build the tree.
@@ -57,7 +57,7 @@ class backup_srg_activity_structure_step extends backup_activity_structure_step 
 
         // Define file annotations.
         $srg->annotate_files('mod_srg', 'intro', null, $contextid = null); // This file areas haven't itemid.
-        $srg->annotate_files('mod_srg', 'content', null, $contextid = null); // This file areas haven't itemid.
+        $srg->annotate_files('mod_srg', 'instruction', null, $contextid = null); // This file areas haven't itemid.
 
         // Return the root element (srg), wrapped into standard activity structure.
         return $this->prepare_activity_structure($srg);

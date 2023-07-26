@@ -57,7 +57,7 @@ class restore_srg_activity_task extends restore_activity_task {
     public static function define_decode_contents() {
         $contents = array();
 
-        $contents[] = new restore_decode_content('srg', array('intro', 'content'), 'srg');
+        $contents[] = new restore_decode_content('srg', array('intro', 'instruction'), 'srg');
 
         return $contents;
     }

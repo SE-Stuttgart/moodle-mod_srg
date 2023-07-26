@@ -73,6 +73,6 @@ class restore_srg_activity_structure_step extends restore_activity_structure_ste
     protected function after_execute() {
         // Add srg related files, no need to match by itemname (just internally handled context).
         $this->add_related_files('mod_srg', 'intro', null);
-        $this->add_related_files('mod_srg', 'content', null);
+        $this->add_related_files('mod_srg', 'instruction', null);
     }
 }

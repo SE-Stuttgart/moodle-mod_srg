@@ -22,6 +22,9 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use PhpXmlRpc\Helper\Logger;
+use ScssPhp\ScssPhp\Formatter\Debug;
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/sql.php');
@@ -71,49 +74,77 @@ function srg_enrolled_in($userid, $courseid) {
 function srg_get_file_list($USER, $course) {
     $filelist = array();
 
-    $filelist[] = array(
-        'name' => 'Course Dedication Report',
-        'filename' => 'course_dedication.csv',
-        'content' => srg_log::get_course_dedication($USER, $course)
-    );
-
-    $filelist[] = array(
-        'name' => 'Course Module Log',
-        'filename' => 'course_module_log.csv',
-        'content' => srg_log::get_course_module_log($USER, $course)
-    );
-
-    $filelist[] = array(
-        'name' => 'Course Module Dedication Report',
-        'filename' => 'course_module_dedication.csv',
-        'content' => srg_log::get_course_module_dedication($USER, $course)
-    );
-
-    $filelist[] = array(
-        'name' => 'Grade Inspection Report',
-        'filename' => 'grade_inspections.csv',
-        'content' => srg_log::get_grading_interest($USER, $course)
-    );
-
-    $filelist[] = array(
-        'name' => 'Forum Activity Report',
-        'filename' => 'forum_activities.csv',
-        'content' => srg_log::get_forum_activity($USER, $course)
-    );
-
-    if (core_plugin_manager::instance()->get_plugin_info('mod_hvp')) {
+    try {
         $filelist[] = array(
-            'name' => 'HVP Score Report',
-            'filename' => 'hvp_scores.csv',
-            'content' => srg_log::get_hvp($USER, $course)
+            'name' => 'Course Dedication Report',
+            'filename' => 'course_dedication.csv',
+            'content' => srg_log::get_course_dedication($USER, $course)
         );
+    } catch (\Throwable $th) {
+        debugging($th);
     }
 
-    $filelist[] = array(
-        'name' => 'User Earned Badges',
-        'filename' => 'badges.csv',
-        'content' => srg_log::get_badges($USER, $course)
-    );
+    try {
+        $filelist[] = array(
+            'name' => 'Course Module Log',
+            'filename' => 'course_module_log.csv',
+            'content' => srg_log::get_course_module_log($USER, $course)
+        );
+    } catch (\Throwable $th) {
+        debugging($th);
+    }
+
+    try {
+        $filelist[] = array(
+            'name' => 'Course Module Dedication Report',
+            'filename' => 'course_module_dedication.csv',
+            'content' => srg_log::get_course_module_dedication($USER, $course)
+        );
+    } catch (\Throwable $th) {
+        debugging($th);
+    }
+
+    try {
+        $filelist[] = array(
+            'name' => 'Grade Inspection Report',
+            'filename' => 'grade_inspections.csv',
+            'content' => srg_log::get_grading_interest($USER, $course)
+        );
+    } catch (\Throwable $th) {
+        debugging($th);
+    }
+
+    try {
+        $filelist[] = array(
+            'name' => 'Forum Activity Report',
+            'filename' => 'forum_activities.csv',
+            'content' => srg_log::get_forum_activity($USER, $course)
+        );
+    } catch (\Throwable $th) {
+        debugging($th);
+    }
+
+    if (core_plugin_manager::instance()->get_plugin_info('mod_hvp')) {
+        try {
+            $filelist[] = array(
+                'name' => 'HVP Score Report',
+                'filename' => 'hvp_scores.csv',
+                'content' => srg_log::get_hvp($USER, $course)
+            );
+        } catch (\Throwable $th) {
+            debugging($th);
+        }
+    }
+
+    try {
+        $filelist[] = array(
+            'name' => 'User Earned Badges',
+            'filename' => 'badges.csv',
+            'content' => srg_log::get_badges($USER, $course)
+        );
+    } catch (\Throwable $th) {
+        debugging($th);
+    }
 
     return $filelist;
 }

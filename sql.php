@@ -374,7 +374,7 @@ class srg_log {
         return (new table_from_db(
             'hvp_xapi_results',
             array(
-                'userid = ' . $USER->id,
+                'user_id = ' . $USER->id,
             ),
             array(
                 'content_id' => 'content_id',

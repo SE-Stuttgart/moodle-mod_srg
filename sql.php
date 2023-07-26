@@ -404,7 +404,9 @@ class srg_log {
                     )
                 ),
                 array(
-                    table_from_db::DEFAULT => array()
+                    table_from_db::DEFAULT => array(
+                        'timecreated' => 'timecreated'
+                    )
                 )
             )
             ->add_human_time('Time')

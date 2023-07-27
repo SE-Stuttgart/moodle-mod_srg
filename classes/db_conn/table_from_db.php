@@ -74,7 +74,7 @@ class table_from_db {
         // Prepare $dbwhere.
         $dbwhere = '';
         if (!empty($where)) {
-            $dbwhere .= "(" . implode(' and ', $where) . ")";
+            $dbwhere .= "(" . implode(') and (', $where) . ")";
         }
         if (!empty($where) && !empty($hiddencolumns)) {
             $dbwhere .= " and ";

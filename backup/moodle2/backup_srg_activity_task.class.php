@@ -19,7 +19,7 @@
  *
  * @package     mod_srg
  * @category    backup
- * @copyright  2022 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @copyright   2023 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -28,36 +28,33 @@ defined('MOODLE_INTERNAL') || die();
 // More information about the backup process: {@link https://docs.moodle.org/dev/Backup_API}.
 // More information about the restore process: {@link https://docs.moodle.org/dev/Restore_API}.
 
-require_once($CFG->dirroot . '/mod/srg/backup/moodle2/backup_srg_stepslib.php'); // Because it exists (must)
-require_once($CFG->dirroot . '/mod/srg/backup/moodle2/backup_srg_settingslib.php'); // Because it exists (optional)
+require_once($CFG->dirroot . '/mod/srg/backup/moodle2/backup_srg_stepslib.php'); // Because it exists (must).
 
 /**
  * Provides all the settings and steps to perform a complete backup of mod_srg.
  */
-class backup_srg_activity_task extends backup_activity_task
-{
+class backup_srg_activity_task extends backup_activity_task {
+
     /**
      * Define (add) particular settings this activity can have
      */
-    protected function define_my_settings()
-    {
-        // No particular settings for this activity
+    protected function define_my_settings() {
+        // No particular settings for this activity.
     }
 
     /**
      * Define (add) particular steps this activity can have
      */
-    protected function define_my_steps()
-    {
+    protected function define_my_steps() {
         $this->add_step(new backup_srg_activity_structure_step('srg_structure', 'srg.xml'));
     }
 
     /**
      * Code the transformations to perform in the activity in
      * order to get transportable (encoded) links
+     * @param string $content
      */
-    static public function encode_content_links($content)
-    {
+    public static function encode_content_links($content) {
         global $CFG;
 
         $base = preg_quote($CFG->wwwroot, '/');

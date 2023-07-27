@@ -19,11 +19,9 @@
  *
  * @package     mod_srg
  * @category    backup
- * @copyright  2022 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @copyright   2023 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-defined('MOODLE_INTERNAL') || die();
 
 // More information about the backup process: {@link https://docs.moodle.org/dev/Backup_API}.
 // More information about the restore process: {@link https://docs.moodle.org/dev/Restore_API}.
@@ -31,35 +29,37 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Define the complete structure for backup, with file and id annotations.
  */
-class backup_srg_activity_structure_step extends backup_activity_structure_step
-{
+class backup_srg_activity_structure_step extends backup_activity_structure_step {
 
     /**
      * Defines the structure of the resulting xml file.
      *
      * @return backup_nested_element The structure wrapped by the common 'activity' element.
      */
-    protected function define_structure()
-    {
+    protected function define_structure() {
 
-        // To know if we are including userinfo
+        // To know if we are including userinfo.
         $userinfo = $this->get_setting_value('userinfo');
 
-        // Define each element separated
-        $srg = new backup_nested_element('srg', array('id'), array('name', 'timecreated', 'timemodified', 'intro', 'introformat', 'content', 'contentformat'));
+        // Define each element separated.
+        $srg = new backup_nested_element(
+            'srg',
+            array('id'),
+            array('name', 'timecreated', 'timemodified', 'intro', 'introformat', 'instruction', 'instructionformat')
+        );
 
-        // Build the tree
+        // Build the tree.
 
-        // Define sources
+        // Define sources.
         $srg->set_source_table('srg', array('id' => backup::VAR_ACTIVITYID));
 
-        // Define id annotations
+        // Define id annotations.
 
-        // Define file annotations
-        $srg->annotate_files('mod_srg', 'intro', null, $contextid = null); // This file areas haven't itemid
-        $srg->annotate_files('mod_srg', 'content', null, $contextid = null); // This file areas haven't itemid
+        // Define file annotations.
+        $srg->annotate_files('mod_srg', 'intro', null, $contextid = null); // This file areas haven't itemid.
+        $srg->annotate_files('mod_srg', 'instruction', null, $contextid = null); // This file areas haven't itemid.
 
-        // Return the root element (srg), wrapped into standard activity structure
+        // Return the root element (srg), wrapped into standard activity structure.
         return $this->prepare_activity_structure($srg);
     }
 }

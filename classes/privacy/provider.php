@@ -15,18 +15,29 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Library of interface functions and constants.
  *
  * @package     mod_srg
  * @copyright   2023 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace mod_srg\privacy;
 
-$logs = array(
-    array('module' => 'srg', 'action' => 'view',     'mtable' => 'srg', 'field' => 'name'),
-    array('module' => 'srg', 'action' => 'view all', 'mtable' => 'srg', 'field' => 'name'),
-    array('module' => 'srg', 'action' => 'update',   'mtable' => 'srg', 'field' => 'name'),
-    array('module' => 'srg', 'action' => 'add',      'mtable' => 'srg', 'field' => 'name'),
-);
+/**
+ * The mod_srg module does not store any data.
+ */
+class provider implements
+    // This plugin does not store any personal user data.
+    \core_privacy\local\metadata\null_provider {
+
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return  string
+     */
+    public static function get_reason(): string {
+        return 'privacy:metadata';
+    }
+}

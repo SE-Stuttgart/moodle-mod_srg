@@ -18,13 +18,14 @@
  * The main mod_srg configuration form.
  *
  * @package     mod_srg
- * @copyright   2022 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @copyright   2023 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
+require_once(__DIR__ . '/locallib.php');
 
 /**
  * Module instance settings form.
@@ -33,24 +34,22 @@ require_once($CFG->dirroot . '/course/moodleform_mod.php');
  * @copyright   2022 University of Stuttgart
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_srg_mod_form extends moodleform_mod
-{
+class mod_srg_mod_form extends moodleform_mod {
 
     /**
      * Defines forms elements
      */
-    public function definition()
-    {
+    public function definition() {
         global $CFG, $DB, $OUTPUT;
 
         $mform = &$this->_form;
 
         $config = get_config('srg');
 
-        //Header
+        // Header.
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
-        // Name
+        // Name.
         $mform->addElement('text', 'name', get_string('name'), array('size' => '48'));
         if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);
@@ -60,13 +59,13 @@ class mod_srg_mod_form extends moodleform_mod
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
-        // Intro
+        // Intro.
         $this->standard_intro_elements();
 
-        // Content
+        // Content.
         $mform->addElement('editor', 'instruction', get_string('content_title', 'mod_srg'));
         $mform->setType('instruction', PARAM_RAW);
-        $mform->setDefault('instruction', array('text' => get_string('content_default', 'mod_srg')));
+        $mform->setDefault('instruction', array('text' => srg_get_instruction($this->current->id)));
 
         // Add standard elements.
         $this->standard_coursemodule_elements();

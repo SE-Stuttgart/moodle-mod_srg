@@ -18,14 +18,14 @@
  * Plugin version and other meta-data are defined here.
  *
  * @package     mod_srg
- * @copyright  2022 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @copyright   2023 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2023013110; // plug-in version (YYMMDDHH)
+$plugin->version = 2023072700; // Plug-in version (YYMMDDHH).
 $plugin->requires = 2020061515;
 $plugin->component = 'mod_srg';
-$plugin->release = '1.1.0';
+$plugin->release = '1.1.1';
 $plugin->maturity = MATURITY_STABLE;

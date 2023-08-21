@@ -80,7 +80,7 @@ if ($mode == 'print') { // Download data as CSV in .zip.
         if ($zipwriter instanceof \core_files\local\archive_writer\zip_writer) {
             // Stream the files into the zip.
             foreach ($filelist as $file) {
-                $zipwriter->add_file_from_string($file['filename'], srg_CSV::simple_table_to_csv($file['content']));
+                $zipwriter->add_file_from_string($file['filename'], mod_srg\srg_CSV::simple_table_to_csv($file['content']));
                 unset($file);
             }
 
@@ -104,7 +104,7 @@ if ($mode == 'print') { // Download data as CSV in .zip.
             }
 
             $csvfilepath = $exporttmpdir . DIRECTORY_SEPARATOR . $file['filename'];
-            if (!file_put_contents($csvfilepath, srg_CSV::simple_table_to_csv($file['content']))) {
+            if (!file_put_contents($csvfilepath, mod_srg\srg_CSV::simple_table_to_csv($file['content']))) {
                 throw new moodle_exception(get_string('error_creating_csv_file', 'mod_srg'));
             }
             $zipfiles[$file['filename']] = $csvfilepath;
@@ -122,35 +122,62 @@ if ($mode == 'print') { // Download data as CSV in .zip.
 
     echo $OUTPUT->header();
 
-    echo html_writer::start_tag('style');
-    echo file_get_contents('style/styles.css');
-    echo html_writer::end_tag('style');
-
-    foreach ($filelist as $file) {
+    // View Content.
+    echo html_writer::start_div('', array('id' => 'mod_srg-accordion'));
+    foreach (array_values($filelist) as $i => $file) {
         $table = $file['content'];
         $t = new html_table();
         $t->head = array_shift($table);
         $t->data = $table;
 
-        echo html_writer::div(
-            html_writer::tag(
-                'h2',
-                html_writer::span(
-                    html_writer::tag('i', '', array('class' => 'srg-icon-dropdown', 'aria-hidden' => 'true')),
-                    'media-left'
-                )
-                    . $file['name'],
-                array('class' => 'srg-collapsible media')
-            )
-                . html_writer::div(
-                    html_writer::table($t),
-                    'srg-content'
-                )
-        );
-        unset($file);
-    }
+        echo html_writer::start_div('card'); // Start Card (Accordion item).
 
-    echo html_writer::script('', new moodle_url('/mod/srg/scripts/collapse.js'));
+        echo html_writer::tag(
+            'button',
+            ''
+                . html_writer::tag(
+                    'h5',
+                    $file['name'],
+                    array('class' => 'm-0')
+                )
+                . html_writer::tag(
+                    'i',
+                    '',
+                    array(
+                        'class' => 'fa fa-chevron-down',
+                        'id' => 'mod_srg-chevron-' . $i,
+                        'aria-hidden' => 'true'
+                    )
+                ),
+            array(
+                'class' => 'mod_srg-collapse-button card-header collapsed d-flex flex-row justify-content-between align-items-center',
+                'id' => 'mod_srg-heading-' . $i,
+                'data-toggle' => 'collapse',
+                'data-target' => '#mod_srg-collapse-' . $i,
+                'icon-target' => '#mod_srg-chevron-' . $i,
+                'aria-expanded' => 'false',
+                'aria-controls' => 'mod_srg-collapse-' . $i
+            )
+        );
+
+        echo html_writer::div(
+            html_writer::div(
+                html_writer::table($t),
+                'card-body p-0'
+            ),
+            'collapse',
+            array(
+                'id' => 'mod_srg-collapse-' . $i,
+                'aria-labelledby' => 'mod_srg-heading-' . $i,
+                'data-parent' => '#mod_srg-accordion'
+            )
+        );
+
+        echo html_writer::end_div(); // End Card.
+    }
+    echo html_writer::end_div(); // End Accordion.
+
+    echo html_writer::script('', new moodle_url('/mod/srg/scripts/accordion.js'));
 
     echo $OUTPUT->footer();
 

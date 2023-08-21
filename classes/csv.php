@@ -22,6 +22,8 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_srg;
+
 /**
  * Class holding helper methods corresponding to .csv
  */

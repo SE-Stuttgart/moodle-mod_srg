@@ -24,12 +24,14 @@
 
 namespace mod_srg;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once(__DIR__ . '/table_from_db.php');
 
 /**
  * Class that has multiple static hard coded function, each creating and returning one set of log data.
  */
-class srg_log {
+class db_sql {
     /**
      * This function returns all entries from the course log db table.
      *

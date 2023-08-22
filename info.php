@@ -150,7 +150,8 @@ if ($mode == 'print') { // Download data as CSV in .zip.
                     )
                 ),
             array(
-                'class' => 'mod_srg-collapse-button card-header collapsed d-flex flex-row justify-content-between align-items-center',
+                'class' => 'mod_srg-collapse-button card-header collapsed'
+                    . ' d-flex flex-row justify-content-between align-items-center',
                 'id' => 'mod_srg-heading-' . $i,
                 'data-toggle' => 'collapse',
                 'data-target' => '#mod_srg-collapse-' . $i,

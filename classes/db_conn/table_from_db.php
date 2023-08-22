@@ -261,7 +261,7 @@ class table_from_db {
 
     /**
      * The way how to calculate the dedication was inspired by the Block_Dedication plug-in.
-     * 
+     *
      * Collapse a the table based on $dedication_targen and the timecreated of the DB entries.
      * Create a new column $name which holds the timedifference of each collapsed entry.
      * This timedifference represents the the time actively spent on each $dedicationtarget.
@@ -420,7 +420,7 @@ class table_from_db {
 
     /**
      * This method was copied as part from the dedication from the Block_Dedication plug-in.
-     * 
+     *
      * Turns an int of seconds into a string: x hours y minutes z seconds
      * @param int $seconds
      * @return string x hours y minutes z seconds

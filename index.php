@@ -29,7 +29,11 @@ $id = required_param('id', PARAM_INT); // Course ID.
 
 // Ensure that the course specified is valid.
 if (!$course = $DB->get_record('course', array('id' => $id))) {
-    throw new moodle_exception('Course ID is incorrect');
+    throw new moodle_exception(get_string('error_course_not_found', 'mod_srg'));
+}
+// Does the user have access to the course?
+if (!can_access_course($course)) {
+    throw new moodle_exception(get_string('error_course_access_denied', 'mod_srg'));
 }
 
 require_course_login($course, true);

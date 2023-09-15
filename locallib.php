@@ -22,12 +22,9 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use PhpXmlRpc\Helper\Logger;
-use ScssPhp\ScssPhp\Formatter\Debug;
-
 defined('MOODLE_INTERNAL') || die();
 
-require_once(__DIR__ . '/sql.php');
+require_once(__DIR__ . '/classes/db_conn/db_sql.php');
 
 /**
  * Get the saved insctruction to be displayed on the view page.
@@ -45,27 +42,6 @@ function srg_get_instruction($id) {
 }
 
 /**
- * Checks if a user is actively enrolled in a given course.
- * @param int $userid ID of the user
- * @param int $courseid ID of the course
- * @return bool True if the user with given id is enrolled in course with given id.
- */
-function srg_enrolled_in($userid, $courseid) {
-    global $DB;
-
-    $params = array('userid' => $userid, 'courseid' => $courseid);
-    $sql = "SELECT e.courseid FROM  {enrol} e
-            JOIN {user_enrolments} ue ON e.id = ue.enrolid
-            WHERE ue.status = 0 AND ue.userid = :userid AND e.courseid = :courseid";
-    $enrolledcourses = $DB->get_records_sql($sql, $params);
-
-    if (!$enrolledcourses) {
-        return false;
-    }
-    return true;
-}
-
-/**
  * Hardcoded Selected Logs Metadata
  * @param mixed $USER The current user.
  * @param Course $course The course of this activity.
@@ -78,7 +54,7 @@ function srg_get_file_list($USER, $course) {
         $filelist[] = array(
             'name' => 'Course Dedication Report',
             'filename' => 'course_dedication.csv',
-            'content' => srg_log::get_course_dedication($USER, $course)
+            'content' => mod_srg\db_sql::get_course_dedication($USER, $course)
         );
     } catch (\Throwable $th) {
         debugging($th);
@@ -88,7 +64,7 @@ function srg_get_file_list($USER, $course) {
         $filelist[] = array(
             'name' => 'Course Module Log',
             'filename' => 'course_module_log.csv',
-            'content' => srg_log::get_course_module_log($USER, $course)
+            'content' => mod_srg\db_sql::get_course_module_log($USER, $course)
         );
     } catch (\Throwable $th) {
         debugging($th);
@@ -98,7 +74,7 @@ function srg_get_file_list($USER, $course) {
         $filelist[] = array(
             'name' => 'Course Module Dedication Report',
             'filename' => 'course_module_dedication.csv',
-            'content' => srg_log::get_course_module_dedication($USER, $course)
+            'content' => mod_srg\db_sql::get_course_module_dedication($USER, $course)
         );
     } catch (\Throwable $th) {
         debugging($th);
@@ -108,7 +84,7 @@ function srg_get_file_list($USER, $course) {
         $filelist[] = array(
             'name' => 'Grade Inspection Report',
             'filename' => 'grade_inspections.csv',
-            'content' => srg_log::get_grading_interest($USER, $course)
+            'content' => mod_srg\db_sql::get_grading_interest($USER, $course)
         );
     } catch (\Throwable $th) {
         debugging($th);
@@ -118,7 +94,7 @@ function srg_get_file_list($USER, $course) {
         $filelist[] = array(
             'name' => 'Forum Activity Report',
             'filename' => 'forum_activities.csv',
-            'content' => srg_log::get_forum_activity($USER, $course)
+            'content' => mod_srg\db_sql::get_forum_activity($USER, $course)
         );
     } catch (\Throwable $th) {
         debugging($th);
@@ -129,7 +105,7 @@ function srg_get_file_list($USER, $course) {
             $filelist[] = array(
                 'name' => 'HVP Score Report',
                 'filename' => 'hvp_scores.csv',
-                'content' => srg_log::get_hvp($USER, $course)
+                'content' => mod_srg\db_sql::get_hvp($USER, $course)
             );
         } catch (\Throwable $th) {
             debugging($th);
@@ -140,7 +116,7 @@ function srg_get_file_list($USER, $course) {
         $filelist[] = array(
             'name' => 'User Earned Badges',
             'filename' => 'badges.csv',
-            'content' => srg_log::get_badges($USER, $course)
+            'content' => mod_srg\db_sql::get_badges($USER, $course)
         );
     } catch (\Throwable $th) {
         debugging($th);

@@ -42,27 +42,6 @@ function srg_get_instruction($id) {
 }
 
 /**
- * Checks if a user is actively enrolled in a given course.
- * @param int $userid ID of the user
- * @param int $courseid ID of the course
- * @return bool True if the user with given id is enrolled in course with given id.
- */
-function srg_enrolled_in($userid, $courseid) {
-    global $DB;
-
-    $params = array('userid' => $userid, 'courseid' => $courseid);
-    $sql = "SELECT e.courseid FROM  {enrol} e
-            JOIN {user_enrolments} ue ON e.id = ue.enrolid
-            WHERE ue.status = 0 AND ue.userid = :userid AND e.courseid = :courseid";
-    $enrolledcourses = $DB->get_records_sql($sql, $params);
-
-    if (!$enrolledcourses) {
-        return false;
-    }
-    return true;
-}
-
-/**
  * Hardcoded Selected Logs Metadata
  * @param mixed $USER The current user.
  * @param Course $course The course of this activity.

@@ -47,7 +47,7 @@ if (!$srg = $DB->get_record('srg', array('id' => $cm->instance))) {
     throw new moodle_exception(get_string('error_course_module', 'mod_srg'));
 }
 // Does the user have access to the course?
-if (!srg_enrolled_in($USER->id, $course->id)) {
+if (!can_access_course($course)) {
     throw new moodle_exception(get_string('error_course_access_denied', 'mod_srg'));
 }
 

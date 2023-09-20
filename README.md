@@ -25,7 +25,7 @@ Mehr Informationen zu den Funktionen und zur Konfiguration des Plugins sind im [
 
 ### Installing via Uploaded ZIP File ##
 
-1. Load the ZIP file with the newest version from [https://github.com/SE-Stuttgart/kib3_moodleplugin_srg/releases](https://github.com/SE-Stuttgart/kib3_moodleplugin_srg/releases).
+1. Load the ZIP file with the newest version from [https://github.com/SE-Stuttgart/moodle-mod_srg/releases](https://github.com/SE-Stuttgart/moodle-mod_srg/releases).
 2. Log in to your Moodle site as an admin and go to _Site administration >
    Plugins > Install plugins_.
 3. Upload the ZIP file with the plugin code. You should only be prompted to add

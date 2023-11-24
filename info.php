@@ -178,9 +178,11 @@ if ($mode == 'print') { // Download data as CSV in .zip.
     }
     echo html_writer::end_div(); // End Accordion.
 
-    echo html_writer::script('', new moodle_url('/mod/srg/scripts/accordion.js'));
+
 
     echo $OUTPUT->footer();
+
+    echo html_writer::script('', new moodle_url('/mod/srg/scripts/accordion.js'));
 
     gc_collect_cycles();
 }

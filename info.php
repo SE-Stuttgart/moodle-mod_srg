@@ -39,11 +39,11 @@ if (!$cm = get_coursemodule_from_id('srg', $cmid)) {
     throw new moodle_exception(get_string('error_course_module_id', 'mod_srg'));
 }
 // Course.
-if (!$course = $DB->get_record('course', array('id' => $cm->course))) {
+if (!$course = $DB->get_record('course', ['id' => $cm->course])) {
     throw new moodle_exception(get_string('error_course_not_found', 'mod_srg'));
 }
 // Activity.
-if (!$srg = $DB->get_record('srg', array('id' => $cm->instance))) {
+if (!$srg = $DB->get_record('srg', ['id' => $cm->instance])) {
     throw new moodle_exception(get_string('error_course_module', 'mod_srg'));
 }
 // Does the user have access to the course?
@@ -57,7 +57,7 @@ $systemcontext = context_system::instance();
 $modulecontext = context_module::instance($cm->id);
 $usercontext = context_user::instance($USER->id);
 
-$PAGE->set_url('/mod/srg/info.php',  array('id' => $cm->id, 'mode' => $mode));
+$PAGE->set_url('/mod/srg/info.php',  ['id' => $cm->id, 'mode' => $mode]);
 $PAGE->set_title(get_string('info_title', 'mod_srg'));
 $PAGE->set_heading(get_string('info_heading', 'mod_srg'));
 $PAGE->set_context($modulecontext);
@@ -123,7 +123,7 @@ if ($mode == 'print') { // Download data as CSV in .zip.
     echo $OUTPUT->header();
 
     // View Content.
-    echo html_writer::start_div('', array('id' => 'mod_srg-accordion'));
+    echo html_writer::start_div('', ['id' => 'mod_srg-accordion']);
     foreach (array_values($filelist) as $i => $file) {
         $table = $file['content'];
         $t = new html_table();
@@ -138,18 +138,18 @@ if ($mode == 'print') { // Download data as CSV in .zip.
                 . html_writer::tag(
                     'h5',
                     $file['name'],
-                    array('class' => 'm-0')
+                    ['class' => 'm-0']
                 )
                 . html_writer::tag(
                     'i',
                     '',
-                    array(
+                    [
                         'class' => 'fa fa-chevron-down',
                         'id' => 'mod_srg-chevron-' . $i,
-                        'aria-hidden' => 'true'
-                    )
+                        'aria-hidden' => 'true',
+                    ]
                 ),
-            array(
+            [
                 'class' => 'mod_srg-collapse-button card-header collapsed'
                     . ' d-flex flex-row justify-content-between align-items-center',
                 'id' => 'mod_srg-heading-' . $i,
@@ -157,8 +157,8 @@ if ($mode == 'print') { // Download data as CSV in .zip.
                 'data-target' => '#mod_srg-collapse-' . $i,
                 'icon-target' => '#mod_srg-chevron-' . $i,
                 'aria-expanded' => 'false',
-                'aria-controls' => 'mod_srg-collapse-' . $i
-            )
+                'aria-controls' => 'mod_srg-collapse-' . $i,
+            ]
         );
 
         echo html_writer::div(
@@ -167,20 +167,22 @@ if ($mode == 'print') { // Download data as CSV in .zip.
                 'card-body p-0'
             ),
             'collapse',
-            array(
+            [
                 'id' => 'mod_srg-collapse-' . $i,
                 'aria-labelledby' => 'mod_srg-heading-' . $i,
-                'data-parent' => '#mod_srg-accordion'
-            )
+                'data-parent' => '#mod_srg-accordion',
+            ]
         );
 
         echo html_writer::end_div(); // End Card.
     }
     echo html_writer::end_div(); // End Accordion.
 
-    echo html_writer::script('', new moodle_url('/mod/srg/scripts/accordion.js'));
+
 
     echo $OUTPUT->footer();
+
+    echo html_writer::script('', new moodle_url('/mod/srg/scripts/accordion.js'));
 
     gc_collect_cycles();
 }

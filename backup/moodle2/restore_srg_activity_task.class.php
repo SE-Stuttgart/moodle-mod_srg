@@ -55,9 +55,9 @@ class restore_srg_activity_task extends restore_activity_task {
      * @return array.
      */
     public static function define_decode_contents() {
-        $contents = array();
+        $contents = [];
 
-        $contents[] = new restore_decode_content('srg', array('intro', 'instruction'), 'srg');
+        $contents[] = new restore_decode_content('srg', ['intro', 'instruction'], 'srg');
 
         return $contents;
     }
@@ -68,7 +68,7 @@ class restore_srg_activity_task extends restore_activity_task {
      * @return array.
      */
     public static function define_decode_rules() {
-        $rules = array();
+        $rules = [];
 
         // Srg by cm->id.
         $rules[] = new restore_decode_rule('SRGVIEWBYID', '/mod/srg/view.php?id=$1', 'course_module');
@@ -86,7 +86,7 @@ class restore_srg_activity_task extends restore_activity_task {
      * @return array.
      */
     public static function define_restore_log_rules() {
-        $rules = array();
+        $rules = [];
 
         return $rules;
     }
@@ -102,7 +102,7 @@ class restore_srg_activity_task extends restore_activity_task {
      * activity level. All them are rules not linked to any module instance (cmid = 0)
      */
     public static function define_restore_log_rules_for_course() {
-        $rules = array();
+        $rules = [];
 
         return $rules;
     }

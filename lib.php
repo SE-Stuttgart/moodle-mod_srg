@@ -117,7 +117,7 @@ function srg_update_instance($data) {
 function srg_delete_instance($id) {
     global $DB;
 
-    $exists = $DB->get_record('srg', array('id' => $id));
+    $exists = $DB->get_record('srg', ['id' => $id]);
     if (!$exists) {
         return false;
     }
@@ -125,7 +125,7 @@ function srg_delete_instance($id) {
     $cm = get_coursemodule_from_instance('srg', $id);
     \core_completion\api::update_completion_date_event($cm->id, 'srg', $id, null);
 
-    $DB->delete_records('srg', array('id' => $id));
+    $DB->delete_records('srg', ['id' => $id]);
 
     return true;
 }
@@ -137,10 +137,10 @@ function srg_delete_instance($id) {
  * @param  stdClass $context context object
  */
 function srg_view($srg, $context) {
-    $params = array(
+    $params = [
         'context' => $context,
-        'objectid' => $srg->id
-    );
+        'objectid' => $srg->id,
+    ];
 
     $event = \mod_srg\event\course_module_viewed::create($params);
     $event->add_record_snapshot('srg', $srg);
@@ -154,10 +154,10 @@ function srg_view($srg, $context) {
  * @param  stdClass $context context object
  */
 function srg_log_data_view($srg, $context) {
-    $params = array(
+    $params = [
         'context' => $context,
-        'objectid' => $srg->id
-    );
+        'objectid' => $srg->id,
+    ];
 
     $event = \mod_srg\event\log_data_viewed::create($params);
     $event->add_record_snapshot('srg', $srg);
@@ -171,10 +171,10 @@ function srg_log_data_view($srg, $context) {
  * @param  stdClass $context context object
  */
 function srg_log_data_download($srg, $context) {
-    $params = array(
+    $params = [
         'context' => $context,
-        'objectid' => $srg->id
-    );
+        'objectid' => $srg->id,
+    ];
 
     $event = \mod_srg\event\log_data_downloaded::create($params);
     $event->add_record_snapshot('srg', $srg);

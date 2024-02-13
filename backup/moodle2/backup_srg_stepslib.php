@@ -44,14 +44,14 @@ class backup_srg_activity_structure_step extends backup_activity_structure_step 
         // Define each element separated.
         $srg = new backup_nested_element(
             'srg',
-            array('id'),
-            array('name', 'timecreated', 'timemodified', 'intro', 'introformat', 'instruction', 'instructionformat')
+            ['id'],
+            ['name', 'timecreated', 'timemodified', 'intro', 'introformat', 'instruction', 'instructionformat']
         );
 
         // Build the tree.
 
         // Define sources.
-        $srg->set_source_table('srg', array('id' => backup::VAR_ACTIVITYID));
+        $srg->set_source_table('srg', ['id' => backup::VAR_ACTIVITYID]);
 
         // Define id annotations.
 

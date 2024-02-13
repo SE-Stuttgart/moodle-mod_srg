@@ -28,7 +28,7 @@ require_once(__DIR__ . '/lib.php');
 $id = required_param('id', PARAM_INT); // Course ID.
 
 // Ensure that the course specified is valid.
-if (!$course = $DB->get_record('course', array('id' => $id))) {
+if (!$course = $DB->get_record('course', ['id' => $id])) {
     throw new moodle_exception(get_string('error_course_not_found', 'mod_srg'));
 }
 // Does the user have access to the course?
@@ -45,7 +45,7 @@ $strname            = get_string('name');
 $strintro           = get_string('moduleintro');
 $strlastmodified    = get_string('lastmodified');
 
-$PAGE->set_url('/mod/srg/index.php', array('id' => $id));
+$PAGE->set_url('/mod/srg/index.php', ['id' => $id]);
 $PAGE->set_title(format_string($course->shortname) . ':' . $modulenameplural);
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->navbar->add($modulename);
@@ -54,7 +54,7 @@ echo $OUTPUT->header();
 
 // Get all the appropriate data.
 if (!$srgs = get_all_instances_in_course('srg', $course)) {
-    $srg = array();
+    $srg = [];
 }
 
 $usesections = course_format_uses_sections($course->format);
@@ -64,11 +64,11 @@ $table->attributes['class'] = 'generaltable mod_index';
 
 if ($usesections) {
     $strsectionname = get_string('sectionname', 'format_' . $course->format);
-    $table->head  = array($strsectionname, $strname, $strintro);
-    $table->align = array('center', 'left', 'left');
+    $table->head  = [$strsectionname, $strname, $strintro];
+    $table->align = ['center', 'left', 'left'];
 } else {
-    $table->head  = array($strlastmodified, $strname, $strintro);
-    $table->align = array('left', 'left', 'left');
+    $table->head  = [$strlastmodified, $strname, $strintro];
+    $table->align = ['left', 'left', 'left'];
 }
 
 $modinfo = get_fast_modinfo($course);
@@ -87,16 +87,16 @@ foreach ($srgs as $srg) {
             $currentsection = $srg->section;
         }
     } else {
-        $printsection = html_writer::tag('span', userdate($srg->timemodified), array('class' => 'smallinfo'));
+        $printsection = html_writer::tag('span', userdate($srg->timemodified), ['class' => 'smallinfo']);
     }
 
-    $class = $srg->visible ? null : array('class' => 'dimmed'); // Hidden modules are dimmed.
+    $class = $srg->visible ? null : ['class' => 'dimmed']; // Hidden modules are dimmed.
 
-    $table->data[] = array(
+    $table->data[] = [
         $printsection,
-        html_writer::link(new moodle_url('view.php', array('id' => $cm->id)), format_string($srg->name), $class),
-        format_module_intro('srg', $srg, $cm->id)
-    );
+        html_writer::link(new moodle_url('view.php', ['id' => $cm->id]), format_string($srg->name), $class),
+        format_module_intro('srg', $srg, $cm->id),
+    ];
 }
 
 echo html_writer::table($table);

@@ -48,78 +48,90 @@ function srg_get_instruction($id) {
  * @return array Array of log data packets. Each packet has a name an advised filename and the log as array.
  */
 function srg_get_file_list($USER, $course) {
-    $filelist = array();
+    $filelist = [];
 
     try {
-        $filelist[] = array(
+        $filelist[] = [
             'name' => 'Course Dedication Report',
             'filename' => 'course_dedication.csv',
-            'content' => mod_srg\db_sql::get_course_dedication($USER, $course)
-        );
+            'content' => mod_srg\db_sql::get_course_dedication($USER, $course),
+        ];
     } catch (\Throwable $th) {
         debugging($th);
     }
 
     try {
-        $filelist[] = array(
+        $filelist[] = [
             'name' => 'Course Module Log',
             'filename' => 'course_module_log.csv',
-            'content' => mod_srg\db_sql::get_course_module_log($USER, $course)
-        );
+            'content' => mod_srg\db_sql::get_course_module_log($USER, $course),
+        ];
     } catch (\Throwable $th) {
         debugging($th);
     }
 
     try {
-        $filelist[] = array(
+        $filelist[] = [
             'name' => 'Course Module Dedication Report',
             'filename' => 'course_module_dedication.csv',
-            'content' => mod_srg\db_sql::get_course_module_dedication($USER, $course)
-        );
+            'content' => mod_srg\db_sql::get_course_module_dedication($USER, $course),
+        ];
     } catch (\Throwable $th) {
         debugging($th);
     }
 
     try {
-        $filelist[] = array(
+        $filelist[] = [
             'name' => 'Grade Inspection Report',
             'filename' => 'grade_inspections.csv',
-            'content' => mod_srg\db_sql::get_grading_interest($USER, $course)
-        );
+            'content' => mod_srg\db_sql::get_grading_interest($USER, $course),
+        ];
     } catch (\Throwable $th) {
         debugging($th);
     }
 
     try {
-        $filelist[] = array(
+        $filelist[] = [
             'name' => 'Forum Activity Report',
             'filename' => 'forum_activities.csv',
-            'content' => mod_srg\db_sql::get_forum_activity($USER, $course)
-        );
+            'content' => mod_srg\db_sql::get_forum_activity($USER, $course),
+        ];
     } catch (\Throwable $th) {
         debugging($th);
     }
 
     if (core_plugin_manager::instance()->get_plugin_info('mod_hvp')) {
         try {
-            $filelist[] = array(
+            $filelist[] = [
                 'name' => 'HVP Score Report',
                 'filename' => 'hvp_scores.csv',
-                'content' => mod_srg\db_sql::get_hvp($USER, $course)
-            );
+                'content' => mod_srg\db_sql::get_hvp($USER, $course),
+            ];
         } catch (\Throwable $th) {
             debugging($th);
         }
     }
 
     try {
-        $filelist[] = array(
+        $filelist[] = [
             'name' => 'User Earned Badges',
             'filename' => 'badges.csv',
-            'content' => mod_srg\db_sql::get_badges($USER, $course)
-        );
+            'content' => mod_srg\db_sql::get_badges($USER, $course),
+        ];
     } catch (\Throwable $th) {
         debugging($th);
+    }
+
+    if (core_plugin_manager::instance()->get_plugin_info('block_chatbot')) {
+        try {
+            $filelist[] = [
+                'name' => 'Chatbot History',
+                'filename' => 'chatbot_history.csv',
+                'content' => mod_srg\db_sql::get_chatbot_history($USER, $course),
+            ];
+        } catch (\Throwable $th) {
+            debugging($th);
+        }
     }
 
     return $filelist;

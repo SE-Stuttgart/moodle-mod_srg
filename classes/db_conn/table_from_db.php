@@ -71,9 +71,9 @@ class table_from_db {
 
         global $DB;
         $this->tableheading = $publiccolumns;
-        $this->table = array();
+        $this->table = [];
         $this->hiddentableheadings = $hiddencolumns;
-        $this->hiddentable = array();
+        $this->hiddentable = [];
 
         // Prepare $dbwhere.
         $dbwhere = '';
@@ -99,7 +99,7 @@ class table_from_db {
 
         // Transform DB returned records into desired data structure.
         foreach ($records as $record) {
-            $row = array();
+            $row = [];
             foreach ($this->tableheading as $internalheading => $externalheading) {
                 if (isset($record->$internalheading)) {
                     $row[$internalheading] = $record->$internalheading;
@@ -109,7 +109,7 @@ class table_from_db {
                 $this->table[$record->{'id'}] = $row;
             }
 
-            $row = array();
+            $row = [];
             foreach ($this->hiddentableheadings as $internalheading) {
                 if (isset($record->$internalheading)) {
                     $row[$internalheading] = $record->$internalheading;
@@ -155,7 +155,7 @@ class table_from_db {
         $querytotable = false; // Const.
 
         // Create an array of ID matching arrays for every table to be queried.
-        $subqueries = array();
+        $subqueries = [];
         foreach ($this->hiddentable as $id => $row) {
             // Check if row is necessary for this query.
             if (!isset($row[$idsource])) {
@@ -192,9 +192,9 @@ class table_from_db {
 
             // Check which parameters should be used for this query.
             if (!isset($where[$table])) {
-                $thiswhere = array('id in (' . implode(",", $ids[$tabletoquery]) . ')') + $where[self::DEFAULT];
+                $thiswhere = ['id in (' . implode(",", $ids[$tabletoquery]) . ')'] + $where[self::DEFAULT];
             } else {
-                $thiswhere = array('id' => $ids[$tabletoquery]) + $where[$table];
+                $thiswhere = ['id' => $ids[$tabletoquery]] + $where[$table];
             }
             if (!isset($publiccolumns[$table])) {
                 $thispubliccolumns = $publiccolumns[self::DEFAULT];
@@ -202,9 +202,9 @@ class table_from_db {
                 $thispubliccolumns = $publiccolumns[$table];
             }
             if (!isset($hiddencolumns[$table])) {
-                $thishiddencolumns = array('id' => $idsource) + $hiddencolumns[self::DEFAULT];
+                $thishiddencolumns = ['id' => $idsource] + $hiddencolumns[self::DEFAULT];
             } else {
-                $thishiddencolumns = array('id' => $idsource) + $hiddencolumns[$table];
+                $thishiddencolumns = ['id' => $idsource] + $hiddencolumns[$table];
             }
 
             // Create table columns (headers).
@@ -292,7 +292,7 @@ class table_from_db {
         $lastid = array_key_last($this->table);
         $previoustime = $this->get_time($sessionid);
 
-        $idstodelete = array();
+        $idstodelete = [];
         foreach ($this->table as $id => $row) {
 
             // If new session do update sessionid.
@@ -393,7 +393,7 @@ class table_from_db {
      * @return table_from_db object.
      */
     public function prune_table(array $columns) {
-        $deleteids = array();
+        $deleteids = [];
         foreach ($this->table as $id => $row) {
             foreach ($columns as $column) {
                 if (!isset($row[$column]) || empty($row[$column])) {
@@ -415,7 +415,7 @@ class table_from_db {
      * @return array Array of rows representing the table. First row and column keys are the column headings.
      */
     public function get_table() {
-        return array(0 => $this->tableheading) + $this->table;
+        return [0 => $this->tableheading] + $this->table;
     }
 
     /**

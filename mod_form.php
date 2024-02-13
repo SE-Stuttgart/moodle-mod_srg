@@ -50,7 +50,7 @@ class mod_srg_mod_form extends moodleform_mod {
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         // Name.
-        $mform->addElement('text', 'name', get_string('name'), array('size' => '48'));
+        $mform->addElement('text', 'name', get_string('name'), ['size' => '48']);
         if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);
         } else {
@@ -65,7 +65,7 @@ class mod_srg_mod_form extends moodleform_mod {
         // Content.
         $mform->addElement('editor', 'instruction', get_string('content_title', 'mod_srg'));
         $mform->setType('instruction', PARAM_RAW);
-        $mform->setDefault('instruction', array('text' => srg_get_instruction($this->current->id)));
+        $mform->setDefault('instruction', ['text' => srg_get_instruction($this->current->id)]);
 
         // Add standard elements.
         $this->standard_coursemodule_elements();

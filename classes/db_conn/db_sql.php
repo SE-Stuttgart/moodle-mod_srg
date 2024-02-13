@@ -43,11 +43,11 @@ class db_sql {
     public static function get_course_log($USER, $course) {
         return (new table_from_db(
             'logstore_standard_log',
-            array(
+            [
                 'userid = ' . $USER->id,
-                'courseid = ' . $course->id
-            ),
-            array(
+                'courseid = ' . $course->id,
+            ],
+            [
                 'eventname' => 'eventname',
                 'component' => 'component',
                 'action' => 'action',
@@ -57,18 +57,18 @@ class db_sql {
                 'contextid' => 'contextid',
                 'contextlevel' => 'contextlevel',
                 'contextinstanceid' => 'contextinstanceid',
-                'timecreated' => 'timecreated'
-            ),
-            array(
+                'timecreated' => 'timecreated',
+            ],
+            [
                 'id' => 'id',
-                'timecreated' => 'timecreated'
-            )
+                'timecreated' => 'timecreated',
+            ]
         ))
             ->add_human_time('Time')
-            ->add_constant_columns(array(
+            ->add_constant_columns([
                 'course_shortname' => $course->shortname,
                 'course_fullname' => $course->fullname,
-            ))
+            ])
             ->get_table();
     }
 
@@ -86,18 +86,18 @@ class db_sql {
     public static function get_course_dedication($USER, $course) {
         return (new table_from_db(
             'logstore_standard_log',
-            array(
+            [
                 'userid = ' . $USER->id,
-                'courseid = ' . $course->id
-            ),
-            array(
+                'courseid = ' . $course->id,
+            ],
+            [
                 'courseid' => 'Course ID',
-                'timecreated' => 'timecreated'
-            ),
-            array(
+                'timecreated' => 'timecreated',
+            ],
+            [
                 'id' => 'id',
-                'timecreated' => 'timecreated'
-            )
+                'timecreated' => 'timecreated',
+            ]
         ))
             ->add_dedication('Dedication')
             ->add_human_time('Time')
@@ -116,14 +116,14 @@ class db_sql {
     public static function get_course_module_log($USER, $course) {
         return (new table_from_db(
             'logstore_standard_log',
-            array(
+            [
                 'userid = ' . $USER->id,
                 'courseid = ' . $course->id,
                 '(target="course_module" or target="course_content" or target="course_bin_item"'
                     . ' or target="h5p" or target="attempt" or target="chapter" or target="question")',
-                '(action="viewed" or action="failed" or action="started" or action="submitted")'
-            ),
-            array(
+                '(action="viewed" or action="failed" or action="started" or action="submitted")',
+            ],
+            [
                 'eventname' => 'eventname',
                 'component' => 'component',
                 'action' => 'action',
@@ -134,40 +134,32 @@ class db_sql {
                 'contextlevel' => 'contextlevel',
                 'contextinstanceid' => 'contextinstanceid',
                 'courseid' => 'courseid',
-                'timecreated' => 'timecreated'
-            ),
-            array(
+                'timecreated' => 'timecreated',
+            ],
+            [
                 'id' => 'id',
                 'timecreated' => 'timecreated',
                 'objecttable' => 'objecttable',
-                'objectid' => 'objectid'
-            )
+                'objectid' => 'objectid',
+            ]
         ))
             ->nest_query(
                 false,
                 'objecttable',
                 'objectid',
-                array(),
-                array(table_from_db::DEFAULT => array()),
-                array(
-                    table_from_db::DEFAULT => array(
-                        'name' => 'object_name'
-                    ),
-                    'book_chapters' => array(
-                        'title' => 'object_name'
-                    )
-                ),
-                array(
-                    table_from_db::DEFAULT => array()
-                )
+                [],
+                [table_from_db::DEFAULT => []],
+                [
+                    table_from_db::DEFAULT => ['name' => 'object_name'],
+                    'book_chapters' => ['title' => 'object_name'],
+                ],
+                [table_from_db::DEFAULT => []]
             )
             ->add_human_time('Time')
-            ->add_constant_columns(array(
+            ->add_constant_columns([
                 'course_shortname' => $course->shortname,
                 'course_fullname' => $course->fullname,
-            ))->rename_columns(array(
-                'object_name' => 'Object Name'
-            ))
+            ])->rename_columns(['object_name' => 'Object Name'])
             ->get_table();
     }
 
@@ -187,14 +179,14 @@ class db_sql {
     public static function get_course_module_dedication($USER, $course) {
         return (new table_from_db(
             'logstore_standard_log',
-            array(
+            [
                 'userid = ' . $USER->id,
                 'courseid = ' . $course->id,
                 '(target="course_module" or target="course_content" or target="course_bin_item"'
                     . ' or target="h5p" or target="attempt" or target="chapter" or target="question")',
-                '(action="viewed" or action="failed" or action="started" or action="submitted")'
-            ),
-            array(
+                '(action="viewed" or action="failed" or action="started" or action="submitted")',
+            ],
+            [
                 'eventname' => 'eventname',
                 'component' => 'component',
                 'action' => 'action',
@@ -205,44 +197,36 @@ class db_sql {
                 'contextlevel' => 'contextlevel',
                 'contextinstanceid' => 'contextinstanceid',
                 'courseid' => 'courseid',
-                'timecreated' => 'timecreated'
-            ),
-            array(
+                'timecreated' => 'timecreated',
+            ],
+            [
                 'id' => 'id',
                 'timecreated' => 'timecreated',
                 'objecttable' => 'objecttable',
-                'objectid' => 'objectid'
-            )
+                'objectid' => 'objectid',
+            ]
         ))
             ->add_dedication(
                 'Dedication',
-                'component'
+                'component',
             )
             ->nest_query(
                 false,
                 'objecttable',
                 'objectid',
-                array(),
-                array(table_from_db::DEFAULT => array()),
-                array(
-                    table_from_db::DEFAULT => array(
-                        'name' => 'object_name'
-                    ),
-                    'book_chapters' => array(
-                        'title' => 'object_name'
-                    )
-                ),
-                array(
-                    table_from_db::DEFAULT => array()
-                )
+                [],
+                [table_from_db::DEFAULT => []],
+                [
+                    table_from_db::DEFAULT => ['name' => 'object_name'],
+                    'book_chapters' => ['title' => 'object_name'],
+                ],
+                [table_from_db::DEFAULT => []]
             )
             ->add_human_time('Time')
-            ->add_constant_columns(array(
+            ->add_constant_columns([
                 'course_shortname' => $course->shortname,
                 'course_fullname' => $course->fullname,
-            ))->rename_columns(array(
-                'object_name' => 'Object Name'
-            ))
+            ])->rename_columns(['object_name' => 'Object Name'])
             ->get_table();
     }
 
@@ -258,7 +242,7 @@ class db_sql {
     public static function get_grading_interest($USER, $course) {
         return (new table_from_db(
             'logstore_standard_log',
-            array(
+            [
                 'userid = ' . $USER->id,
                 'courseid = ' . $course->id,
                 'eventname="\\\\mod_assign\\\\event\\\\grading_table_viewed"'
@@ -267,26 +251,24 @@ class db_sql {
                     . ' or eventname="\\\\gradereport_overview\\\\event\\\\grade_report_viewed"'
                     . ' or eventname="\\\\gradereport_grader\\\\event\\\\grade_report_viewed"'
                     . ' or eventname="\\\\gradereport_outcomes\\\\event\\\\grade_report_viewed"'
-                    . ' or eventname="\\\\gradereport_singleview\\\\event\\\\grade_report_viewed"'
-            ),
-            array(
+                    . ' or eventname="\\\\gradereport_singleview\\\\event\\\\grade_report_viewed"',
+            ],
+            [
                 'eventname' => 'eventname',
-                'timecreated' => 'timecreated'
-            ),
-            array(
+                'timecreated' => 'timecreated',
+            ],
+            [
                 'id' => 'id',
-                'timecreated' => 'timecreated'
-            ),
+                'timecreated' => 'timecreated',
+            ],
             'timecreated ASC'
         ))
-            ->rename_columns(array(
-                'eventname' => 'Eventname',
-            ))
+            ->rename_columns(['eventname' => 'Eventname'])
             ->add_human_time('Time')
-            ->add_constant_columns(array(
+            ->add_constant_columns([
                 'course_shortname' => $course->shortname,
                 'course_fullname' => $course->fullname,
-            ))
+            ])
             ->get_table();
     }
 
@@ -302,64 +284,54 @@ class db_sql {
     public static function get_forum_activity($USER, $course) {
         return (new table_from_db(
             'logstore_standard_log',
-            array(
+            [
                 'userid = ' . $USER->id,
                 'courseid = ' . $course->id,
-                'component="mod_forum"'
-            ),
-            array(
+                'component="mod_forum"',
+            ],
+            [
                 'eventname' => 'eventname',
                 'component' => 'component',
                 'action' => 'action',
                 'target' => 'target',
                 'objecttable' => 'objecttable',
                 'objectid' => 'objectid',
-                'timecreated' => 'timecreated'
-            ),
-            array(
+                'timecreated' => 'timecreated',
+            ],
+            [
                 'id' => 'id',
                 'timecreated' => 'timecreated',
                 'objecttable' => 'objecttable',
-                'objectid' => 'objectid'
-            )
+                'objectid' => 'objectid',
+            ]
         ))
             ->nest_query(
                 false,
                 'objecttable',
                 'objectid',
-                array(),
-                array(table_from_db::DEFAULT => array()),
-                array(
-                    table_from_db::DEFAULT => array(
-                        'name' => 'name'
-                    ),
-                    'forum_posts' => array()
-                ),
-                array(
-                    table_from_db::DEFAULT => array(),
-                    'forum_posts' => array(
-                        'discussion' => 'discussion'
-                    )
-                )
+                [],
+                [table_from_db::DEFAULT => []],
+                [
+                    table_from_db::DEFAULT => ['name' => 'name'],
+                    'forum_posts' => [],
+                ],
+                [
+                    table_from_db::DEFAULT => [],
+                    'forum_posts' => ['discussion' => 'discussion'],
+                ]
             )
             ->nest_query(
                 true,
                 'forum_discussions',
                 'discussion',
-                array('objecttable' => 'forum_posts'),
-                array(table_from_db::DEFAULT => array()),
-                array(
-                    table_from_db::DEFAULT => array(
-                        'name' => 'name'
-                    )
-                ),
-                array(
-                    table_from_db::DEFAULT => array()
-                )
+                ['objecttable' => 'forum_posts'],
+                [table_from_db::DEFAULT => []],
+                [table_from_db::DEFAULT => ['name' => 'name']],
+                [table_from_db::DEFAULT => []]
             )
-            ->rename_columns(array())
+            ->rename_columns([])
             ->add_human_time('Time')
-            ->add_constant_columns(array())
+            ->add_constant_columns([])
             ->get_table();
     }
 
@@ -375,49 +347,35 @@ class db_sql {
     public static function get_hvp($USER, $course) {
         return (new table_from_db(
             'hvp_xapi_results',
-            array(
-                'user_id = ' . $USER->id,
-            ),
-            array(
+            ['user_id = ' . $USER->id],
+            [
                 'content_id' => 'content_id',
                 'interaction_type' => 'interaction_type',
                 'raw_score' => 'raw_score',
-                'max_score' => 'max_score'
-            ),
-            array(
+                'max_score' => 'max_score',
+            ],
+            [
                 'id' => 'id',
-                'content_id' => 'content_id'
-            )
+                'content_id' => 'content_id',
+            ]
         ))
             ->nest_query(
                 true,
                 'hvp',
                 'content_id',
-                array(),
-                array(table_from_db::DEFAULT => array(
-                    'course = ' . $course->id
-                )),
-                array(
-                    table_from_db::DEFAULT => array(
-                        'name' => 'object_name'
-                    ),
-                    'book_chapters' => array(
-                        'title' => 'object_name'
-                    )
-                ),
-                array(
-                    table_from_db::DEFAULT => array(
-                        'timecreated' => 'timecreated'
-                    )
-                )
+                [],
+                [table_from_db::DEFAULT => ['course = ' . $course->id]],
+                [
+                    table_from_db::DEFAULT => ['name' => 'object_name'],
+                    'book_chapters' => ['title' => 'object_name'],
+                ],
+                [table_from_db::DEFAULT => ['timecreated' => 'timecreated']]
             )
             ->add_human_time('Time')
-            ->add_constant_columns(array(
+            ->add_constant_columns([
                 'course_shortname' => $course->shortname,
                 'course_fullname' => $course->fullname,
-            ))->rename_columns(array(
-                'object_name' => 'Object Name'
-            ))
+            ])->rename_columns(['object_name' => 'Object Name'])
             ->get_table();
     }
 
@@ -433,41 +391,63 @@ class db_sql {
     public static function get_badges($USER, $course) {
         return (new table_from_db(
             'badge_issued',
-            array(
-                'userid = ' . $USER->id,
-            ),
-            array(
-                'badgeid' => 'badgeid',
-            ),
-            array(
+            ['userid = ' . $USER->id],
+            ['badgeid' => 'badgeid'],
+            [
                 'id' => 'id',
-                'badgeid' => 'badgeid'
-            )
+                'badgeid' => 'badgeid',
+            ]
         ))
             ->nest_query(
                 true,
                 'badge',
                 'badgeid',
-                array(),
-                array(table_from_db::DEFAULT => array(
-                    'course = ' . $course->id
-                )),
-                array(
-                    table_from_db::DEFAULT => array(
-                        'name' => 'name'
-                    )
-                ),
-                array(
-                    table_from_db::DEFAULT => array()
-                )
+                [],
+                [table_from_db::DEFAULT => ['course = ' . $course->id]],
+                [table_from_db::DEFAULT => ['name' => 'name']],
+                [table_from_db::DEFAULT => []]
             )
             ->add_human_time('Time')
-            ->add_constant_columns(array(
+            ->add_constant_columns([
                 'course_shortname' => $course->shortname,
                 'course_fullname' => $course->fullname,
-            ))->rename_columns(array(
-                'object_name' => 'Object Name'
-            ))
+            ])->rename_columns(['object_name' => 'Object Name'])
+            ->get_table();
+    }
+
+
+    /**
+     * This function returns all entries from the chatbot_history db table
+     * that have information about the users chatbot history.
+     *
+     * @param mixed $USER The current user.
+     * @param Course $course The course this activity belongs to.
+     *
+     * @return array Table containing set of log data.
+     */
+    public static function get_chatbot_history($USER, $course) {
+        return (new table_from_db(
+            'chatbot_history',
+            [
+                'userid = ' . $USER->id,
+                'courseid = ' . $course->id,
+            ],
+            [
+                'speaker' => 'speaker',
+                'message' => 'message',
+                'act' => 'act',
+                'timecreated' => 'timecreated',
+            ],
+            [
+                'id' => 'id',
+                'timecreated' => 'timecreated',
+            ]
+        ))
+            ->add_human_time('Time')
+            ->add_constant_columns([
+                'course_shortname' => $course->shortname,
+                'course_fullname' => $course->fullname,
+            ])->rename_columns([])
             ->get_table();
     }
 }

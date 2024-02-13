@@ -37,7 +37,7 @@ class restore_srg_activity_structure_step extends restore_activity_structure_ste
      * @return restore_path_element[].
      */
     protected function define_structure() {
-        $paths = array();
+        $paths = [];
         $userinfo = $this->get_setting_value('userinfo');
 
         $paths[] = new restore_path_element('srg', '/activity/srg');

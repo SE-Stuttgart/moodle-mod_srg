@@ -64,7 +64,7 @@ class log_data_downloaded extends \core\event\base {
      * @return \moodle_url
      */
     public function get_url() {
-        return new \moodle_url('/mod/srg/view.php', array('id' => $this->objectid));
+        return new \moodle_url('/mod/srg/view.php', ['id' => $this->objectid]);
     }
 
     /**
@@ -87,6 +87,6 @@ class log_data_downloaded extends \core\event\base {
      * @return array
      */
     public static function get_objectid_mapping() {
-        return array('db' => 'srg', 'restore' => 'srg');
+        return ['db' => 'srg', 'restore' => 'srg'];
     }
 }

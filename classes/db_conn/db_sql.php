@@ -414,4 +414,40 @@ class db_sql {
             ])->rename_columns(['object_name' => 'Object Name'])
             ->get_table();
     }
+
+
+    /**
+     * This function returns all entries from the chatbot_history db table
+     * that have information about the users chatbot history.
+     *
+     * @param mixed $USER The current user.
+     * @param Course $course The course this activity belongs to.
+     *
+     * @return array Table containing set of log data.
+     */
+    public static function get_chatbot_history($USER, $course) {
+        return (new table_from_db(
+            'chatbot_history',
+            [
+                'userid = ' . $USER->id,
+                'courseid = ' . $course->id,
+            ],
+            [
+                'speaker' => 'speaker',
+                'message' => 'message',
+                'act' => 'act',
+                'timecreated' => 'timecreated',
+            ],
+            [
+                'id' => 'id',
+                'timecreated' => 'timecreated',
+            ]
+        ))
+            ->add_human_time('Time')
+            ->add_constant_columns([
+                'course_shortname' => $course->shortname,
+                'course_fullname' => $course->fullname,
+            ])->rename_columns([])
+            ->get_table();
+    }
 }

@@ -122,5 +122,17 @@ function srg_get_file_list($USER, $course) {
         debugging($th);
     }
 
+    if (core_plugin_manager::instance()->get_plugin_info('block_chatbot')) {
+        try {
+            $filelist[] = [
+                'name' => 'Chatbot History',
+                'filename' => 'chatbot_history.csv',
+                'content' => mod_srg\db_sql::get_chatbot_history($USER, $course),
+            ];
+        } catch (\Throwable $th) {
+            debugging($th);
+        }
+    }
+
     return $filelist;
 }

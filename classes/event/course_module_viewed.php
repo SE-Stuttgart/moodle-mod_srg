@@ -46,7 +46,7 @@ class course_module_viewed extends \core\event\course_module_viewed {
      * @return \moodle_url
      */
     public function get_url() {
-        return new \moodle_url('/mod/srg/view.php', array('id' => $this->objectid));
+        return new \moodle_url('/mod/srg/view.php', ['id' => $this->objectid]);
     }
 
     /**
@@ -55,6 +55,6 @@ class course_module_viewed extends \core\event\course_module_viewed {
      * @return array
      */
     public static function get_objectid_mapping() {
-        return array('db' => 'srg', 'restore' => 'srg');
+        return ['db' => 'srg', 'restore' => 'srg'];
     }
 }

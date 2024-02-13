@@ -45,11 +45,11 @@ class srg_CSV {
         }
         $firstcell = array_shift($firstrow);
 
-        $csv .= '"' . preg_replace(array('/\n/', '/"/'), array('', '""'), $firstcell) . '"';
+        $csv .= '"' . preg_replace(['/\n/', '/"/'], ['', '""'], $firstcell) . '"';
 
         foreach ($firstrow as $cell) {
             $csv .= ",";
-            $csv .= '"' . preg_replace(array('/\n/', '/"/'), array('', '""'), $cell) . '"';
+            $csv .= '"' . preg_replace(['/\n/', '/"/'], ['', '""'], $cell) . '"';
         }
 
         foreach ($table as $row) {
@@ -60,11 +60,11 @@ class srg_CSV {
             }
             $firstcell = array_shift($row);
 
-            $csv .= '"' . preg_replace(array('/\n/', '/"/'), array('', '""'), $firstcell) . '"';
+            $csv .= '"' . preg_replace(['/\n/', '/"/'], ['', '""'], $firstcell) . '"';
 
             foreach ($row as $cell) {
                 $csv .= ",";
-                $csv .= '"' . preg_replace(array('/\n/', '/"/'), array('', '""'), $cell) . '"';
+                $csv .= '"' . preg_replace(['/\n/', '/"/'], ['', '""'], $cell) . '"';
             }
         }
 

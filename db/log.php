@@ -24,9 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$logs = array(
-    array('module' => 'srg', 'action' => 'view',     'mtable' => 'srg', 'field' => 'name'),
-    array('module' => 'srg', 'action' => 'view all', 'mtable' => 'srg', 'field' => 'name'),
-    array('module' => 'srg', 'action' => 'update',   'mtable' => 'srg', 'field' => 'name'),
-    array('module' => 'srg', 'action' => 'add',      'mtable' => 'srg', 'field' => 'name'),
-);
+$logs = [
+    ['module' => 'srg', 'action' => 'view',     'mtable' => 'srg', 'field' => 'name'],
+    ['module' => 'srg', 'action' => 'view all', 'mtable' => 'srg', 'field' => 'name'],
+    ['module' => 'srg', 'action' => 'update',   'mtable' => 'srg', 'field' => 'name'],
+    ['module' => 'srg', 'action' => 'add',      'mtable' => 'srg', 'field' => 'name'],
+];

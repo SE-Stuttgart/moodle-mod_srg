@@ -36,11 +36,11 @@ if (!$cm = get_coursemodule_from_id('srg', $cmid)) {
     throw new Exception(get_string('error_course_module_id', 'mod_srg'));
 }
 // Course.
-if (!$course = $DB->get_record('course', array('id' => $cm->course))) {
+if (!$course = $DB->get_record('course', ['id' => $cm->course])) {
     throw new Exception(get_string('error_course_not_found', 'mod_srg'));
 }
 // Activity.
-if (!$srg = $DB->get_record('srg', array('id' => $cm->instance))) {
+if (!$srg = $DB->get_record('srg', ['id' => $cm->instance])) {
     throw new Exception(get_string('error_course_module', 'mod_srg'));
 }
 // Does the user have access to the course?
@@ -54,7 +54,7 @@ $systemcontext = context_system::instance();
 $modulecontext = context_module::instance($cm->id);
 $usercontext = context_user::instance($USER->id);
 
-$PAGE->set_url('/mod/srg/view.php', array('id' => $cm->id));
+$PAGE->set_url('/mod/srg/view.php', ['id' => $cm->id]);
 $PAGE->set_title(format_string($srg->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
@@ -67,19 +67,19 @@ echo $OUTPUT->header();
 
 echo html_writer::start_div(
     '',
-    array('style' => 'flex-direction: row;align-items: center;text-align: center;justify-content: center;')
+    ['style' => 'flex-direction: row;align-items: center;text-align: center;justify-content: center;']
 );
 
 // Display results on info page.
 echo $OUTPUT->single_button(
-    new moodle_url($CFG->wwwroot . '/mod/srg/info.php', array('id' => $cm->id, 'mode' => 'view')),
+    new moodle_url($CFG->wwwroot . '/mod/srg/info.php', ['id' => $cm->id, 'mode' => 'view']),
     get_string('view_all_button_name', 'mod_srg'),
     'get'
 );
 
 // Skip display and download results.
 echo $OUTPUT->single_button(
-    new moodle_url($CFG->wwwroot . '/mod/srg/info.php', array('id' => $cm->id, 'mode' => 'print')),
+    new moodle_url($CFG->wwwroot . '/mod/srg/info.php', ['id' => $cm->id, 'mode' => 'print']),
     get_string('print_all_button_name', 'mod_srg'),
     'get'
 );

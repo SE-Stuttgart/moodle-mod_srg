@@ -66,12 +66,12 @@ class table {
             // Check if the result is relevant for us.
             $continue = false;
             foreach ($conditions as $field => $values) {
-                if (isset($record->$field) and !in_array($record->$field, $values)) {
+                if (isset($record->$field) && !in_array($record->$field, $values)) {
                     $continue = true;
                     break;
                 }
             }
-            if ($continue or !isset($record->{"id"})) {
+            if ($continue || !isset($record->{"id"})) {
                 continue;
             }
 
@@ -143,7 +143,7 @@ class table {
     public function additional_constraint(string $column, array $values): table {
         $data = [];
         foreach ($this->data as $id => $row) {
-            if (isset($row[$column]) and in_array($row[$column], $values)) {
+            if (isset($row[$column]) && in_array($row[$column], $values)) {
                 $data[$id] = $row;
             }
         }
@@ -279,7 +279,7 @@ class table {
 
 
     /**
-     * Returns the table column and data as an array. 
+     * Returns the table column and data as an array.
      * Array keys of row items are column_name, value of first row is title.
      * @return array Array of rows representing the table.
      */
@@ -334,7 +334,7 @@ class table {
         $idmatches = [];
         foreach ($this->data as $id => $row) {
             // Check if this row can be subqueried.
-            if (isset($row[$targettablecolumn]) and isset($row[$targetidcolumn])) {
+            if (isset($row[$targettablecolumn]) && isset($row[$targetidcolumn])) {
                 // Check if this table is already registered.
                 if (!isset($idmatches[$row[$targettablecolumn]])) {
                     $idmatches[$row[$targettablecolumn]] = [];
@@ -370,7 +370,7 @@ class table {
         // Get all records of given table. Then filter ist based on our conditions.
         $rs = $DB->get_recordset($targettable);
         foreach ($rs as $record) {
-            if (!isset($record->{'id'}) or !array_key_exists($record->{"id"}, $idmatches)) {
+            if (!isset($record->{'id'}) || !array_key_exists($record->{"id"}, $idmatches)) {
                 continue;
             }
             foreach ($joindata as $sourcecolumn => $targetcolumn) {

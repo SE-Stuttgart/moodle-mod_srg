@@ -24,6 +24,8 @@
 
 namespace mod_srg;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once(__DIR__ . "/table.php");
 
 /**
@@ -70,7 +72,6 @@ class reportsystem {
                     "contextid" => "contextid",
                     "contextlevel" => "contextlevel",
                     "contextinstanceid" => "contextinstanceid",
-                    "timecreated" => "timecreated",
                 ]
             )
                 ->additional_requirement("id")
@@ -174,10 +175,10 @@ class reportsystem {
      * @return array Table containing set of log data.
      */
     public function get_course_log($USER, $course) {
-        /** @var table $origin , which database table is the base of this report. */
+        // @var table $origin , which database table is the base of this report.
         $origin = $this->get_logstore_standard_log_table($USER, $course);
 
-        /** @var table $table , the report table containing all necessary report data selected. */
+        // @var table $table , the report table containing all necessary report data selected.
         $table = $origin->create_and_get_sub_table(
             [
                 "id" => "id",
@@ -213,10 +214,10 @@ class reportsystem {
      * @return array Table containing set of log data.
      */
     public function get_course_dedication($USER, $course) {
-        /** @var table $origin , which database table is the base of this report. */
+        // @var table $origin , which database table is the base of this report.
         $origin = $this->get_logstore_standard_log_table($USER, $course);
 
-        /** @var table $table , the report table containing all necessary report data selected. */
+        // @var table $table , the report table containing all necessary report data selected.
         $table = $origin->create_and_get_sub_table(
             [
                 "id" => "id",
@@ -242,10 +243,10 @@ class reportsystem {
      * @return array Table containing set of log data.
      */
     public function get_course_module_log($USER, $course) {
-        /** @var table $origin , which database table is the base of this report. */
+        // @var table $origin , which database table is the base of this report.
         $origin = $this->get_logstore_standard_log_table($USER, $course);
 
-        /** @var table $table , the report table containing all necessary report data selected. */
+        // @var table $table , the report table containing all necessary report data selected.
         $table = $origin->create_and_get_sub_table(
             [
                 "id" => "id",
@@ -295,10 +296,10 @@ class reportsystem {
      * @return array Table containing set of log data.
      */
     public function get_course_module_dedication($USER, $course) {
-        /** @var table $origin , which database table is the base of this report. */
+        // @var table $origin , which database table is the base of this report.
         $origin = $this->get_logstore_standard_log_table($USER, $course);
 
-        /** @var table $table , the report table containing all necessary report data selected. */
+        // @var table $table , the report table containing all necessary report data selected.
         $table = $origin->create_and_get_sub_table(
             [
                 "id" => "id",
@@ -347,10 +348,10 @@ class reportsystem {
      * @return array Table containing set of log data.
      */
     public function get_grading_interest($USER, $course) {
-        /** @var table $origin , which database table is the base of this report. */
+        // @var table $origin , which database table is the base of this report.
         $origin = $this->get_logstore_standard_log_table($USER, $course);
 
-        /** @var table $table , the report table containing all necessary report data selected. */
+        // @var table $table , the report table containing all necessary report data selected.
         $table = $origin->create_and_get_sub_table(
             [
                 "id" => "id",
@@ -385,10 +386,10 @@ class reportsystem {
      * @return array Table containing set of log data.
      */
     public function get_forum_activity($USER, $course) {
-        /** @var table $origin , which database table is the base of this report. */
+        // @var table $origin , which database table is the base of this report.
         $origin = $this->get_logstore_standard_log_table($USER, $course);
 
-        /** @var table $table , the report table containing all necessary report data selected. */
+        // @var table $table , the report table containing all necessary report data selected.
         $table = $origin->create_and_get_sub_table(
             [
                 "id" => "id",
@@ -432,10 +433,10 @@ class reportsystem {
      * @return array Table containing set of log data.
      */
     public function get_hvp($USER, $course) {
-        /** @var table $origin , which database table is the base of this report. */
+        // @var table $origin , which database table is the base of this report.
         $origin = $this->get_hvp_table($USER, $course);
 
-        /** @var table $table , the report table containing all necessary report data selected. */
+        // @var table $table , the report table containing all necessary report data selected.
         $table = $origin->create_and_get_sub_table(
             [
                 "id" => "id",
@@ -472,10 +473,10 @@ class reportsystem {
      * @return array Table containing set of log data.
      */
     public function get_badges($USER, $course) {
-        /** @var table $origin , which database table is the base of this report. */
+        // @var table $origin , which database table is the base of this report.
         $origin = $this->get_badges_table($USER, $course);
 
-        /** @var table $table , the report table containing all necessary report data selected. */
+        // @var table $table , the report table containing all necessary report data selected.
         $table = $origin->create_and_get_sub_table(
             [
                 "id" => "id",
@@ -510,10 +511,10 @@ class reportsystem {
      * @return array Table containing set of log data.
      */
     public function get_chatbot_history($USER, $course) {
-        /** @var table $origin , which database table is the base of this report. */
+        // @var table $origin , which database table is the base of this report.
         $origin = $this->get_chatbot_history_table($USER, $course);
 
-        /** @var table $table , the report table containing all necessary report data selected. */
+        // @var table $table , the report table containing all necessary report data selected.
         $table = $origin->create_and_get_sub_table(
             [
                 "id" => "id",

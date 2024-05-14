@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once(__DIR__ . '/classes/db_conn/db_sql.php');
+require_once(__DIR__ . '/classes/db_connection/reportsystem.php');
 
 /**
  * Get the saved insctruction to be displayed on the view page.
@@ -51,10 +51,17 @@ function srg_get_file_list($USER, $course) {
     $filelist = [];
 
     try {
+        $reportsystem = new mod_srg\reportsystem();
+    } catch (\Throwable $th) {
+        debugging($th);
+        return $filelist;
+    }
+
+    try {
         $filelist[] = [
-            'name' => 'Course Dedication Report',
-            'filename' => 'course_dedication.csv',
-            'content' => mod_srg\db_sql::get_course_dedication($USER, $course),
+            'name' => 'Course Dedication Log',
+            'filename' => 'course_dedication_log.csv',
+            'content' => $reportsystem->get_course_dedication($USER, $course),
         ];
     } catch (\Throwable $th) {
         debugging($th);
@@ -64,7 +71,7 @@ function srg_get_file_list($USER, $course) {
         $filelist[] = [
             'name' => 'Course Module Log',
             'filename' => 'course_module_log.csv',
-            'content' => mod_srg\db_sql::get_course_module_log($USER, $course),
+            'content' => $reportsystem->get_course_module_log($USER, $course),
         ];
     } catch (\Throwable $th) {
         debugging($th);
@@ -74,7 +81,7 @@ function srg_get_file_list($USER, $course) {
         $filelist[] = [
             'name' => 'Course Module Dedication Report',
             'filename' => 'course_module_dedication.csv',
-            'content' => mod_srg\db_sql::get_course_module_dedication($USER, $course),
+            'content' => $reportsystem->get_course_module_dedication($USER, $course),
         ];
     } catch (\Throwable $th) {
         debugging($th);
@@ -84,7 +91,7 @@ function srg_get_file_list($USER, $course) {
         $filelist[] = [
             'name' => 'Grade Inspection Report',
             'filename' => 'grade_inspections.csv',
-            'content' => mod_srg\db_sql::get_grading_interest($USER, $course),
+            'content' => $reportsystem->get_grading_interest($USER, $course),
         ];
     } catch (\Throwable $th) {
         debugging($th);
@@ -94,7 +101,7 @@ function srg_get_file_list($USER, $course) {
         $filelist[] = [
             'name' => 'Forum Activity Report',
             'filename' => 'forum_activities.csv',
-            'content' => mod_srg\db_sql::get_forum_activity($USER, $course),
+            'content' => $reportsystem->get_forum_activity($USER, $course),
         ];
     } catch (\Throwable $th) {
         debugging($th);
@@ -105,7 +112,7 @@ function srg_get_file_list($USER, $course) {
             $filelist[] = [
                 'name' => 'HVP Score Report',
                 'filename' => 'hvp_scores.csv',
-                'content' => mod_srg\db_sql::get_hvp($USER, $course),
+                'content' => $reportsystem->get_hvp($USER, $course),
             ];
         } catch (\Throwable $th) {
             debugging($th);
@@ -116,7 +123,7 @@ function srg_get_file_list($USER, $course) {
         $filelist[] = [
             'name' => 'User Earned Badges',
             'filename' => 'badges.csv',
-            'content' => mod_srg\db_sql::get_badges($USER, $course),
+            'content' => $reportsystem->get_badges($USER, $course),
         ];
     } catch (\Throwable $th) {
         debugging($th);
@@ -127,7 +134,7 @@ function srg_get_file_list($USER, $course) {
             $filelist[] = [
                 'name' => 'Chatbot History',
                 'filename' => 'chatbot_history.csv',
-                'content' => mod_srg\db_sql::get_chatbot_history($USER, $course),
+                'content' => $reportsystem->get_chatbot_history($USER, $course),
             ];
         } catch (\Throwable $th) {
             debugging($th);

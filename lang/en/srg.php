@@ -51,11 +51,11 @@ $string['error_creating_csv_file'] = 'There was an error creating the .csv file.
 $string['info_title'] = 'Data Overview';
 $string['info_heading'] = 'Data Overview';
 $string['content_title'] = 'Instructions';
-$string['content_default'] = 'Here, you can view part of your anonymized log data in this Moodle course or download it if needed.'
-    . ' <br><br>'
-    . 'Hint: The downloaded file is actually a file in the .zip format.'
-    . 'It is, however, downloaded with .kib3 as the extension to prevent automatic unpacking by your operating system.'
-    . 'If you want to unpack and view it, please change the extension to .zip after downloading and then unpack it.';
+$string['content_default'] = "Here, you can view part of your anonymized log data in this Moodle course or download it if needed.
+
+Hint: The downloaded file is actually a file in the .zip format.
+It is, however, downloaded with .kib3 as the extension to prevent automatic unpacking by your operating system.
+You can use a zip programm like 7Zip to unpack it.";
 
 // File Text.
 $string['zipfilename'] = 'moodle-mod_srg';

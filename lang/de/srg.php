@@ -51,11 +51,11 @@ $string['error_creating_csv_file'] = 'There was an error creating the .csv file.
 $string['info_title'] = 'Übersicht über die Daten';
 $string['info_heading'] = 'Übersicht';
 $string['content_title'] = 'Anleitung';
-$string['content_default'] = 'Sie können hier einen Teil Ihrer Logdaten in diesem Moodle-Kurs in anonymisierter Form einsehen und bei Bedarf in einer Datei herunterladen.'
-    . '<br><br>'
-    . 'Anmerkung: Die heruntergeladene Datei ist eigentlich eine .zip-Datei.'
-    . 'Sie hat aber die Endung .kib3, weil sie sonst unter manchen Betriebssystemen automatisch entpackt würde.'
-    . 'Falls Sie den Inhalt einer solchen .kib3-Datei überprüfen wollen, ändern Sie daher nach dem Download einfach die Endung auf .zip und entpacken Sie sie.';
+$string['content_default'] = "Sie können hier einen Teil Ihrer Logdaten in diesem Moodle-Kurs in anonymisierter Form einsehen und bei Bedarf in einer Datei herunterladen.
+
+Anmerkung: Die heruntergeladene Datei ist eigentlich eine .zip-Datei.
+Sie hat aber die Endung .kib3, weil sie sonst unter manchen Betriebssystemen automatisch entpackt würde.
+Sie können ein zip Programm wie 7Zip benutzen um die Datei zu entpacken.";
 
 // File Text.
 $string['zipfilename'] = 'moodle-mod_srg';

@@ -25,6 +25,8 @@ defined('MOODLE_INTERNAL') || die();
 
 use mod_srg\local\report_system;
 
+use stdClass;
+
 /**
  * Get the saved insctruction to be displayed on the view page.
  * @param int $id Id of the activity.
@@ -43,7 +45,7 @@ function srg_get_instruction($id) {
 /**
  * Hardcoded Selected Logs Metadata
  * @param mixed $USER The current user.
- * @param Course $course The course of this activity.
+ * @param stdClass $course The course of this activity.
  * @return array Array of log data packets. Each packet has a name an advised filename and the log as array.
  */
 function srg_get_file_list($USER, $course) {

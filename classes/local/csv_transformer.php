@@ -30,7 +30,7 @@ namespace mod_srg\local;
 class csv_transformer {
 
     /**
-     * Transforms simple table (from db_conn) into .csv.
+     * Transforms simple table (from report_system) into .csv.
      * @param array $table Array of rows (first is header) to be turned into an csv file.
      * @return string .csv type string.
      */

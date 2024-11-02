@@ -24,6 +24,8 @@
 
 use mod_srg\local\csv_transformer;
 
+use stdClass;
+
 require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
 require_once(__DIR__ . '/locallib.php');
@@ -121,69 +123,37 @@ if ($mode == 'print') { // Download data as CSV in .zip.
     // Trigger event\log_data_viewed.
     srg_log_data_view($srg, $modulecontext);
 
+    // Prepare the data for visualization using a mustache template.
+    $data = [];
+    foreach (array_values($filelist) as $i => $file) {
+        $table = new stdClass();
+        $table->index = format_text(strval($i), FORMAT_HTML);
+        $table->name = format_text(strval($file['name']), FORMAT_HTML);
+        $table->head = [];
+        foreach (array_shift($file['content']) as $header) {
+            $head = new stdClass();
+            $head->value = format_text(strval($header), FORMAT_HTML);
+            $table->head[] = $head;
+        }
+        $table->data = [];
+        foreach ($file['content'] as $rowcontent) {
+            $row = new stdClass();
+            $row->content = [];
+            foreach ($rowcontent as $cellvalue) {
+                $cell = new stdClass();
+                $cell->value = format_text(strval($cellvalue), FORMAT_HTML);
+                $row->content[] = $cell;
+            }
+            $table->data[] = $row;
+        }
+        $data[] = $table;
+    }
+
     echo $OUTPUT->header();
 
-    // View Content.
-    echo html_writer::start_div('', ['id' => 'mod_srg-accordion']);
-    foreach (array_values($filelist) as $i => $file) {
-        $table = $file['content'];
-        $t = new html_table();
-        $t->head = array_shift($table);
-        $t->data = $table;
-
-        echo html_writer::start_div('card'); // Start Card (Accordion item).
-
-        echo html_writer::tag(
-            'button',
-            ''
-                . html_writer::tag(
-                    'h5',
-                    $file['name'],
-                    ['class' => 'm-0']
-                )
-                . html_writer::tag(
-                    'i',
-                    '',
-                    [
-                        'class' => 'fa fa-chevron-down',
-                        'id' => 'mod_srg-chevron-' . $i,
-                        'aria-hidden' => 'true',
-                    ]
-                ),
-            [
-                'class' => 'mod_srg-collapse-button card-header collapsed'
-                    . ' d-flex flex-row justify-content-between align-items-center',
-                'id' => 'mod_srg-heading-' . $i,
-                'data-toggle' => 'collapse',
-                'data-target' => '#mod_srg-collapse-' . $i,
-                'icon-target' => '#mod_srg-chevron-' . $i,
-                'aria-expanded' => 'false',
-                'aria-controls' => 'mod_srg-collapse-' . $i,
-            ]
-        );
-
-        echo html_writer::div(
-            html_writer::div(
-                html_writer::table($t),
-                'card-body p-0'
-            ),
-            'collapse',
-            [
-                'id' => 'mod_srg-collapse-' . $i,
-                'aria-labelledby' => 'mod_srg-heading-' . $i,
-                'data-parent' => '#mod_srg-accordion',
-            ]
-        );
-
-        echo html_writer::end_div(); // End Card.
-    }
-    echo html_writer::end_div(); // End Accordion.
-
-
+    echo $OUTPUT->render_from_template('mod_srg/report_display', ['filelist' => $data]);
 
     echo $OUTPUT->footer();
-
-    echo html_writer::script('', new moodle_url('/mod/srg/scripts/accordion.js'));
 
     gc_collect_cycles();
 }

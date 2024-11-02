@@ -18,20 +18,21 @@
  * Library of interface functions and constants.
  *
  * @package     mod_srg
- * @copyright  2022 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @copyright   2022 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_srg;
+namespace mod_srg\local;
 
 /**
  * Class holding helper methods corresponding to .csv
  */
-class srg_CSV {
+class csv_transformer {
+
     /**
      * Transforms simple table (from db_conn) into .csv.
      * @param array $table Array of rows (first is header) to be turned into an csv file.
-     * @return string CSV type string.
+     * @return string .csv type string.
      */
     public static function simple_table_to_csv(array $table) {
         $csv = '';

@@ -18,13 +18,12 @@
  * Library of interface functions and constants.
  *
  * @package     mod_srg
- * @copyright   2023 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @copyright   2023 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 defined('MOODLE_INTERNAL') || die();
 
-require_once(__DIR__ . '/classes/db_connection/reportsystem.php');
+use mod_srg\local\report_system;
 
 /**
  * Get the saved insctruction to be displayed on the view page.
@@ -51,7 +50,7 @@ function srg_get_file_list($USER, $course) {
     $filelist = [];
 
     try {
-        $reportsystem = new mod_srg\reportsystem();
+        $reportsystem = new report_system();
     } catch (\Throwable $th) {
         debugging($th);
         return $filelist;

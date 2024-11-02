@@ -18,18 +18,18 @@
  * Object Class of a local db, with connection to moodle db and data manipulation fuinctions.
  *
  * @package     mod_srg
- * @copyright   2024 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @copyright   2024 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_srg;
+namespace mod_srg\local;
 
 use stdClass;
 
 /**
  * This class is a connection to the db, a representation and data and has data manipulation capabilities.
  */
-class table {
+class report_table {
 
     /** @var array $columns this array holds information on which columns are represented and how the column is named.*/
     private array $columns;
@@ -52,9 +52,9 @@ class table {
      * @param string $tablename name of the target table to load data from.
      * @param array $conditions conditions [column => [value]] where row is skipped if the column data is not part of values.
      * @param array $fields a list of columns that select which fields should appear in the resulting table.
-     * @return table this object
+     * @return report_table this object
      */
-    public function get_db_records(string $tablename, array $conditions, array $fields): table {
+    public function get_db_records(string $tablename, array $conditions, array $fields): report_table {
         global $DB;
 
         $data = [];
@@ -97,9 +97,9 @@ class table {
     /**
      * Create a new table based on this table and some more constraints.
      * @param array $columns a list of columns [column_name => title] to select which columns the sub-table has.
-     * @return table new sub-table object
+     * @return report_table new sub-table object
      */
-    public function create_and_get_sub_table(array $columns): table {
+    public function create_and_get_sub_table(array $columns): report_table {
         $subdata = [];
 
         foreach ($this->data as $id => $data) {
@@ -113,16 +113,16 @@ class table {
             }
             $subdata[$id] = $row;
         }
-        return new table($columns, $subdata);
+        return new report_table($columns, $subdata);
     }
 
 
     /**
      * Constrain the current table by deleting all rows where there is no value in the given column.
      * @param string $column the constrained column.
-     * @return table this object
+     * @return report_table this object
      */
-    public function additional_requirement(string $column): table {
+    public function additional_requirement(string $column): report_table {
         $data = [];
         foreach ($this->data as $id => $row) {
             if (isset($row[$column])) {
@@ -138,9 +138,9 @@ class table {
      * Contrain the current table by deleting all rows where there is not one of the given values in the given columns.
      * @param string $column the constrained column.
      * @param array $values the list of allowed values.
-     * @return table this object
+     * @return report_table this object.
      */
-    public function additional_constraint(string $column, array $values): table {
+    public function additional_constraint(string $column, array $values): report_table {
         $data = [];
         foreach ($this->data as $id => $row) {
             if (isset($row[$column]) && in_array($row[$column], $values)) {
@@ -166,14 +166,14 @@ class table {
      * If empty, all entries count as the same task.
      * @param int $dedicationmintime [default = 60] Minimal time in seconds spend on a task to count as working on it.
      * @param int $dedicationmaxtime [default = 60 * 15] Maximal time in seconds between entries to spot work pauses.
-     * @return table this object
+     * @return report_table this object.
      */
     public function add_dedication(
         string $name,
         string $dedicationtarget = '',
         int $dedicationmintime = 60,
         int $dedicationmaxtime = 60 * 15
-    ) {
+    ): report_table {
         $this->columns[$name] = $name;
 
         if (empty($this->data)) {
@@ -240,9 +240,9 @@ class table {
      * Add a new column to the table with a given constant value for all rows.
      * @param string $name the name of the new column.
      * @param mixed $value the value of the new param.
-     * @return table this object
+     * @return report_table this object.
      */
-    public function add_constant_column(string $name, mixed $value): table {
+    public function add_constant_column(string $name, mixed $value): report_table {
         $this->columns[$name] = $name;
         foreach ($this->data as $id => $row) {
             $this->data[$id][$name] = $value;
@@ -255,9 +255,9 @@ class table {
      * Rename the title of a column (internal column_name is unchanged).
      * @param string $column the name of the column to be renamed.
      * @param string $title the new title.
-     * @return table this object
+     * @return report_table this object.
      */
-    public function rename_column(string $column, string $title): table {
+    public function rename_column(string $column, string $title): report_table {
         $this->columns[$column] = $title;
         return $this;
     }
@@ -266,9 +266,9 @@ class table {
     /**
      * Function to add a Human understandable Timestamp based on the timecreated of the log to the Table.
      * @param string $name Name is the column title for the new column.
-     * @return table this object
+     * @return report_table this object.
      */
-    public function add_human_time(string $name): table {
+    public function add_human_time(string $name): report_table {
         $this->columns[$name] = $name;
         foreach ($this->data as $id => $row) {
             $this->data[$id][$name] = date("Y-m-d H:i:s", $this->get_time($id));
@@ -293,13 +293,13 @@ class table {
      * @param string $targettable name of the target table.
      * @param string $targetidcolumn where in this table can be the join id be found.
      * @param array $joindata what data (columns) do we want from the joined table [targetcolumnname => tablecolumnname].
-     * @return table this object
+     * @return report_table this object
      */
     public function join_with_fixed_table(
         string $targettable,
         string $targetidcolumn,
         array $joindata
-    ): table {
+    ): report_table {
         $idmatches = [];
         foreach ($this->data as $id => $row) {
             // Check if this row can be subqueried.
@@ -323,14 +323,14 @@ class table {
      * @param string $targetidcolumn where in this table can be the join id be found.
      * @param array $defaultjoindata what data (columns) do we want from the joined table [targetcolumnname => tablecolumnname].
      * @param array $customjoindata similar to $defaultjoindata but it defines different data columns selected based on target DB.
-     * @return table this object
+     * @return report_table this object
      */
     public function join_with_variable_table(
         string $targettablecolumn,
         string $targetidcolumn,
         array $defaultjoindata,
         array $customjoindata
-    ): table {
+    ): report_table {
         $idmatches = [];
         foreach ($this->data as $id => $row) {
             // Check if this row can be subqueried.

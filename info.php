@@ -18,14 +18,15 @@
  * Version details and info
  *
  * @package     mod_srg
- * @copyright   2023 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @copyright   2023 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+use mod_srg\local\csv_transformer;
 
 require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
 require_once(__DIR__ . '/locallib.php');
-require_once(__DIR__ . '/classes/csv.php');
 
 global $CFG, $USER, $DB;
 
@@ -80,7 +81,7 @@ if ($mode == 'print') { // Download data as CSV in .zip.
         if ($zipwriter instanceof \core_files\local\archive_writer\zip_writer) {
             // Stream the files into the zip.
             foreach ($filelist as $file) {
-                $zipwriter->add_file_from_string($file['filename'], mod_srg\srg_CSV::simple_table_to_csv($file['content']));
+                $zipwriter->add_file_from_string($file['filename'], csv_transformer::simple_table_to_csv($file['content']));
                 unset($file);
             }
 
@@ -104,7 +105,7 @@ if ($mode == 'print') { // Download data as CSV in .zip.
             }
 
             $csvfilepath = $exporttmpdir . DIRECTORY_SEPARATOR . $file['filename'];
-            if (!file_put_contents($csvfilepath, mod_srg\srg_CSV::simple_table_to_csv($file['content']))) {
+            if (!file_put_contents($csvfilepath, csv_transformer::simple_table_to_csv($file['content']))) {
                 throw new moodle_exception(get_string('error_creating_csv_file', 'mod_srg'));
             }
             $zipfiles[$file['filename']] = $csvfilepath;

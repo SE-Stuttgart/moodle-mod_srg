@@ -18,20 +18,20 @@
  * List of Hardcoded DB query information.
  *
  * @package     mod_srg
- * @copyright   2024 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @copyright   2024 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_srg;
+namespace mod_srg\local;
 
-defined('MOODLE_INTERNAL') || die();
+use mod_srg\local\report_table;
 
-require_once(__DIR__ . "/table.php");
+use stdClass;
 
 /**
  * Class that contains some preset reports based on existing database data.
  */
-class reportsystem {
+class report_system {
     /** @var array This Array holds all needed origin tables.*/
     private array $tables;
 
@@ -46,13 +46,13 @@ class reportsystem {
     /**
      * Load the data of the db table "logstore_standard_log" into a local representation as mod_srg\table.
      * @param mixed $USER The current user.
-     * @param Course $course The course this activity belongs to.
-     * @return table object, that contains the data.
+     * @param stdClass $course The course this activity belongs to.
+     * @return report_table object, that contains the data.
      */
-    private function get_logstore_standard_log_table($USER, $course): table {
+    private function get_logstore_standard_log_table($USER, $course): report_table {
         $tablename = "logstore_standard_log";
         if (!isset($this->tables[$tablename])) {
-            $this->tables[$tablename] = (new table([], []))->get_db_records(
+            $this->tables[$tablename] = (new report_table([], []))->get_db_records(
                 $tablename,
                 [
                     "userid" => [$USER->id],
@@ -84,13 +84,13 @@ class reportsystem {
     /**
      * Load the data of the db table "hvp_xapi_results" into a local representation as mod_srg\table.
      * @param mixed $USER The current user.
-     * @param Course $course The course this activity belongs to.
-     * @return table object, that contains the data.
+     * @param stdClass $course The course this activity belongs to.
+     * @return report_table object, that contains the data.
      */
-    private function get_hvp_table($USER, $course): table {
+    private function get_hvp_table($USER, $course): report_table {
         $tablename = "hvp_xapi_results";
         if (!isset($this->tables[$tablename])) {
-            $this->tables[$tablename] = (new table([], []))->get_db_records(
+            $this->tables[$tablename] = (new report_table([], []))->get_db_records(
                 $tablename,
                 [
                     "user_id" => [$USER->id],
@@ -113,13 +113,13 @@ class reportsystem {
     /**
      * Load the data of the db table "badge_issued" into a local representation as mod_srg\table.
      * @param mixed $USER The current user.
-     * @param Course $course The course this activity belongs to.
-     * @return table object, that contains the data.
+     * @param stdClass $course The course this activity belongs to.
+     * @return report_table object, that contains the data.
      */
-    private function get_badges_table($USER, $course): table {
+    private function get_badges_table($USER, $course): report_table {
         $tablename = "badge_issued";
         if (!isset($this->tables[$tablename])) {
-            $this->tables[$tablename] = (new table([], []))->get_db_records(
+            $this->tables[$tablename] = (new report_table([], []))->get_db_records(
                 $tablename,
                 [
                     "userid" => [$USER->id],
@@ -139,13 +139,13 @@ class reportsystem {
     /**
      * Load the data of the db table "chatbot_history" into a local representation as mod_srg\table.
      * @param mixed $USER The current user.
-     * @param Course $course The course this activity belongs to.
-     * @return table object, that contains the data.
+     * @param stdClass $course The course this activity belongs to.
+     * @return report_table object, that contains the data.
      */
-    private function get_chatbot_history_table($USER, $course): table {
+    private function get_chatbot_history_table($USER, $course): report_table {
         $tablename = "chatbot_history";
         if (!isset($this->tables[$tablename])) {
-            $this->tables[$tablename] = (new table([], []))->get_db_records(
+            $this->tables[$tablename] = (new report_table([], []))->get_db_records(
                 $tablename,
                 [
                     "userid" => [$USER->id],
@@ -170,7 +170,7 @@ class reportsystem {
      * This function returns all entries from the course log db table.
      *
      * @param mixed $USER The current user.
-     * @param Course $course The course this activity belongs to.
+     * @param stdClass $course The course this activity belongs to.
      *
      * @return array Table containing set of log data.
      */
@@ -207,7 +207,7 @@ class reportsystem {
      * and the time difference in this group is "dedication", how much time was spent on this group.
      *
      * @param mixed $USER The current user.
-     * @param Course $course The course this activity belongs to.
+     * @param stdClass $course The course this activity belongs to.
      *
      * @return array Table containing set of log data.
      */
@@ -234,7 +234,7 @@ class reportsystem {
      * This data is expanded by information not found in the standard log db table.
      *
      * @param mixed $USER The current user.
-     * @param Course $course The course this activity belongs to.
+     * @param stdClass $course The course this activity belongs to.
      *
      * @return array Table containing set of log data.
      */
@@ -259,7 +259,13 @@ class reportsystem {
             ->additional_requirement("objecttable")
             ->additional_requirement("objectid")
             ->additional_constraint("target", [
-                "course_module", "course_content", "course_bin_item", "h5p", "attempt", "chapter", "question",
+                "course_module",
+                "course_content",
+                "course_bin_item",
+                "h5p",
+                "attempt",
+                "chapter",
+                "question",
             ])
             ->additional_constraint("action", ["viewed", "failed", "started", "submitted"])
             ->add_human_time("Time")
@@ -285,7 +291,7 @@ class reportsystem {
      * This data is expanded by information not found in the standard log db table.
      *
      * @param mixed $USER The current user.
-     * @param Course $course The course this activity belongs to.
+     * @param stdClass $course The course this activity belongs to.
      *
      * @return array Table containing set of log data.
      */
@@ -310,7 +316,13 @@ class reportsystem {
             ->additional_requirement("objecttable")
             ->additional_requirement("objectid")
             ->additional_constraint("target", [
-                "course_module", "course_content", "course_bin_item", "h5p", "attempt", "chapter", "question",
+                "course_module",
+                "course_content",
+                "course_bin_item",
+                "h5p",
+                "attempt",
+                "chapter",
+                "question",
             ])
             ->additional_constraint("action", ["viewed", "failed", "started", "submitted"])
             ->add_dedication("Dedication", "component")
@@ -335,7 +347,7 @@ class reportsystem {
      * that have information about the user accessing their grades.
      *
      * @param mixed $USER The current user.
-     * @param Course $course The course this activity belongs to.
+     * @param stdClass $course The course this activity belongs to.
      *
      * @return array Table containing set of log data.
      */
@@ -371,7 +383,7 @@ class reportsystem {
      * that have information about the user using a forum.
      *
      * @param mixed $USER The current user.
-     * @param Course $course The course this activity belongs to.
+     * @param stdClass $course The course this activity belongs to.
      *
      * @return array Table containing set of log data.
      */
@@ -416,7 +428,7 @@ class reportsystem {
      * that have information about the users interaction with hvp content.
      *
      * @param mixed $USER The current user.
-     * @param Course $course The course this activity belongs to.
+     * @param stdClass $course The course this activity belongs to.
      *
      * @return array Table containing set of log data.
      */
@@ -454,7 +466,7 @@ class reportsystem {
      * that have information about the users badges.
      *
      * @param mixed $USER The current user.
-     * @param Course $course The course this activity belongs to.
+     * @param stdClass $course The course this activity belongs to.
      *
      * @return array Table containing set of log data.
      */
@@ -490,7 +502,7 @@ class reportsystem {
      * that have information about the users chatbot history.
      *
      * @param mixed $USER The current user.
-     * @param Course $course The course this activity belongs to.
+     * @param stdClass $course The course this activity belongs to.
      *
      * @return array Table containing set of log data.
      */

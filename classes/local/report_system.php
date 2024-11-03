@@ -59,19 +59,19 @@ class report_system {
                     "courseid" => [$course->id],
                 ],
                 [
-                    "id" => "id",
-                    "timecreated" => "timecreated",
-                    "userid" => "userid",
-                    "courseid" => "courseid",
-                    "eventname" => "eventname",
-                    "component" => "component",
-                    "action" => "action",
-                    "target" => "target",
-                    "objecttable" => "objecttable",
-                    "objectid" => "objectid",
-                    "contextid" => "contextid",
-                    "contextlevel" => "contextlevel",
-                    "contextinstanceid" => "contextinstanceid",
+                    "id",
+                    "timecreated",
+                    "userid",
+                    "courseid",
+                    "eventname",
+                    "component",
+                    "action",
+                    "target",
+                    "objecttable",
+                    "objectid",
+                    "contextid",
+                    "contextlevel",
+                    "contextinstanceid",
                 ]
             )
                 ->additional_requirement("id")
@@ -96,11 +96,11 @@ class report_system {
                     "user_id" => [$USER->id],
                 ],
                 [
-                    "id" => "id",
-                    "content_id" => "content_id",
-                    "interaction_type" => "interaction_type",
-                    "raw_score" => "raw_score",
-                    "max_score" => "max_score",
+                    "id",
+                    "content_id",
+                    "interaction_type",
+                    "raw_score",
+                    "max_score",
                 ]
             )
                 ->additional_requirement("id")
@@ -125,8 +125,8 @@ class report_system {
                     "userid" => [$USER->id],
                 ],
                 [
-                    "id" => "id",
-                    "badgeid" => "badgeid",
+                    "id",
+                    "badgeid",
                 ]
             )
                 ->additional_requirement("id")
@@ -152,11 +152,11 @@ class report_system {
                     "courseid" => [$course->id],
                 ],
                 [
-                    "id" => "id",
-                    "timecreated" => "timecreated",
-                    "speaker" => "speaker",
-                    "message" => "message",
-                    "act" => "act",
+                    "id",
+                    "timecreated",
+                    "speaker",
+                    "message",
+                    "act",
                 ]
             )
                 ->additional_requirement("id")
@@ -179,22 +179,22 @@ class report_system {
 
         $table = $origin->create_and_get_sub_table(
             [
-                "id" => "id",
-                "timecreated" => "timecreated",
-                "eventname" => "eventname",
-                "component" => "component",
-                "action" => "action",
-                "target" => "target",
-                "objecttable" => "objecttable",
-                "objectid" => "objectid",
-                "contextid" => "contextid",
-                "contextlevel" => "contextlevel",
-                "contextinstanceid" => "contextinstanceid",
+                "id",
+                "timecreated",
+                "eventname",
+                "component",
+                "action",
+                "target",
+                "objecttable",
+                "objectid",
+                "contextid",
+                "contextlevel",
+                "contextinstanceid",
             ]
         )
-            ->add_human_time("Time")
-            ->add_constant_column("course_shortname", $course->shortname)
-            ->add_constant_column("course_fullname", $course->fullname);
+            ->add_human_time(get_string('time', 'mod_srg'))
+            ->add_constant_column(get_string('course_shortname', 'mod_srg'), $course->shortname)
+            ->add_constant_column(get_string('course_fullname', 'mod_srg'), $course->fullname);
 
         return $table->get_table();
     }
@@ -216,13 +216,13 @@ class report_system {
 
         $table = $origin->create_and_get_sub_table(
             [
-                "id" => "id",
-                "timecreated" => "timecreated",
-                "courseid" => "courseid",
+                "id",
+                "timecreated",
+                "courseid",
             ]
         )
-            ->add_dedication("Dedication")
-            ->add_human_time("Time");
+            ->add_dedication(get_string('dedication', 'mod_srg'))
+            ->add_human_time(get_string('time', 'mod_srg'));
 
         return $table->get_table();
     }
@@ -243,17 +243,17 @@ class report_system {
 
         $table = $origin->create_and_get_sub_table(
             [
-                "id" => "id",
-                "timecreated" => "timecreated",
-                "eventname" => "eventname",
-                "component" => "component",
-                "action" => "action",
-                "target" => "target",
-                "objecttable" => "objecttable",
-                "objectid" => "objectid",
-                "contextid" => "contextid",
-                "contextlevel" => "contextlevel",
-                "contextinstanceid" => "contextinstanceid",
+                "id",
+                "timecreated",
+                "eventname",
+                "component",
+                "action",
+                "target",
+                "objecttable",
+                "objectid",
+                "contextid",
+                "contextlevel",
+                "contextinstanceid",
             ]
         )
             ->additional_requirement("objecttable")
@@ -268,17 +268,17 @@ class report_system {
                 "question",
             ])
             ->additional_constraint("action", ["viewed", "failed", "started", "submitted"])
-            ->add_human_time("Time")
+            ->add_human_time(get_string('time', 'mod_srg'))
             ->add_constant_column("object_name", "")
-            ->add_constant_column("course_shortname", $course->shortname)
-            ->add_constant_column("course_fullname", $course->fullname)
+            ->add_constant_column(get_string('course_shortname', 'mod_srg'), $course->shortname)
+            ->add_constant_column(get_string('course_fullname', 'mod_srg'), $course->fullname)
             ->join_with_variable_table(
                 "objecttable",
                 "objectid",
                 ["name" => "object_name"],
                 ["book_chapters" => ["title" => "object_name"]]
             )
-            ->rename_column("object_name", "Object Name");
+            ->rename_column("object_name", get_string('object_name', 'mod_srg'));
 
         return $table->get_table();
     }
@@ -300,17 +300,17 @@ class report_system {
 
         $table = $origin->create_and_get_sub_table(
             [
-                "id" => "id",
-                "timecreated" => "timecreated",
-                "eventname" => "eventname",
-                "component" => "component",
-                "action" => "action",
-                "target" => "target",
-                "objecttable" => "objecttable",
-                "objectid" => "objectid",
-                "contextid" => "contextid",
-                "contextlevel" => "contextlevel",
-                "contextinstanceid" => "contextinstanceid",
+                "id",
+                "timecreated",
+                "eventname",
+                "component",
+                "action",
+                "target",
+                "objecttable",
+                "objectid",
+                "contextid",
+                "contextlevel",
+                "contextinstanceid",
             ]
         )
             ->additional_requirement("objecttable")
@@ -325,18 +325,18 @@ class report_system {
                 "question",
             ])
             ->additional_constraint("action", ["viewed", "failed", "started", "submitted"])
-            ->add_dedication("Dedication", "component")
-            ->add_human_time("Time")
+            ->add_dedication(get_string('dedication', 'mod_srg'), "component")
+            ->add_human_time(get_string('time', 'mod_srg'))
             ->add_constant_column("object_name", "")
-            ->add_constant_column("course_shortname", $course->shortname)
-            ->add_constant_column("course_fullname", $course->fullname)
+            ->add_constant_column(get_string('course_shortname', 'mod_srg'), $course->shortname)
+            ->add_constant_column(get_string('course_fullname', 'mod_srg'), $course->fullname)
             ->join_with_variable_table(
                 "objecttable",
                 "objectid",
                 ["name" => "object_name"],
                 ["book_chapters" => ["title" => "object_name"]]
             )
-            ->rename_column("object_name", "Object Name");
+            ->rename_column("object_name", get_string('object_name', 'mod_srg'));
 
         return $table->get_table();
     }
@@ -356,9 +356,9 @@ class report_system {
 
         $table = $origin->create_and_get_sub_table(
             [
-                "id" => "id",
-                "timecreated" => "timecreated",
-                "eventname" => "eventname",
+                "id",
+                "timecreated",
+                "eventname",
             ]
         )
             ->additional_constraint("eventname", [
@@ -370,10 +370,10 @@ class report_system {
                 '\gradereport_outcomes\event\grade_report_viewed',
                 '\gradereport_singleview\event\grade_report_viewed',
             ])
-            ->add_human_time("Time")
-            ->add_constant_column("course_shortname", $course->shortname)
-            ->add_constant_column("course_fullname", $course->fullname)
-            ->rename_column("eventname", "Eventname");
+            ->add_human_time(get_string('time', 'mod_srg'))
+            ->add_constant_column(get_string('course_shortname', 'mod_srg'), $course->shortname)
+            ->add_constant_column(get_string('course_fullname', 'mod_srg'), $course->fullname)
+            ->rename_column("eventname", get_string('eventname', 'mod_srg'));
 
         return $table->get_table();
     }
@@ -392,20 +392,20 @@ class report_system {
 
         $table = $origin->create_and_get_sub_table(
             [
-                "id" => "id",
-                "timecreated" => "timecreated",
-                "eventname" => "eventname",
-                "component" => "component",
-                "action" => "action",
-                "target" => "target",
-                "objecttable" => "objecttable",
-                "objectid" => "objectid",
+                "id",
+                "timecreated",
+                "eventname",
+                "component",
+                "action",
+                "target",
+                "objecttable",
+                "objectid",
             ]
         )
             ->additional_requirement("objecttable")
             ->additional_requirement("objectid")
             ->additional_constraint("component", ["mod_forum"])
-            ->add_human_time("Time")
+            ->add_human_time(get_string('time', 'mod_srg'))
             ->add_constant_column("name", "")
             ->add_constant_column("discussionid", "")
             ->join_with_variable_table(
@@ -437,11 +437,11 @@ class report_system {
 
         $table = $origin->create_and_get_sub_table(
             [
-                "id" => "id",
-                "content_id" => "content_id",
-                "interaction_type" => "interaction_type",
-                "raw_score" => "raw_score",
-                "max_score" => "max_score",
+                "id",
+                "content_id",
+                "interaction_type",
+                "raw_score",
+                "max_score",
             ]
         )
             ->add_constant_column("course", "")
@@ -453,10 +453,10 @@ class report_system {
                 ["course" => "courseid", "name" => "object_name", "timecreated" => "timecreated"]
             )
             ->additional_constraint("courseid", $course->id)
-            ->add_human_time("Time")
-            ->add_constant_column("course_shortname", $course->shortname)
-            ->add_constant_column("course_fullname", $course->fullname)
-            ->rename_column("object_name", "Object Name");
+            ->add_human_time(get_string('time', 'mod_srg'))
+            ->add_constant_column(get_string('course_shortname', 'mod_srg'), $course->shortname)
+            ->add_constant_column(get_string('course_fullname', 'mod_srg'), $course->fullname)
+            ->rename_column("object_name", get_string('object_name', 'mod_srg'));
 
         return $table->get_table();
     }
@@ -475,8 +475,8 @@ class report_system {
 
         $table = $origin->create_and_get_sub_table(
             [
-                "id" => "id",
-                "badgeid" => "badgeid",
+                "id",
+                "badgeid",
             ]
         )
             ->add_constant_column("courseid", "")
@@ -488,10 +488,10 @@ class report_system {
                 ["course" => "courseid", "name" => "object_name", "timecreated" => "timecreated"]
             )
             ->additional_constraint("courseid", [$course->id])
-            ->add_human_time("Time")
-            ->add_constant_column("course_shortname", $course->shortname)
-            ->add_constant_column("course_fullname", $course->fullname)
-            ->rename_column("object_name", "Object Name");
+            ->add_human_time(get_string('time', 'mod_srg'))
+            ->add_constant_column(get_string('course_shortname', 'mod_srg'), $course->shortname)
+            ->add_constant_column(get_string('course_fullname', 'mod_srg'), $course->fullname)
+            ->rename_column("object_name", get_string('object_name', 'mod_srg'));
 
         return $table->get_table();
     }
@@ -511,16 +511,16 @@ class report_system {
 
         $table = $origin->create_and_get_sub_table(
             [
-                "id" => "id",
-                "timecreated" => "timecreated",
-                "speaker" => "speaker",
-                "message" => "message",
-                "act" => "act",
+                "id",
+                "timecreated",
+                "speaker",
+                "message",
+                "act",
             ]
         )
-            ->add_human_time("Time")
-            ->add_constant_column("course_shortname", $course->shortname)
-            ->add_constant_column("course_fullname", $course->fullname);
+            ->add_human_time(get_string('time', 'mod_srg'))
+            ->add_constant_column(get_string('course_shortname', 'mod_srg'), $course->shortname)
+            ->add_constant_column(get_string('course_fullname', 'mod_srg'), $course->fullname);
 
         return $table->get_table();
     }

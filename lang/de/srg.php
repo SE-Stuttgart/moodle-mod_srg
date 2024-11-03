@@ -57,9 +57,33 @@ Anmerkung: Die heruntergeladene Datei ist eigentlich eine .zip-Datei.
 Sie hat aber die Endung .kib3, weil sie sonst unter manchen Betriebssystemen automatisch entpackt würde.
 Sie können ein zip Programm wie 7Zip benutzen um die Datei zu entpacken.";
 
-// File Text.
-$string['zipfilename'] = 'moodle-mod_srg';
-
 // View Text.
 $string['view_all_button_name'] = 'Logdaten ansehen';
 $string['print_all_button_name'] = 'Logdaten herunterladen';
+
+// Report strings.
+$string['zipfilename'] = 'moodle-mod_srg';
+// Report file names.
+$string['course_dedication_log'] = 'Course Dedication Log';
+$string['course_dedication_log_csv'] = 'course_dedication_log.csv';
+$string['course_module_log'] = 'Course Module Log';
+$string['course_module_log_csv'] = 'course_module_log.csv';
+$string['course_module_dedication'] = 'Course Module Dedication Report';
+$string['course_module_dedication_csv'] = 'course_module_dedication.csv';
+$string['grade_inspections'] = 'Grade Inspection Report';
+$string['grade_inspections_csv'] = 'grade_inspections.csv';
+$string['forum_activities'] = 'Forum Activity Report';
+$string['forum_activities_csv'] = 'forum_activities.csv';
+$string['hvp_scores'] = 'HVP Score Report';
+$string['hvp_scores_csv'] = 'hvp_scores.csv';
+$string['badges'] = 'User Earned Badges';
+$string['badges_csv'] = 'badges.csv';
+$string['chatbot_history'] = 'Chatbot History';
+$string['chatbot_history_csv'] = 'chatbot_history.csv';
+// Report header names.
+$string['time'] = 'Time';
+$string['course_shortname'] = 'Course Shortname';
+$string['course_fullname'] = 'Course Fullname';
+$string['dedication'] = 'Dedication';
+$string['object_name'] = 'Object Name';
+$string['eventname'] = 'Eventname';

@@ -104,7 +104,7 @@ class report_table {
 
         foreach ($this->data as $id => $data) {
             $row = [];
-            foreach ($columns as $column => $title) {
+            foreach ($columns as $column) {
                 if (isset($data[$column])) {
                     $row[$column] = $data[$column];
                 } else {

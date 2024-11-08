@@ -1,0 +1,18 @@
+.srg-tab-container .srg-tab-active {
+    font-weight: bold;
+    border-bottom: 2px solid #0073e6;
+}
+
+.srg-page-navigation {
+    margin: 10px;
+}
+
+.srg-hidden {
+    display: none;
+}
+
+.srg-page-navigation a,
+.srg-page-navigation a .fa {
+    font-size: large;
+    line-height: 1;
+}

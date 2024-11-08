@@ -61,6 +61,14 @@ You can use a zip programm like 7Zip to unpack it.";
 $string['view_all_button_name'] = 'View log data';
 $string['print_all_button_name'] = 'Download log data';
 
+// Info UI text.
+$string['page_navigation'] = 'Page navigation';
+$string['first'] = '<<';
+$string['previous'] = '<';
+$string['next'] = '>';
+$string['last'] = '>>';
+// $string[''] = '';
+
 // Report strings.
 $string['zipfilename'] = 'moodle-mod_srg';
 // Report file names.

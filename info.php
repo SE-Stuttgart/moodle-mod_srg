@@ -24,8 +24,6 @@
 
 use mod_srg\local\csv_transformer;
 
-use stdClass;
-
 require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
 require_once(__DIR__ . '/locallib.php');
@@ -124,34 +122,14 @@ if ($mode == 'print') { // Download data as CSV in .zip.
     srg_log_data_view($srg, $modulecontext);
 
     // Prepare the data for visualization using a mustache template.
-    $data = [];
-    foreach (array_values($filelist) as $i => $file) {
-        $table = new stdClass();
-        $table->index = format_text(strval($i), FORMAT_HTML);
-        $table->name = format_text(strval($file['name']), FORMAT_HTML);
-        $table->head = [];
-        foreach (array_shift($file['content']) as $header) {
-            $head = new stdClass();
-            $head->value = format_text(strval($header), FORMAT_HTML);
-            $table->head[] = $head;
-        }
-        $table->data = [];
-        foreach ($file['content'] as $rowcontent) {
-            $row = new stdClass();
-            $row->content = [];
-            foreach ($rowcontent as $cellvalue) {
-                $cell = new stdClass();
-                $cell->value = format_text(strval($cellvalue), FORMAT_HTML);
-                $row->content[] = $cell;
-            }
-            $table->data[] = $row;
-        }
-        $data[] = $table;
-    }
+    $templatedata = srg_preprocess_data_for_rendering($filelist);
+
+    // Register the stylesheet.
+    $PAGE->requires->css('/mod/srg/styles.css');
 
     echo $OUTPUT->header();
 
-    echo $OUTPUT->render_from_template('mod_srg/report_display', ['filelist' => $data]);
+    echo $OUTPUT->render_from_template('mod_srg/data_view', ['filelist' => $templatedata]);
 
     echo $OUTPUT->footer();
 

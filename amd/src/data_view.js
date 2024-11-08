@@ -13,36 +13,22 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+import {
+    initFileSelection
+} from "mod_srg/file_selection";
+
 /**
- * View HTML Accordion handling.
+ * Create and support the data viewing in html.
  *
- * @module     mod_srg/accordion
+ * @module     mod_srg/data_view
  * @copyright  2024 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 /**
- * Sets up the event listener for the accordion interaction.
+ * Entry point for the data viewing javascript support, call only after rendering template/file_navigation.
+ * Initialize the file-selection UI and delegate further html renders.
  */
 export function init() {
-    var collapseButtons = document.getElementsByClassName("mod_srg-collapse-button");
-
-    for (var i = 0; i < collapseButtons.length; i++) {
-        var button = collapseButtons[i];
-        button.addEventListener('click', handleAccordionClick);
-    }
-}
-
-/**
- * Function to handle accordion interaction.
- * @param {*} event The input event catched by the listener.
- */
-function handleAccordionClick(event) {
-    var iconTarget = event.target.getAttribute('icon-target');
-    var iconElement = document.querySelector(iconTarget);
-
-    if (iconElement) {
-        iconElement.classList.toggle('fa-chevron-down');
-        iconElement.classList.toggle('fa-chevron-up');
-    }
+    initFileSelection();
 }

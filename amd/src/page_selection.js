@@ -142,13 +142,13 @@ function setActivePage(nextPageIndex) {
     // Get the head and data for the currently active file/tab.
     const tabs = document.querySelectorAll(".srg-tab-container .nav-link");
     const activeTab = tabs[dataElement.dataset.activeFileIndex];
-    const head = JSON.parse(atob(activeTab.getAttribute("data-head") || "e30="));
-    const data = JSON.parse(atob(activeTab.getAttribute("data-content") || "e30="));
+    const head = JSON.parse(atob(activeTab.getAttribute("data-head") || "W10="));
+    const data = JSON.parse(atob(activeTab.getAttribute("data-content") || "W10="));
 
-    // Get the content for the currently active page.
-    const content = data[dataElement.dataset.activePageIndex].rows;
-
-    renderTable(head, content);
+    renderTable(
+        preprocessHead(head),
+        preprocessData(data, parseInt(dataElement.dataset.pageLength, 10), parseInt(dataElement.dataset.activePageIndex, 10))
+    );
 }
 
 /**
@@ -193,16 +193,59 @@ function updatePaginationVisibilityStates(paginationContainerElement, pageIndex)
 /**
  * Render the content as a table.
  * @param {array} head - The column headers for the table.
- * @param {array} content - The content rows for the table.
+ * @param {array} data - The content rows for the table.
  */
-function renderTable(head, content) {
+function renderTable(head, data) {
     const tableContainer = document.querySelector(".srg-tab-content-container");
 
-    const templateContext = { head: head, rows: content };
+    const templateContext = { head: head, rows: data };
     render('mod_srg/table', templateContext).then((html) => {
         tableContainer.innerHTML = html;
         return undefined;
     }).catch(ex => {
         window.console.error('Template rendering failed: ', ex);
     });
+}
+
+/**
+ * Converts header values into HTML-safe objects with a `value` property.
+ * @param {Array} head - Array of header values to process.
+ * @returns {Array<Object>} Array of objects with each header as an HTML-safe string in `value`.
+ */
+function preprocessHead(head) {
+    return head.map(headValue => ({
+        value: makeHtmlSafe(headValue)
+    }));
+}
+
+/**
+ * Slices data to retrieve rows for the given page index, ensuring HTML safety for each cell value.
+ * @param {Array<Array>} data - The data array where each element is a row array.
+ * @param {number} pageLength - The number of rows per page.
+ * @param {number} pageIndex - The index of the current page (0-based).
+ * @returns {Array<Object>} Array of row objects, each with `columns` containing HTML-safe cell values.
+ */
+function preprocessData(data, pageLength, pageIndex) {
+    const startIndex = pageIndex * pageLength;
+    const endIndex = startIndex + pageLength;
+
+    const page = data.slice(startIndex, endIndex);
+
+    return page.map(row => ({
+        columns: row.map(cellValue => ({
+            value: makeHtmlSafe(cellValue)
+        }))
+    }));
+}
+
+/**
+ * Converts a value to an HTML-safe string.
+ * This function prevents HTML injection by escaping special characters.
+ * @param {any} value - The value to make HTML-safe.
+ * @returns {string} HTML-safe string representation of the value.
+ */
+function makeHtmlSafe(value) {
+    const tempDiv = document.createElement('div');
+    tempDiv.textContent = String(value);
+    return tempDiv.innerHTML;
 }

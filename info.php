@@ -22,7 +22,7 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use mod_srg\local\csv_transformer;
+use stdClass;
 
 require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
@@ -81,7 +81,7 @@ if ($mode == 'print') { // Download data as CSV in .zip.
         if ($zipwriter instanceof \core_files\local\archive_writer\zip_writer) {
             // Stream the files into the zip.
             foreach ($filelist as $file) {
-                $zipwriter->add_file_from_string($file['filename'], csv_transformer::simple_table_to_csv($file['content']));
+                $zipwriter->add_file_from_string($file['filename'], $file['report_table']->get_as_csv_table());
                 unset($file);
             }
 
@@ -100,12 +100,12 @@ if ($mode == 'print') { // Download data as CSV in .zip.
         $exporttmpdir = make_request_directory();
 
         foreach ($filelist as $file) {
-            if (!$file['content']) {
+            if (!$file['report_table']) {
                 continue;
             }
 
             $csvfilepath = $exporttmpdir . DIRECTORY_SEPARATOR . $file['filename'];
-            if (!file_put_contents($csvfilepath, csv_transformer::simple_table_to_csv($file['content']))) {
+            if (!file_put_contents($csvfilepath, $file['report_table']->get_as_csv_table())) {
                 throw new moodle_exception(get_string('error_creating_csv_file', 'mod_srg'));
             }
             $zipfiles[$file['filename']] = $csvfilepath;
@@ -116,20 +116,39 @@ if ($mode == 'print') { // Download data as CSV in .zip.
         send_temp_file($zipfilepath, $zipfilename);
         gc_collect_cycles();
     }
+    debugging(print_r($templatetable, true), DEBUG_DEVELOPER);
     die; // Important!
 } else if ($mode == 'view') { // View data in browser.
     // Trigger event\log_data_viewed.
     srg_log_data_view($srg, $modulecontext);
 
-    // Prepare the data for visualization using a mustache template.
-    $templatedata = srg_preprocess_data_for_rendering($filelist);
+    $pagelength = 50;
+
+    $templatedata = [];
+    foreach ($filelist as $index => $file) {
+        $headers = $file['report_table']->get_headers();
+        $data = $file['report_table']->get_data();
+
+        $table = new stdClass();
+        $table->index = format_text(strval($index), FORMAT_HTML);
+        $table->name = format_text(strval($file['name']), FORMAT_HTML);
+        $table->pagecount = format_text(strval(((int)ceil(sizeof($data) / $pagelength))), FORMAT_HTML);
+        $table->head = base64_encode(json_encode($headers));
+        $table->data = base64_encode(json_encode($data));
+
+        $templatedata[] = $table;
+    }
+    gc_collect_cycles();
 
     // Register the stylesheet.
     $PAGE->requires->css('/mod/srg/styles.css');
 
     echo $OUTPUT->header();
 
-    echo $OUTPUT->render_from_template('mod_srg/data_view', ['filelist' => $templatedata]);
+    echo $OUTPUT->render_from_template(
+        'mod_srg/data_view',
+        ['filelist' => $templatedata, 'pagelength' => format_text(strval($pagelength), FORMAT_HTML)]
+    );
 
     echo $OUTPUT->footer();
 

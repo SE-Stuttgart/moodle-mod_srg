@@ -50,21 +50,6 @@ function initTabListeners() {
 }
 
 /**
- * Display the tab content.
- * @param {Element} tab - The tab to display content for.
- */
-function initTabContent(tab) {
-    const data = JSON.parse(atob(tab.getAttribute("data-content") || "e30="));
-
-    // Create an array (for the pagination template) with one object per page, starting at value 1;
-    const pages = Array.from(data, (_, index) => ({ index: index + 1 }));
-
-    if (pages.length > 0) {
-        initPageSelection(pages);
-    }
-}
-
-/**
  * Sets a new active tab and updates the tab content.
  * @param {int} nextTabIndex - Index of the new active tab.
  */
@@ -90,7 +75,12 @@ function setActiveTab(nextTabIndex) {
         tab.setAttribute("aria-selected", isActive ? "true" : "false");
 
         if (isActive) {
-            initTabContent(tab);
+            // Create an array (for the pagination template) with one object per page, starting at value 1;
+            const pages = Array.from({ length: parseInt(tab.dataset.pageCount, 10) }, (_, index) => ({ index: index + 1 }));
+            // Initiate page selection and content view if there are pages to display.
+            if (pages.length > 0) {
+                initPageSelection(pages);
+            }
         }
     });
 }

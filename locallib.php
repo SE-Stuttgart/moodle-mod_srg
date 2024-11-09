@@ -61,7 +61,7 @@ function srg_get_file_list($USER, $course) {
         $filelist[] = [
             'name' => get_string('course_dedication_log', 'mod_srg'),
             'filename' => get_string('course_dedication_log_csv', 'mod_srg'),
-            'content' => $reportsystem->get_course_dedication($USER, $course),
+            'report_table' => $reportsystem->get_course_dedication($USER, $course),
         ];
     } catch (\Throwable $th) {
         debugging($th);
@@ -71,7 +71,7 @@ function srg_get_file_list($USER, $course) {
         $filelist[] = [
             'name' => get_string('course_module_log', 'mod_srg'),
             'filename' => get_string('course_module_log_csv', 'mod_srg'),
-            'content' => $reportsystem->get_course_module_log($USER, $course),
+            'report_table' => $reportsystem->get_course_module_log($USER, $course),
         ];
     } catch (\Throwable $th) {
         debugging($th);
@@ -81,7 +81,7 @@ function srg_get_file_list($USER, $course) {
         $filelist[] = [
             'name' => get_string('course_module_dedication', 'mod_srg'),
             'filename' => get_string('course_module_dedication_csv', 'mod_srg'),
-            'content' => $reportsystem->get_course_module_dedication($USER, $course),
+            'report_table' => $reportsystem->get_course_module_dedication($USER, $course),
         ];
     } catch (\Throwable $th) {
         debugging($th);
@@ -91,7 +91,7 @@ function srg_get_file_list($USER, $course) {
         $filelist[] = [
             'name' => get_string('grade_inspections', 'mod_srg'),
             'filename' => get_string('grade_inspections_csv', 'mod_srg'),
-            'content' => $reportsystem->get_grading_interest($USER, $course),
+            'report_table' => $reportsystem->get_grading_interest($USER, $course),
         ];
     } catch (\Throwable $th) {
         debugging($th);
@@ -101,7 +101,7 @@ function srg_get_file_list($USER, $course) {
         $filelist[] = [
             'name' => get_string('forum_activities', 'mod_srg'),
             'filename' => get_string('forum_activities_csv', 'mod_srg'),
-            'content' => $reportsystem->get_forum_activity($USER, $course),
+            'report_table' => $reportsystem->get_forum_activity($USER, $course),
         ];
     } catch (\Throwable $th) {
         debugging($th);
@@ -112,7 +112,7 @@ function srg_get_file_list($USER, $course) {
             $filelist[] = [
                 'name' => get_string('hvp_scores', 'mod_srg'),
                 'filename' => get_string('hvp_scores_csv', 'mod_srg'),
-                'content' => $reportsystem->get_hvp($USER, $course),
+                'report_table' => $reportsystem->get_hvp($USER, $course),
             ];
         } catch (\Throwable $th) {
             debugging($th);
@@ -123,7 +123,7 @@ function srg_get_file_list($USER, $course) {
         $filelist[] = [
             'name' => get_string('badges', 'mod_srg'),
             'filename' => get_string('badges_csv', 'mod_srg'),
-            'content' => $reportsystem->get_badges($USER, $course),
+            'report_table' => $reportsystem->get_badges($USER, $course),
         ];
     } catch (\Throwable $th) {
         debugging($th);
@@ -134,7 +134,7 @@ function srg_get_file_list($USER, $course) {
             $filelist[] = [
                 'name' => get_string('chatbot_history', 'mod_srg'),
                 'filename' => get_string('chatbot_history_csv', 'mod_srg'),
-                'content' => $reportsystem->get_chatbot_history($USER, $course),
+                'report_table' => $reportsystem->get_chatbot_history($USER, $course),
             ];
         } catch (\Throwable $th) {
             debugging($th);
@@ -142,76 +142,4 @@ function srg_get_file_list($USER, $course) {
     }
 
     return $filelist;
-}
-
-/**
- * This function processes the filelist tables so they work with the implemented rendering system.
- * @param array $filelist Array of tables containing all report data.
- * @return array Array of objects with information and data to be easy to render.
- */
-function srg_preprocess_data_for_rendering($filelist): array {
-    // Prepare the data for visualization using a mustache template.
-    $templatedata = [];
-    foreach (array_values($filelist) as $i => $file) {
-        // Table is {index: int, name: string, head: string, data: string}.
-        $table = new stdClass();
-
-        // Set the index and name.
-        $table->index = format_text(strval($i), FORMAT_HTML);
-        $table->name = format_text(strval($file['name']), FORMAT_HTML);
-
-        // Prepare the head (headers).
-        $table->head = [];
-        // foreach ($file['headers'] as $header) {
-        foreach (array_shift($file['content']) as $header) {
-            $head = new stdClass();
-            $head->value = format_text(strval($header), FORMAT_HTML);
-            $table->head[] = $head;
-        }
-        $table->head = base64_encode(json_encode($table->head)); // Encode headers as base64 JSON
-
-        // Initialize data for pagination
-        $table->data = [];
-        $pagelength = 50;
-        $index = 0;
-        $page = new stdClass();
-        $page->rows = [];
-
-        // Populate rows and handle pagination
-        foreach ($file['content'] as $rowcontent) {
-            $row = new stdClass();
-            $row->columns = [];
-
-            // Populate each row's columns
-            foreach ($rowcontent as $cellvalue) {
-                $cell = new stdClass();
-                $cell->value = format_text(strval($cellvalue), FORMAT_HTML);
-                $row->columns[] = $cell;
-            }
-
-            // Add row to current page
-            $page->rows[] = $row;
-            $index++;
-
-            // If page is full, add to data and start a new page
-            if ($index >= $pagelength) {
-                $table->data[] = $page;
-                $page = new stdClass();
-                $page->rows = [];
-                $index = 0;
-            }
-        }
-
-        // Add any remaining rows in the final page
-        if (!empty($page->rows)) {
-            $table->data[] = $page;
-        }
-
-        // Encode all pages as Base64 JSON
-        $table->data = base64_encode(json_encode($table->data));
-
-        // Append to the templatedata array
-        $templatedata[] = $table;
-    }
-    return $templatedata;
 }

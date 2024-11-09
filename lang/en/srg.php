@@ -46,6 +46,8 @@ $string['error_course_module'] = 'Course Module misconfigured.';
 $string['error_course_not_found'] = 'Course is misconfigured';
 $string['error_course_access_denied'] = 'Access to course denied. You are not enrolled.';
 $string['error_creating_csv_file'] = 'There was an error creating the .csv file.';
+$string['error_duplicate_primary_key'] = 'Duplicate value found for given primary key - keyfield ';
+$string['error_accessing_database'] = 'There has been an error when accessing the following database table: ';
 
 // Form Text.
 $string['info_title'] = 'Data Overview';
@@ -63,11 +65,10 @@ $string['print_all_button_name'] = 'Download log data';
 
 // Info UI text.
 $string['page_navigation'] = 'Page navigation';
-$string['first'] = '<<';
-$string['previous'] = '<';
-$string['next'] = '>';
-$string['last'] = '>>';
-// $string[''] = '';
+$string['first'] = 'first';
+$string['previous'] = 'previous';
+$string['next'] = 'next';
+$string['last'] = 'last';
 
 // Report strings.
 $string['zipfilename'] = 'moodle-mod_srg';

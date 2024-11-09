@@ -46,6 +46,8 @@ $string['error_course_module'] = 'Course Module misconfigured.';
 $string['error_course_not_found'] = 'Course is misconfigured';
 $string['error_course_access_denied'] = 'Access to course denied. You are not enrolled.';
 $string['error_creating_csv_file'] = 'There was an error creating the .csv file.';
+$string['error_duplicate_primary_key'] = 'Duplicate value found for given primary key - keyfield ';
+$string['error_accessing_database'] = 'There has been an error when accessing the following database table: ';
 
 // Form Text.
 $string['info_title'] = 'Übersicht über die Daten';
@@ -60,6 +62,13 @@ Sie können ein zip Programm wie 7Zip benutzen um die Datei zu entpacken.";
 // View Text.
 $string['view_all_button_name'] = 'Logdaten ansehen';
 $string['print_all_button_name'] = 'Logdaten herunterladen';
+
+// Info UI text.
+$string['page_navigation'] = 'Seiten Navigation';
+$string['first'] = 'Erste';
+$string['previous'] = 'Vorherige';
+$string['next'] = 'Nächste';
+$string['last'] = 'Letzte';
 
 // Report strings.
 $string['zipfilename'] = 'moodle-mod_srg';

@@ -106,7 +106,8 @@
                role="tab" 
                aria-selected="false"
                data-head="{{ head }}" 
-               data-content="{{ data }}">
+               data-content="{{ data }}"
+               data-page-count="{{ pagecount }}">
                 {{name}}
             </a>
         </li>
@@ -114,7 +115,10 @@
     </ul>
 </div>
 
-<div class="srg-page-container" data-active-file-index="0" data-active-page-index="0">
+<div class="srg-page-container"
+    data-page-length="{{ pagelength }}" 
+    data-active-file-index="0" 
+    data-active-page-index="0">
     <div class="srg-page-navigation-container-top"></div>
     <div class="srg-tab-content-container"></div>
     <div class="srg-page-navigation-container-bottom"></div>

@@ -114,10 +114,11 @@ class report_table {
 
         // Retrieve recordset from the database with specified conditions and fields.
         $recordset = $DB->get_recordset_select(
-            table: $table,
-            select: $conditions,
-            params: $params,
-            fields: $fields
+            $table,
+            $conditions,
+            $params,
+            '',
+            $fields
         );
 
         foreach ($recordset as $record) {
@@ -444,9 +445,9 @@ class report_table {
         try {
             // Call the join function, passing the join parameters to link target table data with local rows.
             $this->join_with_table(
-                table: $table,
-                joinids: $joinids,
-                joinfields: $joinfields
+                $table,
+                $joinids,
+                $joinfields
             );
         } catch (\Throwable $th) {
             // Log an error if the database access fails, including the table name and exception details.
@@ -502,9 +503,9 @@ class report_table {
             try {
                 // Join the data from the target table with the current table's rows.
                 $this->join_with_table(
-                    table: $table,
-                    joinids: $joinids,
-                    joinfields: $joinfields
+                    $table,
+                    $joinids,
+                    $joinfields
                 );
             } catch (\Throwable $th) {
                 // Log a debugging message if the join fails.
@@ -546,10 +547,11 @@ class report_table {
 
         // Fetch records from the join table, matching only rows with IDs in $joinids.
         $recordset = $DB->get_recordset_list(
-            table: $table,
-            field: 'id',
-            values: array_keys($joinids),
-            fields: $fields
+            $table,
+            'id',
+            array_keys($joinids),
+            '',
+            $fields
         );
 
         // Map retrieved records to the target fields in this table's data.

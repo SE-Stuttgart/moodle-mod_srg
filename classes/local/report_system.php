@@ -56,7 +56,7 @@ class report_system {
      * - component: The component that triggered the event
      * - action: The specific action performed in the event
      * - target: The target entity of the event
-     * - objecttable: The table of the object involved in the event
+     * - objectThe table of the object involved in the event
      * - objectid: The ID of the object involved in the event
      * - contextid: The context ID of the event
      * - contextlevel: The level of context for the event
@@ -77,7 +77,7 @@ class report_system {
         if (!isset($this->tables[$tablename])) {
             // Instantiate a new report_table with the appropriate headers.
             $table = new report_table(
-                headers: [
+                [
                     "id" => "id",
                     "timecreated" => "timecreated",
                     "userid" => "userid",
@@ -96,16 +96,16 @@ class report_system {
 
             // Populate the report_table with log data from the database, applying conditions for user and course.
             $table->populate_from_database(
-                table: $tablename,
-                conditions: "userid = :userid"
+                $tablename,
+                "userid = :userid"
                     . " AND courseid = :courseid"
                     . " AND id IS NOT NULL AND id <> ''"
                     . " AND timecreated IS NOT NULL AND timecreated <> ''",
-                params: [
+                [
                     'userid' => $USER->id,
                     'courseid' => $course->id,
                 ],
-                fields: implode(", ", [
+                implode(", ", [
                     "id",
                     "timecreated",
                     "userid",
@@ -120,7 +120,7 @@ class report_system {
                     "contextlevel",
                     "contextinstanceid",
                 ]),
-                keyfield: 'id'
+                'id'
             );
 
             // Cache the populated table in the $tables array.
@@ -158,7 +158,7 @@ class report_system {
         if (!isset($this->tables[$tablename])) {
             // Instantiate a new report_table with the appropriate headers.
             $table = new report_table(
-                headers: [
+                [
                     "id" => "id",
                     "content_id" => "content_id",
                     "interaction_type" => "interaction_type",
@@ -169,21 +169,21 @@ class report_system {
 
             // Populate the report_table with xAPI result data from the database, applying conditions for the user.
             $table->populate_from_database(
-                table: $tablename,
-                conditions: "userid = :userid"
+                $tablename,
+                "userid = :userid"
                     . " AND id IS NOT NULL AND id <> ''"
                     . " AND content_id IS NOT NULL AND content_id <> ''",
-                params: [
+                [
                     'userid' => $USER->id,
                 ],
-                fields: implode(", ", [
+                implode(", ", [
                     "id",
                     "content_id",
                     "interaction_type",
                     "raw_score",
                     "max_score",
                 ]),
-                keyfield: 'id'
+                'id'
             );
 
             // Cache the populated table in the $tables array.
@@ -217,7 +217,7 @@ class report_system {
 
             // Instantiate a new report_table with the appropriate headers.
             $table = new report_table(
-                headers: [
+                [
                     "id" => "id",
                     "badgeid" => "badgeid",
                 ]
@@ -225,18 +225,18 @@ class report_system {
 
             // Populate the report_table with badge issuance data from the database, applying conditions for the user.
             $table->populate_from_database(
-                table: $tablename,
-                conditions: "userid = :userid"
+                $tablename,
+                "userid = :userid"
                     . " AND id IS NOT NULL AND id <> ''"
                     . " AND badgeid IS NOT NULL AND badgeid <> ''",
-                params: [
+                [
                     'userid' => $USER->id,
                 ],
-                fields: implode(", ", [
+                implode(", ", [
                     "id",
                     "badgeid",
                 ]),
-                keyfield: 'id'
+                'id'
             );
 
             // Cache the populated table in the $tables array.
@@ -274,7 +274,7 @@ class report_system {
 
             // Instantiate a new report_table with the appropriate headers.
             $table = new report_table(
-                headers: [
+                [
                     "id" => "id",
                     "timecreated" => "timecreated",
                     "speaker" => "speaker",
@@ -285,23 +285,23 @@ class report_system {
 
             // Populate the report_table with chatbot history data from the database, applying conditions for user and course.
             $table->populate_from_database(
-                table: $tablename,
-                conditions: "userid = :userid"
+                $tablename,
+                "userid = :userid"
                     . " AND courseid = :courseid"
                     . " AND id IS NOT NULL AND id <> ''"
                     . " AND timecreated IS NOT NULL AND timecreated <> ''",
-                params: [
+                [
                     'userid' => $USER->id,
                     'courseid' => $course->id,
                 ],
-                fields: implode(", ", [
+                implode(", ", [
                     "id",
                     "timecreated",
                     "speaker",
                     "message",
                     "act",
                 ]),
-                keyfield: 'id'
+                'id'
             );
 
             // Cache the populated table in the $tables array.
@@ -342,7 +342,7 @@ class report_system {
 
         // Create a sub-table with additional headers and apply the dedication and human time columns.
         $table = $origin->create_and_get_sub_table(
-            newheaders: [
+            [
                 "id" => "id",
                 "timecreated" => "timecreated",
                 "courseid" => "courseid",
@@ -371,7 +371,7 @@ class report_system {
      * - component: The component that generated the log entry
      * - action: The action performed in the event
      * - target: The target of the event (e.g., course module, chapter, question)
-     * - objecttable: The table of the object involved in the event
+     * - objectThe table of the object involved in the event
      * - objectid: The ID of the object involved in the event
      * - contextid: The context ID of the event
      * - contextlevel: The level of the context for the event
@@ -397,7 +397,7 @@ class report_system {
 
         // Create a sub-table with specific headers and apply additional requirements and constraints.
         $table = $origin->create_and_get_sub_table(
-            newheaders: [
+            [
                 "id" => "id",
                 "timecreated" => "timecreated",
                 "eventname" => "eventname",
@@ -413,14 +413,14 @@ class report_system {
         )
             // Additional requirements for objecttable and objectid.
             ->additional_requirements(
-                fields: [
+                [
                     "objecttable",
                     "objectid",
                 ]
             )
             // Constraints on valid target values and action types.
             ->additional_constraints(
-                conditions: [
+                [
                     "target" => [
                         "course_module",
                         "course_content",
@@ -445,9 +445,9 @@ class report_system {
             ->add_constant_column(get_string('course_fullname', 'mod_srg'), $course->fullname)
             // Join additional tables to enrich the object data (e.g., book chapters, H5P).
             ->join_with_variable_table(
-                tablesource: "objecttable",
-                idsource: "objectid",
-                joinfieldsets: [
+                "objecttable",
+                "objectid",
+                [
                     0 => [
                         "name" => "object_name",
                     ],
@@ -476,7 +476,7 @@ class report_system {
      * - component: The component that generated the log entry
      * - action: The action performed in the event
      * - target: The target of the event (e.g., course module, chapter, question)
-     * - objecttable: The table of the object involved in the event
+     * - objectThe table of the object involved in the event
      * - objectid: The ID of the object involved in the event
      * - contextid: The context ID of the event
      * - contextlevel: The level of the context for the event
@@ -502,7 +502,7 @@ class report_system {
 
         // Create a sub-table with specific headers, including the "dedication" column.
         $table = $origin->create_and_get_sub_table(
-            newheaders: [
+            [
                 "id" => "id",
                 "timecreated" => "timecreated",
                 "eventname" => "eventname",
@@ -553,7 +553,7 @@ class report_system {
 
         // Create a sub-table with specific headers and filter log entries related to grading activities.
         $table = $origin->create_and_get_sub_table(
-            newheaders: [
+            [
                 "id" => "id",
                 "timecreated" => "timecreated",
                 "eventname" => "eventname",
@@ -561,7 +561,7 @@ class report_system {
         )
             // Apply conditions to filter log entries by event names related to grading activities.
             ->additional_constraints(
-                conditions: [
+                [
                     "eventname" => [
                         '\mod_assign\event\grading_table_viewed',
                         '\mod_assign\event\grading_form_viewed',
@@ -595,7 +595,7 @@ class report_system {
      * - component: The component associated with the event (in this case, "mod_forum")
      * - action: The specific action taken (e.g., "viewed", "created")
      * - target: The target entity related to the action (e.g., a specific forum post or discussion)
-     * - objecttable: The table of the object involved in the action (e.g., "forum_posts", "forum_discussions")
+     * - objectThe table of the object involved in the action (e.g., "forum_posts", "forum_discussions")
      * - objectid: The identifier of the object involved in the action (e.g., the ID of the forum post or discussion)
      * - time: A human-readable format of the time the log entry was created
      * - name: The name of the forum post or discussion (depending on the action)
@@ -616,7 +616,7 @@ class report_system {
 
         // Create a sub-table with specific headers and filter log entries related to the "mod_forum" component.
         $table = $origin->create_and_get_sub_table(
-            newheaders: [
+            [
                 "id" => "id",
                 "timecreated" => "timecreated",
                 "eventname" => "eventname",
@@ -629,14 +629,14 @@ class report_system {
         )
             // Add fields that are required for the join operations.
             ->additional_requirements(
-                fields: [
+                [
                     "objecttable",
                     "objectid",
                 ]
             )
             // Apply conditions to filter log entries related to the "mod_forum" component.
             ->additional_constraints(
-                conditions: [
+                [
                     "component" => [
                         "mod_forum",
                     ],
@@ -648,9 +648,9 @@ class report_system {
             ->add_constant_column("discussionid", "")
             // Join with the relevant variable tables to add details about the forum posts and discussions.
             ->join_with_variable_table(
-                tablesource: "objecttable",
-                idsource: "objectid",
-                joinfieldsets: [
+                "objecttable",
+                "objectid",
+                [
                     0 => [
                         "name" => "name",
                     ],
@@ -662,9 +662,9 @@ class report_system {
             )
             // Join with the fixed "forum_discussions" table to get the discussion name.
             ->join_with_fixed_table(
-                table: "forum_discussions",
-                idsource: "discussionid",
-                joinfields: [
+                "forum_discussions",
+                "discussionid",
+                [
                     "name" => "name",
                 ]
             );
@@ -705,7 +705,7 @@ class report_system {
 
         // Create a sub-table with the relevant headers for H5P interaction data.
         $table = $origin->create_and_get_sub_table(
-            newheaders: [
+            [
                 "id" => "id",
                 "content_id" => "content_id",
                 "interaction_type" => "interaction_type",
@@ -719,9 +719,9 @@ class report_system {
             ->add_constant_column("timecreated", "")
             // Join the H5P table to enrich the data with the course, object name, and creation time.
             ->join_with_fixed_table(
-                table: "hvp",
-                idsource: "content_id",
-                joinfields: [
+                "hvp",
+                "content_id",
+                [
                     "course" => "courseid",
                     "name" => "object_name",
                     "timecreated" => "timecreated",
@@ -729,7 +729,7 @@ class report_system {
             )
             // Apply conditions to filter entries for the current course.
             ->additional_constraints(
-                conditions: [
+                [
                     "courseid" => [
                         $course->id,
                     ],
@@ -774,7 +774,7 @@ class report_system {
 
         // Create a sub-table with the relevant headers for badge data.
         $table = $origin->create_and_get_sub_table(
-            newheaders: [
+            [
                 "id" => "id",
                 "badgeid" => "badgeid",
             ]
@@ -785,9 +785,9 @@ class report_system {
             ->add_constant_column("timecreated", "")
             // Join the badge table to enrich the data with the course ID, badge name, and creation time.
             ->join_with_fixed_table(
-                table: "badge",
-                idsource: "badgeid",
-                joinfields: [
+                "badge",
+                "badgeid",
+                [
                     "courseid" => "courseid",
                     "name" => "object_name",
                     "timecreated" => "timecreated",
@@ -795,7 +795,7 @@ class report_system {
             )
             // Apply conditions to filter entries for the current course.
             ->additional_constraints(
-                conditions: [
+                [
                     "courseid" => [
                         $course->id,
                     ],
@@ -842,7 +842,7 @@ class report_system {
 
         // Create a sub-table with the relevant headers for chatbot history data.
         $table = $origin->create_and_get_sub_table(
-            newheaders: [
+            [
                 "id" => "id",
                 "timecreated" => "timecreated",
                 "speaker" => "speaker",

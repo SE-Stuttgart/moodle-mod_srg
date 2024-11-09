@@ -116,7 +116,6 @@ if ($mode == 'print') { // Download data as CSV in .zip.
         send_temp_file($zipfilepath, $zipfilename);
         gc_collect_cycles();
     }
-    debugging(print_r($templatetable, true), DEBUG_DEVELOPER);
     die; // Important!
 } else if ($mode == 'view') { // View data in browser.
     // Trigger event\log_data_viewed.
@@ -132,7 +131,7 @@ if ($mode == 'print') { // Download data as CSV in .zip.
         $table = new stdClass();
         $table->index = format_text(strval($index), FORMAT_HTML);
         $table->name = format_text(strval($file['name']), FORMAT_HTML);
-        $table->pagecount = format_text(strval(((int)ceil(sizeof($data) / $pagelength))), FORMAT_HTML);
+        $table->pagecount = format_text(strval(((int)ceil(count($data) / $pagelength))), FORMAT_HTML);
         $table->head = base64_encode(json_encode($headers));
         $table->data = base64_encode(json_encode($data));
 

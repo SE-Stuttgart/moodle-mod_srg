@@ -76,7 +76,12 @@ function setActiveTab(nextTabIndex) {
 
         if (isActive) {
             // Create an array (for the pagination template) with one object per page, starting at value 1;
-            const pages = Array.from({ length: parseInt(tab.dataset.pageCount, 10) }, (_, index) => ({ index: index + 1 }));
+            const pages = Array.from({
+                length: parseInt(tab.dataset.pageCount, 10)
+            }, (_, index) => ({
+                index: index + 1
+            }));
+
             // Initiate page selection and content view if there are pages to display.
             if (pages.length > 0) {
                 initPageSelection(pages);

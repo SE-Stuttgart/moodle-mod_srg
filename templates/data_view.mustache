@@ -14,7 +14,8 @@
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-    Template to display the report in the browser as a table.
+    Template to display the report selection in the browser as tabs.
+    Also calls JavaScript Module mod_srg/data_view to render the data.
     @package    mod_srg
     @copyright  2024 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
     @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -22,77 +23,20 @@
 {{!
     @template mod_srg/tabbed_environment
 
-    Report Visualization
+    Report View Tab Selection
 
     Example context (json):
     {
         "filelist": [
             {
-                "index": "0",
-                "name": "Course Dedication Log",
-                "head": "[
-                    { "value": "ID" },
-                    { "value": "timecreated" },
-                    { "value": "courseid" },
-                    { "value": "Dedication" },
-                    { "value": "Time" }
-                ]",
-                "data": "[
-                    {
-                        "rows": [
-                            {
-                                "columns": [
-                                    { "value": "0" },
-                                    { "value": "0" },
-                                    { "value": "0" },
-                                    { "value": "10" },
-                                    { "value": "0" }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "rows": [
-                            {
-                                "columns": [
-                                    { "value": "1" },
-                                    { "value": "100" },
-                                    { "value": "0" },
-                                    { "value": "10" },
-                                    { "value": "1:00" }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "rows": [
-                            {
-                                "columns": [
-                                    { "value": "2" },
-                                    { "value": "500" },
-                                    { "value": "1" },
-                                    { "value": "30" },
-                                    { "value": "5:00" }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "rows": [
-                            {
-                                "columns": [
-                                    { "value": "3" },
-                                    { "value": "550" },
-                                    { "value": "1" },
-                                    { "value": "40" },
-                                    { "value": "5:50" }
-                                ]
-                            }
-                        ]
-                    }
-                ]"
+                "index": 0,
+                "name": "tablename",
+                "pagecount": 5,
+                "head": "encoded_string",
+                "data": "encoded_string"
             }
-        ]
+        ],
+        "pagelength": 50
     }
 }}
 <div class="srg-tab-container">

@@ -36,7 +36,9 @@ export function initPageSelection(pages) {
     const bottomPagination = document.querySelector(".srg-page-navigation-container-bottom");
 
     // Render the "page_navigation" Mustache template with the generated pages array
-    const templateContext = { pages: pages };
+    const templateContext = {
+        pages: pages
+    };
 
     render('mod_srg/pagination', templateContext).then((html) => {
         // Render pagination HTML.
@@ -198,7 +200,11 @@ function updatePaginationVisibilityStates(paginationContainerElement, pageIndex)
 function renderTable(head, data) {
     const tableContainer = document.querySelector(".srg-tab-content-container");
 
-    const templateContext = { head: head, rows: data };
+    const templateContext = {
+        head: head,
+        rows: data
+    };
+
     render('mod_srg/table', templateContext).then((html) => {
         tableContainer.innerHTML = html;
         return undefined;

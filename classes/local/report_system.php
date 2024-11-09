@@ -67,7 +67,7 @@ class report_system {
      *
      * @param mixed $USER The current user, typically an instance of `stdClass` representing the logged-in user.
      * @param stdClass $course The course object associated with the activity.
-     * 
+     *
      * @return report_table The `report_table` object that contains the filtered log data for the given user and course.
      */
     private function get_logstore_standard_log_table($USER, $course): report_table {
@@ -133,7 +133,7 @@ class report_system {
 
     /**
      * Load the data from the "hvp_xapi_results" database table into a local representation as a `report_table` object.
-     * This function queries the xAPI results data based on the current user's ID and filters out rows with null or empty values 
+     * This function queries the xAPI results data based on the current user's ID and filters out rows with null or empty values
      * in essential fields. It returns relevant data for the given user.
      *
      * The resulting `report_table` object contains the following columns:
@@ -148,7 +148,7 @@ class report_system {
      *
      * @param mixed $USER The current user, typically an instance of `stdClass` representing the logged-in user.
      * @param stdClass $course The course object associated with the activity.
-     * 
+     *
      * @return report_table The `report_table` object that contains the filtered xAPI result data for the given user.
      */
     private function get_hvp_table($USER, $course): report_table {
@@ -196,7 +196,7 @@ class report_system {
 
     /**
      * Load the data from the "badge_issued" database table into a local representation as a `report_table` object.
-     * This function queries the badge issuance data based on the current user's ID and filters out rows with null or empty values 
+     * This function queries the badge issuance data based on the current user's ID and filters out rows with null or empty values
      * in essential fields. It returns relevant badge data for the given user.
      *
      * The resulting `report_table` object contains the following columns:
@@ -208,7 +208,7 @@ class report_system {
      *
      * @param mixed $USER The current user, typically an instance of `stdClass` representing the logged-in user.
      * @param stdClass $course The course object associated with the activity.
-     * 
+     *
      * @return report_table The `report_table` object that contains the filtered badge issuance data for the given user.
      */
     private function get_badges_table($USER, $course): report_table {
@@ -249,8 +249,8 @@ class report_system {
 
     /**
      * Load the data from the "chatbot_history" database table into a local representation as a `report_table` object.
-     * This function queries the chatbot history data based on the current user's ID and the course ID, filtering out rows with 
-     * null or empty values in essential fields such as the message and timestamp. It returns the chatbot interaction data for the 
+     * This function queries the chatbot history data based on the current user's ID and the course ID, filtering out rows with
+     * null or empty values in essential fields such as the message and timestamp. It returns the chatbot interaction data for the
      * given user and course.
      *
      * The resulting `report_table` object contains the following columns:
@@ -265,7 +265,7 @@ class report_system {
      *
      * @param mixed $USER The current user, typically an instance of `stdClass` representing the logged-in user.
      * @param stdClass $course The course object associated with the activity.
-     * 
+     *
      * @return report_table The `report_table` object that contains the filtered chatbot history data for the given user and course.
      */
     private function get_chatbot_history_table($USER, $course): report_table {
@@ -313,9 +313,12 @@ class report_system {
     }
 
     /**
-     * Retrieves and groups course log data entries by "dedication". Entries that are time-close to each other are grouped together, 
-     * and the time difference between them is calculated as "dedication", representing how much time was spent on that group of entries.
-     * The function returns a table containing the log data for the course, with additional columns for dedication time and human-readable timestamps.
+     * Retrieves and groups course log data entries by "dedication".
+     * Entries that are time-close to each other are grouped together,
+     * and the time difference between them is calculated as "dedication",
+     * representing how much time was spent on that group of entries.
+     * The function returns a table containing the log data for the course,
+     * with additional columns for dedication time and human-readable timestamps.
      *
      * The resulting `report_table` object contains the following columns:
      * - id: Unique identifier for each log entry
@@ -354,13 +357,13 @@ class report_system {
 
 
     /**
-     * Retrieves and filters course log data entries based on specific targets and actions. The function expands the log data 
-     * by adding information that is not found in the standard log database table, such as details about the associated objects 
-     * and additional course information. 
-     * 
-     * The function selects log entries with specific targets and actions (e.g., course modules, H5P, attempts, etc.) and 
+     * Retrieves and filters course log data entries based on specific targets and actions. The function expands the log data
+     * by adding information that is not found in the standard log database table, such as details about the associated objects
+     * and additional course information.
+     *
+     * The function selects log entries with specific targets and actions (e.g., course modules, H5P, attempts, etc.) and
      * adds relevant columns to the table. It also enriches the log data with human-readable timestamps and course details.
-     * 
+     *
      * The resulting `report_table` object contains the following columns:
      * - id: Unique identifier for the log entry
      * - timecreated: The timestamp when the log entry was created
@@ -377,7 +380,7 @@ class report_system {
      * - time: A human-readable format of the time the log entry was created
      * - course_shortname: The short name of the course
      * - course_fullname: The full name of the course
-     * 
+     *
      * Additionally, the function applies the following filters:
      * - Only log entries with specific targets (e.g., course modules, H5P, attempts) and actions (e.g., viewed, started, submitted)
      * - It joins the log data with additional tables (like `book_chapters` or `h5p`) to get more information about the objects
@@ -432,7 +435,7 @@ class report_system {
                         "failed",
                         "started",
                         "submitted",
-                    ]
+                    ],
                 ]
             )
             // Add human-readable time and constant columns for course details.
@@ -462,10 +465,10 @@ class report_system {
     }
 
     /**
-     * Retrieves and groups course log data entries based on "dedication." Entries that are timed closely together 
-     * and belong to the same component are grouped, with the time spent on the group representing the "dedication" value. 
+     * Retrieves and groups course log data entries based on "dedication." Entries that are timed closely together
+     * and belong to the same component are grouped, with the time spent on the group representing the "dedication" value.
      * The function enriches the log data by adding additional information not available in the standard log database table.
-     * 
+     *
      * The resulting `report_table` object contains the following columns:
      * - id: Unique identifier for the log entry
      * - timecreated: The timestamp when the log entry was created
@@ -485,7 +488,7 @@ class report_system {
      * - dedication: The amount of time spent on a group of log entries with closely timed events and the same component.
      *
      * The function processes log data by grouping entries that occur close together in time and belong to the same component.
-     * The "dedication" column reflects the total time spent on these grouped entries. Additional details about the object involved 
+     * The "dedication" column reflects the total time spent on these grouped entries. Additional details about the object involved
      * in the log events are added, and the log data is enriched with the course's short and full names.
      *
      * @param mixed $USER The current user, typically an instance of `stdClass` representing the logged-in user.
@@ -527,7 +530,7 @@ class report_system {
     /**
      * Retrieves log entries from the course log database table that are related to the user's interest in accessing grades.
      * These entries track user interactions with various grade reports and grading tables.
-     * 
+     *
      * The resulting `report_table` object contains the following columns:
      * - id: Unique identifier for the log entry
      * - timecreated: The timestamp when the log entry was created
@@ -536,9 +539,9 @@ class report_system {
      * - course_shortname: The short name of the course
      * - course_fullname: The full name of the course
      *
-     * The function filters log entries based on specific grading-related events, such as viewing the grading table, grading form, 
+     * The function filters log entries based on specific grading-related events, such as viewing the grading table, grading form,
      * and grade reports. It also adds extra information about the course, including its short and full names.
-     * 
+     *
      * @param mixed $USER The current user, typically an instance of `stdClass` representing the logged-in user.
      * @param stdClass $course The course object associated with the activity.
      *
@@ -567,7 +570,7 @@ class report_system {
                         '\gradereport_grader\event\grade_report_viewed',
                         '\gradereport_outcomes\event\grade_report_viewed',
                         '\gradereport_singleview\event\grade_report_viewed',
-                    ]
+                    ],
                 ]
             )
             // Add additional columns for time and course details.
@@ -584,7 +587,7 @@ class report_system {
     /**
      * Retrieves log entries from the course log database table related to user activity in a forum.
      * This includes actions such as viewing posts, making posts, or interacting with forum discussions.
-     * 
+     *
      * The resulting `report_table` object contains the following columns:
      * - id: Unique identifier for the log entry
      * - timecreated: The timestamp when the log entry was created
@@ -601,7 +604,7 @@ class report_system {
      * The function filters log entries to include only those related to the "mod_forum" component, ensuring that
      * the table contains only forum-related activities. It also adds additional information about the forum posts
      * and discussions, including their names and IDs, by joining with the relevant tables.
-     * 
+     *
      * @param mixed $USER The current user, typically an instance of `stdClass` representing the logged-in user.
      * @param stdClass $course The course object associated with the activity.
      *
@@ -636,7 +639,7 @@ class report_system {
                 conditions: [
                     "component" => [
                         "mod_forum",
-                    ]
+                    ],
                 ]
             )
             // Add additional columns for time and other forum-related information.
@@ -654,7 +657,7 @@ class report_system {
                     "forum_posts" => [
                         "discussion" => "discussionid",
                     ],
-                    "forum_discussion_subs" => []
+                    "forum_discussion_subs" => [],
                 ]
             )
             // Join with the fixed "forum_discussions" table to get the discussion name.
@@ -662,7 +665,7 @@ class report_system {
                 table: "forum_discussions",
                 idsource: "discussionid",
                 joinfields: [
-                    "name" => "name"
+                    "name" => "name",
                 ]
             );
 
@@ -673,7 +676,7 @@ class report_system {
     /**
      * Retrieves log entries from the course log database table related to user interactions with H5P (HTML5 Package) content.
      * These log entries contain data such as the type of interaction, raw score, and max score for the H5P content.
-     * 
+     *
      * The resulting `report_table` object contains the following columns:
      * - id: Unique identifier for the log entry
      * - content_id: The ID of the H5P content being interacted with
@@ -687,13 +690,14 @@ class report_system {
      * - course_shortname: The short name of the course
      * - course_fullname: The full name of the course
      *
-     * The function filters log entries to include only those related to the specified course. It then joins the 
+     * The function filters log entries to include only those related to the specified course. It then joins the
      * H5P content table to enrich the data with information such as the course ID, content name, and creation time.
      *
      * @param mixed $USER The current user, typically an instance of `stdClass` representing the logged-in user.
      * @param stdClass $course The course object associated with the activity.
      *
-     * @return report_table The `report_table` object containing the filtered log entries related to user interactions with H5P content.
+     * @return report_table The `report_table` object
+     *                      containing the filtered log entries related to user interactions with H5P content.
      */
     public function get_hvp($USER, $course): report_table {
         // Retrieve the H5P-related log data for the specified user and course.
@@ -728,7 +732,7 @@ class report_system {
                 conditions: [
                     "courseid" => [
                         $course->id,
-                    ]
+                    ],
                 ]
             )
             // Add human-readable time column and constant columns for course short and full name.
@@ -743,9 +747,9 @@ class report_system {
     }
 
     /**
-     * Retrieves log entries from the course log database table that contain information about user interactions 
+     * Retrieves log entries from the course log database table that contain information about user interactions
      * with badges, such as earning or viewing badges within the specified course.
-     * 
+     *
      * The resulting `report_table` object contains the following columns:
      * - id: Unique identifier for the log entry.
      * - badgeid: The ID of the badge associated with the log entry.
@@ -794,7 +798,7 @@ class report_system {
                 conditions: [
                     "courseid" => [
                         $course->id,
-                    ]
+                    ],
                 ]
             )
             // Add a human-readable time column and constant columns for course short and full name.
@@ -810,9 +814,9 @@ class report_system {
 
     /**
      * Retrieves log entries from the `chatbot_history` database table that contain information about user interactions
-     * with the chatbot within the specified course. The entries include details such as the time of interaction, 
+     * with the chatbot within the specified course. The entries include details such as the time of interaction,
      * the speaker (user or chatbot), the message exchanged, and the action performed.
-     * 
+     *
      * The resulting `report_table` object contains the following columns:
      * - id: Unique identifier for the log entry.
      * - timecreated: The timestamp when the interaction occurred.
@@ -823,7 +827,7 @@ class report_system {
      * - course_shortname: The short name of the course.
      * - course_fullname: The full name of the course.
      *
-     * The function retrieves the relevant chatbot history log data for the current user and course and formats the 
+     * The function retrieves the relevant chatbot history log data for the current user and course and formats the
      * output with additional details such as the course name and a human-readable time format.
      *
      * @param mixed $USER The current user, typically an instance of `stdClass` representing the logged-in user.

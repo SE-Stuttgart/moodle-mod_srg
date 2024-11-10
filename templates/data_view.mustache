@@ -1,0 +1,73 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+    Template to display the report selection in the browser as tabs.
+    Also calls JavaScript Module mod_srg/data_view to render the data.
+    @package    mod_srg
+    @copyright  2024 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+    @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+}}
+{{!
+    @template mod_srg/tabbed_environment
+
+    Report View Tab Selection
+
+    Example context (json):
+    {
+        "filelist": [
+            {
+                "index": 0,
+                "name": "tablename",
+                "pagecount": 5,
+                "head": "encoded_string",
+                "data": "encoded_string"
+            }
+        ],
+        "pagelength": 50
+    }
+}}
+<div class="srg-tab-container">
+    <ul class="nav nav-tabs" role="tablist">
+        {{#filelist}}
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" 
+               id="srg-tab-{{index}}" 
+               data-index="{{index}}" 
+               href="#" 
+               role="tab" 
+               aria-selected="false"
+               data-head="{{ head }}" 
+               data-content="{{ data }}"
+               data-page-count="{{ pagecount }}">
+                {{name}}
+            </a>
+        </li>
+        {{/filelist}}
+    </ul>
+</div>
+
+<div class="srg-page-container"
+    data-page-length="{{ pagelength }}" 
+    data-active-file-index="0" 
+    data-active-page-index="0">
+    <div class="srg-page-navigation-container-top"></div>
+    <div class="srg-tab-content-container"></div>
+    <div class="srg-page-navigation-container-bottom"></div>
+</div>
+
+{{#js}}
+require(['mod_srg/data_view'], (module) => module.init());
+{{/js}}

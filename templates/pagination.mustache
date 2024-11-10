@@ -1,0 +1,77 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+    Template to display a page navigation for the report data in the browser.
+    @package    mod_srg
+    @copyright  2024 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+    @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+}}
+
+{{!
+    @template mod_srg/pagination
+
+    Report View Tab Pagination
+
+    Example context (json):
+    {
+        "pages": [
+            { "index": 0 }
+        ]
+    }
+}}
+<nav class="srg-page-navigation" aria-label="{{#str}}page_navigation, mod_srg{{/str}}">
+  <ul class="pagination justify-content-center">
+    <li class="page-item srg-page-nav-first">
+        <a class="page-link" href="#" aria-label="{{#str}}first, mod_srg{{/str}}">
+            <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+        </a>
+    </li>
+    <li class="page-item srg-page-nav-previous">
+        <a class="page-link" href="#" aria-label="{{#str}}previous, mod_srg{{/str}}">
+            <i class="fa fa-angle-left" aria-hidden="true"></i>
+        </a>
+    </li>
+    <li class="page-item disabled srg-page-nav-ellipsis-left">
+        <a class="page-link" href="#" aria-hidden="true">
+            <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+        </a>
+    </li>
+    
+    {{#pages}}
+    <li class="page-item srg-page-nav-page">
+        <a class="page-link" href="#" aria-label="{{#str}}page, mod_srg{{/str}} {{index}}">
+            {{index}}
+        </a>
+    </li>
+    {{/pages}}
+
+    <li class="page-item disabled srg-page-nav-ellipsis-right">
+        <a class="page-link" href="#" aria-hidden="true">
+            <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+        </a>
+    </li>
+    <li class="page-item srg-page-nav-next">
+        <a class="page-link" href="#" aria-label="{{#str}}next, mod_srg{{/str}}">
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+        </a>
+    </li>
+    <li class="page-item srg-page-nav-last">
+        <a class="page-link" href="#" aria-label="{{#str}}last, mod_srg{{/str}}">
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+        </a>
+    </li>
+  </ul>
+</nav>

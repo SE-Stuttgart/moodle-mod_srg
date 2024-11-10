@@ -18,14 +18,15 @@
  * Version details and info
  *
  * @package     mod_srg
- * @copyright   2023 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @copyright   2023 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+use stdClass;
 
 require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
 require_once(__DIR__ . '/locallib.php');
-require_once(__DIR__ . '/classes/csv.php');
 
 global $CFG, $USER, $DB;
 
@@ -80,7 +81,7 @@ if ($mode == 'print') { // Download data as CSV in .zip.
         if ($zipwriter instanceof \core_files\local\archive_writer\zip_writer) {
             // Stream the files into the zip.
             foreach ($filelist as $file) {
-                $zipwriter->add_file_from_string($file['filename'], mod_srg\srg_CSV::simple_table_to_csv($file['content']));
+                $zipwriter->add_file_from_string($file['filename'], $file['report_table']->get_as_csv_table());
                 unset($file);
             }
 
@@ -99,12 +100,12 @@ if ($mode == 'print') { // Download data as CSV in .zip.
         $exporttmpdir = make_request_directory();
 
         foreach ($filelist as $file) {
-            if (!$file['content']) {
+            if (!$file['report_table']) {
                 continue;
             }
 
             $csvfilepath = $exporttmpdir . DIRECTORY_SEPARATOR . $file['filename'];
-            if (!file_put_contents($csvfilepath, mod_srg\srg_CSV::simple_table_to_csv($file['content']))) {
+            if (!file_put_contents($csvfilepath, $file['report_table']->get_as_csv_table())) {
                 throw new moodle_exception(get_string('error_creating_csv_file', 'mod_srg'));
             }
             $zipfiles[$file['filename']] = $csvfilepath;
@@ -120,69 +121,35 @@ if ($mode == 'print') { // Download data as CSV in .zip.
     // Trigger event\log_data_viewed.
     srg_log_data_view($srg, $modulecontext);
 
+    $pagelength = 50;
+
+    $templatedata = [];
+    foreach ($filelist as $index => $file) {
+        $headers = $file['report_table']->get_headers();
+        $data = $file['report_table']->get_data();
+
+        $table = new stdClass();
+        $table->index = format_text(strval($index), FORMAT_HTML);
+        $table->name = format_text(strval($file['name']), FORMAT_HTML);
+        $table->pagecount = format_text(strval(((int)ceil(count($data) / $pagelength))), FORMAT_HTML);
+        $table->head = base64_encode(json_encode($headers));
+        $table->data = base64_encode(json_encode($data));
+
+        $templatedata[] = $table;
+    }
+    gc_collect_cycles();
+
+    // Register the stylesheet.
+    $PAGE->requires->css('/mod/srg/styles.css');
+
     echo $OUTPUT->header();
 
-    // View Content.
-    echo html_writer::start_div('', ['id' => 'mod_srg-accordion']);
-    foreach (array_values($filelist) as $i => $file) {
-        $table = $file['content'];
-        $t = new html_table();
-        $t->head = array_shift($table);
-        $t->data = $table;
-
-        echo html_writer::start_div('card'); // Start Card (Accordion item).
-
-        echo html_writer::tag(
-            'button',
-            ''
-                . html_writer::tag(
-                    'h5',
-                    $file['name'],
-                    ['class' => 'm-0']
-                )
-                . html_writer::tag(
-                    'i',
-                    '',
-                    [
-                        'class' => 'fa fa-chevron-down',
-                        'id' => 'mod_srg-chevron-' . $i,
-                        'aria-hidden' => 'true',
-                    ]
-                ),
-            [
-                'class' => 'mod_srg-collapse-button card-header collapsed'
-                    . ' d-flex flex-row justify-content-between align-items-center',
-                'id' => 'mod_srg-heading-' . $i,
-                'data-toggle' => 'collapse',
-                'data-target' => '#mod_srg-collapse-' . $i,
-                'icon-target' => '#mod_srg-chevron-' . $i,
-                'aria-expanded' => 'false',
-                'aria-controls' => 'mod_srg-collapse-' . $i,
-            ]
-        );
-
-        echo html_writer::div(
-            html_writer::div(
-                html_writer::table($t),
-                'card-body p-0'
-            ),
-            'collapse',
-            [
-                'id' => 'mod_srg-collapse-' . $i,
-                'aria-labelledby' => 'mod_srg-heading-' . $i,
-                'data-parent' => '#mod_srg-accordion',
-            ]
-        );
-
-        echo html_writer::end_div(); // End Card.
-    }
-    echo html_writer::end_div(); // End Accordion.
-
-
+    echo $OUTPUT->render_from_template(
+        'mod_srg/data_view',
+        ['filelist' => $templatedata, 'pagelength' => format_text(strval($pagelength), FORMAT_HTML)]
+    );
 
     echo $OUTPUT->footer();
-
-    echo html_writer::script('', new moodle_url('/mod/srg/scripts/accordion.js'));
 
     gc_collect_cycles();
 }

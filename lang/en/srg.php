@@ -19,7 +19,7 @@
  *
  * @package     mod_srg
  * @category    string
- * @copyright   2022 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @copyright   2022 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -46,6 +46,8 @@ $string['error_course_module'] = 'Course Module misconfigured.';
 $string['error_course_not_found'] = 'Course is misconfigured';
 $string['error_course_access_denied'] = 'Access to course denied. You are not enrolled.';
 $string['error_creating_csv_file'] = 'There was an error creating the .csv file.';
+$string['error_duplicate_primary_key'] = 'Duplicate value found for given primary key - keyfield ';
+$string['error_accessing_database'] = 'There has been an error when accessing the following database table: ';
 
 // Form Text.
 $string['info_title'] = 'Data Overview';
@@ -57,9 +59,40 @@ Hint: The downloaded file is actually a file in the .zip format.
 It is, however, downloaded with .kib3 as the extension to prevent automatic unpacking by your operating system.
 You can use a zip programm like 7Zip to unpack it.";
 
-// File Text.
-$string['zipfilename'] = 'moodle-mod_srg';
-
 // View Text.
 $string['view_all_button_name'] = 'View log data';
 $string['print_all_button_name'] = 'Download log data';
+
+// Info UI text.
+$string['page_navigation'] = 'Page navigation';
+$string['first'] = 'first';
+$string['previous'] = 'previous';
+$string['next'] = 'next';
+$string['last'] = 'last';
+
+// Report strings.
+$string['zipfilename'] = 'moodle-mod_srg';
+// Report file names.
+$string['course_dedication_log'] = 'Course Dedication Log';
+$string['course_dedication_log_csv'] = 'course_dedication_log.csv';
+$string['course_module_log'] = 'Course Module Log';
+$string['course_module_log_csv'] = 'course_module_log.csv';
+$string['course_module_dedication'] = 'Course Module Dedication Report';
+$string['course_module_dedication_csv'] = 'course_module_dedication.csv';
+$string['grade_inspections'] = 'Grade Inspection Report';
+$string['grade_inspections_csv'] = 'grade_inspections.csv';
+$string['forum_activities'] = 'Forum Activity Report';
+$string['forum_activities_csv'] = 'forum_activities.csv';
+$string['hvp_scores'] = 'HVP Score Report';
+$string['hvp_scores_csv'] = 'hvp_scores.csv';
+$string['badges'] = 'User Earned Badges';
+$string['badges_csv'] = 'badges.csv';
+$string['chatbot_history'] = 'Chatbot History';
+$string['chatbot_history_csv'] = 'chatbot_history.csv';
+// Report header names.
+$string['time'] = 'Time';
+$string['course_shortname'] = 'Course Shortname';
+$string['course_fullname'] = 'Course Fullname';
+$string['dedication'] = 'Dedication';
+$string['object_name'] = 'Object Name';
+$string['eventname'] = 'Eventname';

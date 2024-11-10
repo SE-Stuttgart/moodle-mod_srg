@@ -18,13 +18,13 @@
  * Library of interface functions and constants.
  *
  * @package     mod_srg
- * @copyright   2023 Universtity of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @copyright   2023 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+use mod_srg\local\report_system;
 
-require_once(__DIR__ . '/classes/db_connection/reportsystem.php');
+use stdClass;
 
 /**
  * Get the saved insctruction to be displayed on the view page.
@@ -44,14 +44,14 @@ function srg_get_instruction($id) {
 /**
  * Hardcoded Selected Logs Metadata
  * @param mixed $USER The current user.
- * @param Course $course The course of this activity.
+ * @param stdClass $course The course of this activity.
  * @return array Array of log data packets. Each packet has a name an advised filename and the log as array.
  */
 function srg_get_file_list($USER, $course) {
     $filelist = [];
 
     try {
-        $reportsystem = new mod_srg\reportsystem();
+        $reportsystem = new report_system();
     } catch (\Throwable $th) {
         debugging($th);
         return $filelist;
@@ -59,9 +59,9 @@ function srg_get_file_list($USER, $course) {
 
     try {
         $filelist[] = [
-            'name' => 'Course Dedication Log',
-            'filename' => 'course_dedication_log.csv',
-            'content' => $reportsystem->get_course_dedication($USER, $course),
+            'name' => get_string('course_dedication_log', 'mod_srg'),
+            'filename' => get_string('course_dedication_log_csv', 'mod_srg'),
+            'report_table' => $reportsystem->get_course_dedication($USER, $course),
         ];
     } catch (\Throwable $th) {
         debugging($th);
@@ -69,9 +69,9 @@ function srg_get_file_list($USER, $course) {
 
     try {
         $filelist[] = [
-            'name' => 'Course Module Log',
-            'filename' => 'course_module_log.csv',
-            'content' => $reportsystem->get_course_module_log($USER, $course),
+            'name' => get_string('course_module_log', 'mod_srg'),
+            'filename' => get_string('course_module_log_csv', 'mod_srg'),
+            'report_table' => $reportsystem->get_course_module_log($USER, $course),
         ];
     } catch (\Throwable $th) {
         debugging($th);
@@ -79,9 +79,9 @@ function srg_get_file_list($USER, $course) {
 
     try {
         $filelist[] = [
-            'name' => 'Course Module Dedication Report',
-            'filename' => 'course_module_dedication.csv',
-            'content' => $reportsystem->get_course_module_dedication($USER, $course),
+            'name' => get_string('course_module_dedication', 'mod_srg'),
+            'filename' => get_string('course_module_dedication_csv', 'mod_srg'),
+            'report_table' => $reportsystem->get_course_module_dedication($USER, $course),
         ];
     } catch (\Throwable $th) {
         debugging($th);
@@ -89,9 +89,9 @@ function srg_get_file_list($USER, $course) {
 
     try {
         $filelist[] = [
-            'name' => 'Grade Inspection Report',
-            'filename' => 'grade_inspections.csv',
-            'content' => $reportsystem->get_grading_interest($USER, $course),
+            'name' => get_string('grade_inspections', 'mod_srg'),
+            'filename' => get_string('grade_inspections_csv', 'mod_srg'),
+            'report_table' => $reportsystem->get_grading_interest($USER, $course),
         ];
     } catch (\Throwable $th) {
         debugging($th);
@@ -99,9 +99,9 @@ function srg_get_file_list($USER, $course) {
 
     try {
         $filelist[] = [
-            'name' => 'Forum Activity Report',
-            'filename' => 'forum_activities.csv',
-            'content' => $reportsystem->get_forum_activity($USER, $course),
+            'name' => get_string('forum_activities', 'mod_srg'),
+            'filename' => get_string('forum_activities_csv', 'mod_srg'),
+            'report_table' => $reportsystem->get_forum_activity($USER, $course),
         ];
     } catch (\Throwable $th) {
         debugging($th);
@@ -110,9 +110,9 @@ function srg_get_file_list($USER, $course) {
     if (core_plugin_manager::instance()->get_plugin_info('mod_hvp')) {
         try {
             $filelist[] = [
-                'name' => 'HVP Score Report',
-                'filename' => 'hvp_scores.csv',
-                'content' => $reportsystem->get_hvp($USER, $course),
+                'name' => get_string('hvp_scores', 'mod_srg'),
+                'filename' => get_string('hvp_scores_csv', 'mod_srg'),
+                'report_table' => $reportsystem->get_hvp($USER, $course),
             ];
         } catch (\Throwable $th) {
             debugging($th);
@@ -121,9 +121,9 @@ function srg_get_file_list($USER, $course) {
 
     try {
         $filelist[] = [
-            'name' => 'User Earned Badges',
-            'filename' => 'badges.csv',
-            'content' => $reportsystem->get_badges($USER, $course),
+            'name' => get_string('badges', 'mod_srg'),
+            'filename' => get_string('badges_csv', 'mod_srg'),
+            'report_table' => $reportsystem->get_badges($USER, $course),
         ];
     } catch (\Throwable $th) {
         debugging($th);
@@ -132,9 +132,9 @@ function srg_get_file_list($USER, $course) {
     if (core_plugin_manager::instance()->get_plugin_info('block_chatbot')) {
         try {
             $filelist[] = [
-                'name' => 'Chatbot History',
-                'filename' => 'chatbot_history.csv',
-                'content' => $reportsystem->get_chatbot_history($USER, $course),
+                'name' => get_string('chatbot_history', 'mod_srg'),
+                'filename' => get_string('chatbot_history_csv', 'mod_srg'),
+                'report_table' => $reportsystem->get_chatbot_history($USER, $course),
             ];
         } catch (\Throwable $th) {
             debugging($th);

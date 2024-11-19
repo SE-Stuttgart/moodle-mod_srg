@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * This class helps in predefining a report and gathering the necessary data from the DB.
+ * Factory class for creating various types of reports for Moodle courses.
  *
  * @package     mod_srg
  * @copyright   2024 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
@@ -27,8 +27,22 @@ namespace mod_srg\local;
 use mod_srg\local\report;
 use mod_srg\local\report_sql;
 
+/**
+ * The `report_generator` class provides static methods to generate different types of reports
+ * related to Moodle courses and their associated data. Each method returns an instance of the
+ * `report` class configured for a specific reporting context, such as course logs, module
+ * activity, grading interests, or user engagement. It utilizes SQL builders and report-specific
+ * configurations to streamline the creation of complex data reports.
+ */
 class report_generator {
 
+    /**
+     * Creates a course log report.
+     *
+     * @param stdClass $USER The user object for the current user.
+     * @param stdClass $course The course object for which the report is generated.
+     * @return report Configured report object containing course logs.
+     */
     public static function get_course_report($USER, $course): report {
         $report = new report(
             get_string('course_log', 'mod_srg'),
@@ -62,6 +76,13 @@ class report_generator {
         return $report;
     }
 
+    /**
+     * Creates a course dedication report, including time and dedication fields.
+     *
+     * @param stdClass $USER The user object for the current user.
+     * @param stdClass $course The course object for which the report is generated.
+     * @return report Configured report object containing course dedication data.
+     */
     public static function get_course_dedication_report($USER, $course): report {
         $report = new report(
             get_string('course_dedication_log', 'mod_srg'),
@@ -84,6 +105,13 @@ class report_generator {
         return $report;
     }
 
+    /**
+     * Creates a report of course module activity logs.
+     *
+     * @param stdClass $USER The user object for the current user.
+     * @param stdClass $course The course object for which the report is generated.
+     * @return report Configured report object containing module activity logs.
+     */
     public static function get_course_module_log_report($USER, $course): report {
         $report = new report(
             get_string('course_module_log', 'mod_srg'),
@@ -117,6 +145,13 @@ class report_generator {
         return $report;
     }
 
+    /**
+     * Creates a report of course module activity with dedication data.
+     *
+     * @param stdClass $USER The user object for the current user.
+     * @param stdClass $course The course object for which the report is generated.
+     * @return report Configured report object containing module activity and dedication data.
+     */
     public static function get_course_module_dedication_report($USER, $course): report {
         $report = new report(
             get_string('course_module_dedication', 'mod_srg'),
@@ -152,6 +187,13 @@ class report_generator {
         return $report;
     }
 
+    /**
+     * Creates a grading interest report for a course.
+     *
+     * @param stdClass $USER The user object for the current user.
+     * @param stdClass $course The course object for which the report is generated.
+     * @return report Configured report object containing grading interest data.
+     */
     public static function get_grading_interest_report($USER, $course): report {
         $report = new report(
             get_string('grade_inspections', 'mod_srg'),
@@ -176,6 +218,13 @@ class report_generator {
         return $report;
     }
 
+    /**
+     * Creates a forum activity report for a course.
+     *
+     * @param stdClass $USER The user object for the current user.
+     * @param stdClass $course The course object for which the report is generated.
+     * @return report Configured report object containing forum activity logs.
+     */
     public static function get_forum_activity_report($USER, $course): report {
         $report = new report(
             get_string('forum_activities', 'mod_srg'),
@@ -203,6 +252,13 @@ class report_generator {
         return $report;
     }
 
+    /**
+     * Creates an H5P (interactive content) report for a course.
+     *
+     * @param stdClass $USER The user object for the current user.
+     * @param stdClass $course The course object for which the report is generated.
+     * @return report Configured report object containing H5P activity data.
+     */
     public static function get_hvp_report($USER, $course): report {
         $report = new report(
             get_string('hvp', 'mod_srg'),
@@ -232,6 +288,13 @@ class report_generator {
         return $report;
     }
 
+    /**
+     * Creates a badges report for a course.
+     *
+     * @param stdClass $USER The user object for the current user.
+     * @param stdClass $course The course object for which the report is generated.
+     * @return report Configured report object containing badge-related data.
+     */
     public static function get_badges_report($USER, $course): report {
         $report = new report(
             get_string('badges', 'mod_srg'),
@@ -258,6 +321,13 @@ class report_generator {
         return $report;
     }
 
+    /**
+     * Creates a chatbot interaction history report for a course.
+     *
+     * @param stdClass $USER The user object for the current user.
+     * @param stdClass $course The course object for which the report is generated.
+     * @return report Configured report object containing chatbot conversation history.
+     */
     public static function get_chatbot_history_report($USER, $course): report {
         $report = new report(
             get_string('chatbot_history', 'mod_srg'),

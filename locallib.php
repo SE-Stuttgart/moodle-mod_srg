@@ -42,6 +42,14 @@ function srg_get_instruction($id) {
     return $record->instruction;
 }
 
+/**
+ * Retrieves a list of available report identifiers for the SRG module.
+ *
+ * The function dynamically checks for the presence of optional plugins
+ * like H5P (`mod_hvp`) and Chatbot (`block_chatbot`) to include their reports.
+ *
+ * @return array A list of report identifiers supported by the SRG module.
+ */
 function srg_get_report_list() {
     $reportlist = [];
 
@@ -62,6 +70,17 @@ function srg_get_report_list() {
     return $reportlist;
 }
 
+/**
+ * Retrieves a specific report object based on the provided report ID, user, and course.
+ *
+ * The function maps the report ID to its corresponding report generation method in `report_generator`.
+ * If the report ID is invalid, it returns null.
+ *
+ * @param int $reportid The ID of the report to retrieve.
+ * @param stdClass $USER The user object for whom the report is being generated.
+ * @param stdClass $course The course object associated with the report.
+ * @return report|null The corresponding report object, or null if the ID is invalid.
+ */
 function srg_get_report(int $reportid, $USER, $course): ?report {
     switch ($reportid) {
         case MOD_SRG_REPORT_COURSE_LOG:

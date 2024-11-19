@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * TODO DESCRIPTION
+ * Provides utility methods for generating SQL queries, including CASE statements, left joins, and default table selection.
  *
  * @package     mod_srg
  * @copyright   2024 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
@@ -24,16 +24,27 @@
 
 namespace mod_srg\local;
 
+/**
+ * The sql_generator class offers a set of static methods to assist in constructing dynamic SQL queries for Moodle plugins.
+ * It includes tools for selecting default tables based on specific criteria, generating SQL CASE statements for field mapping,
+ * and creating LEFT JOIN clauses for relational queries.
+ * These utilities help manage database interactions efficiently and flexibly.
+ */
 class sql_generator {
 
     /**
-     * Retrieves a list of default tables from a field in a given table.
+     * Retrieves a list of default tables from a field in a given table based on specified criteria.
      *
-     * @param string $table The name of the table to query.
-     * @param string $field The column name containing table references.
-     * @param array $customfields A list of fields that are considered "custom" and should be excluded.
-     * @param array $requiredfields A list of fields that must exist in a table for it to be considered "default."
-     * @return array A list of default table names that meet the required criteria.
+     * This function queries a database field for table names and filters them against a list of custom fields,
+     * checks for table existence, and ensures required fields are present in each table before including it
+     * in the default table list.
+     *
+     * @param string $sql SQL query to fetch table names.
+     * @param array $params Parameters for the SQL query.
+     * @param string $tablefield The field containing table names.
+     * @param array $customfields Fields that represent custom tables to exclude.
+     * @param array $requiredfields Fields that must exist in a table to be included.
+     * @return array List of default table names that meet all criteria.
      */
     public static function get_default_tables_from_field(
         string $sql,
@@ -88,16 +99,16 @@ class sql_generator {
     }
 
     /**
-     * Generate a SQL CASE statement for a SELECT field with an alias.
+     * Generates a SQL CASE statement for dynamically mapping field values to corresponding table fields or custom expressions.
      *
-     * @param string $sourcetable Name of the table containing the source field.
-     * @param string $sourcefield Name of the source field to evaluate.
-     * @param array $defaulttables List of default tables to check (table names as strings).
-     * @param string $defaultfield Default field to retrieve from the default tables.
-     * @param array $customtables Associative array of custom tables and specific SQL expressions.
+     * @param string $sourcetable The table containing the source field.
+     * @param string $sourcefield The field to evaluate in the CASE statement.
+     * @param array $defaulttables List of default tables to include in the CASE mapping.
+     * @param string $defaultfield Field to retrieve from default tables in the CASE mapping.
+     * @param array $customtables Custom tables and specific SQL expressions for the CASE mapping.
      *              Example: ['forum_posts' => 'forum_discussions.name']
-     * @param string $alias Alias for the CASE statement in the SELECT.
-     * @return string SQL CASE statement for a SELECT field with an alias, or an empty string if both tables are empty.
+     * @param string $alias Alias for the generated CASE field.
+     * @return string SQL CASE statement with the specified alias, or an empty string if no tables are provided.
      */
     public static function get_switch_select_field(
         string $sourcetable,
@@ -131,7 +142,18 @@ class sql_generator {
         return $sql;
     }
 
-
+    /**
+     * Generates SQL LEFT JOIN clauses for default tables based on a source table and ID mapping.
+     *
+     * This function creates LEFT JOIN statements for each default table, linking them to the source table using
+     * the specified ID mapping and ensuring data consistency.
+     *
+     * @param string $tablesource The source table field to join on.
+     * @param string $idsource The ID field to match between the source table and default tables.
+     * @param array $defaulttables List of default tables to join.
+     * @param string $defaultfield The field in the default table to use for joining.
+     * @return string SQL LEFT JOIN clauses for the provided default tables.
+     */
     public static function get_default_left_joins(
         string $tablesource,
         string $idsource,

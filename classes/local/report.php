@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * This class helps in predefining a report and gathering the necessary data from the DB.
+ * This class represents a report system that retrieves, processes, and formats data from the Moodle Database.
  *
  * @package     mod_srg
  * @copyright   2024 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
@@ -24,20 +24,57 @@
 
 namespace mod_srg\local;
 
-use moodle_exception;
+use mod_srg\local\sql_builder;
 use stdClass;
 
+/**
+ * Class report
+ *
+ * This class represents a report system that retrieves, processes, and formats data
+ * from a database using an SQL builder. The data can be retrieved with headers,
+ * paginated, or formatted as a CSV table. Optionally, it can process data based
+ * on "dedication" sessions to calculate time-related statistics.
+ */
 class report {
 
+    /** @var string The name of the report. */
     private string $reportname;
+
+    /** @var string The filename for the report (e.g., for CSV export). */
     private string $filename;
+
+    /** @var sql_builder The SQL builder responsible for generating SQL queries. */
     private sql_builder $sql_builder;
+
+    /** @var array Field-to-header mapping for the report. */
     private array $headers;
+
+    /** @var array Constant key-value pairs to include in each row of the report. */
     private array $constants;
+
+    /** @var string Optional column name for displaying human-readable timestamps. */
     private string $humantime;
+
+    /** @var string Optional column name for dedication time calculations. */
     private string $dedication;
+
+    /** @var string Optional column name for the dedication target (e.g., session grouping). */
     private string $dedicationtarget;
 
+    /**
+     * report constructor.
+     *
+     * Initializes the report with a name, file name, SQL builder, headers, and optional constants.
+     *
+     * @param string $reportname The name of the report.
+     * @param string $filename The filename for export purposes.
+     * @param sql_builder $sql_builder The SQL builder instance for query generation.
+     * @param array $headers An associative array mapping fields to column headers.
+     * @param array $constants Optional key-value constants to include in every row.
+     * @param string $humantime Optional column for human-readable timestamps.
+     * @param string $dedication Optional column for dedication time calculations.
+     * @param string $dedicationtarget Optional column for dedication grouping (e.g., sessions).
+     */
     public function __construct(
         string $reportname,
         string $filename,
@@ -58,94 +95,150 @@ class report {
         $this->dedicationtarget = $dedicationtarget;
     }
 
+    /**
+     * Gets the name of the report.
+     *
+     * @return string The report name.
+     */
     public function get_report_name(): string {
         return $this->reportname;
     }
 
+    /**
+     * Gets the filename associated with the report.
+     *
+     * @return string The file name.
+     */
     public function get_file_name(): string {
         return $this->filename;
     }
 
+    /**
+     * Retrieves the headers for the report.
+     *
+     * Combines field headers, constant headers, optional human-readable time header, 
+     * and dedication column (if set).
+     *
+     * @return array The report headers.
+     */
     public function get_headers(): array {
         $fieldheaders = array_values($this->headers);
         $constantheaders = !empty($this->constants) ? array_keys($this->constants) : [];
         $humantimeheader = $this->humantime !== '' ? [$this->humantime] : [];
         $dedication = $this->dedication !== '' ? [$this->dedication] : [];
 
+        // Combine all header sources into one array.
         $reportheaders = array_merge($fieldheaders, $constantheaders, $humantimeheader, $dedication);
 
         return $reportheaders;
     }
 
-    public function get_row_count(): int {
-        global $DB;
-        return $DB->count_records_sql($this->sql_builder->get_count_sql(), $this->sql_builder->get_params());
-    }
-
-    public function get_data(int $limitfrom, int $limitnum): array {
+    /**
+     * Retrieves paginated data for the report.
+     *
+     * Depending on the presence of a dedication column, retrieves either direct data 
+     * or dedication-processed data, along with batch count for pagination.
+     *
+     * @param int $batchindex The index of the batch (page) to retrieve.
+     * @param int $limitnum The number of rows to retrieve.
+     * @return array An array containing:
+     *               - rows: The data rows for the current page.
+     *               - batchcount: The total number of pages/batches.
+     */
+    public function get_data(int $batchindex, int $limitnum): array {
         $rows = [];
-        $newlimitfrom = 0;
+        $batchcount = 0;
+
         if ($this->dedication === '') {
-            $rows = $this->get_direct_data($limitfrom, $limitnum);
-            $newlimitfrom = $limitfrom + $limitnum;
-            return [$rows, $newlimitfrom];
+            // Direct data mode.
+            $rows = $this->get_direct_data($batchindex, $limitnum);
+            $batchcount = (int)ceil($this->get_row_count() / $limitnum);
+
+            return [$rows, $batchcount];
         }
-        list($rows, $newlimitfrom) = $this->get_dedication_data($limitfrom, $limitnum);
-        return [$rows, $newlimitfrom];
+
+        // Dedication processing mode.
+        list($rows, $batchcount) = $this->get_dedication_data($batchindex, $limitnum);
+        return [$rows, $batchcount];
     }
 
-
-    public function get_as_csv_table(int $limitfrom, int $limitnum): string {
+    /**
+     * Formats report data as a CSV table.
+     *
+     * @param int $batchindex The index of the batch (page) to retrieve.
+     * @param int $limitnum The number of rows to retrieve.
+     * @return string The formatted CSV table.
+     */
+    public function get_as_csv_table(int $batchindex, int $limitnum): string {
         $headers = $this->get_headers();
-        list($data, $newlimitfrom) = $this->get_data($limitfrom, $limitnum);
+        list($data, $batchcount) = $this->get_data($batchindex, $limitnum);
 
         $rows = [];
 
-        // Add headers to CSV as the first row.
+        // Add headers to the CSV as the first row.
         $cells = [];
         foreach ($headers as $value) {
-            // Escape double quotes and format each header as a quoted string.
+            // Escape newlines and double quotes in the headers.
             $cells[] = '"' . preg_replace(['/\n/', '/"/'], ['', '""'], $value) . '"';
         }
         $rows[] = implode(",", $cells);
 
-        // Add each data row to CSV.
+        // Add each data row to the CSV.
         foreach ($data as $row) {
             $cells = [];
             foreach ($row as $value) {
-                // Escape double quotes and format each cell value as a quoted string.
+                // Escape newlines and double quotes in the data.
                 $cells[] = '"' . preg_replace(['/\n/', '/"/'], ['', '""'], $value) . '"';
             }
             $rows[] = implode(",", $cells);
         }
 
-        // Combine all rows into a single CSV string, separated by newline characters.
+        // Combine all rows into a single CSV string with newline separators.
         $csv = implode("\n", $rows);
 
         return $csv;
     }
 
+    /**
+     * Gets the total row count for the report query.
+     *
+     * @return int The total number of rows.
+     */
+    private function get_row_count(): int {
+        global $DB;
+        return $DB->count_records_sql($this->sql_builder->get_count_sql(), $this->sql_builder->get_params());
+    }
 
-
-    private function get_direct_data(int $limitfrom, int $limitnum): array {
+    /**
+     * Retrieves data directly without dedication calculations.
+     *
+     * @param int $batchindex The index of the batch (page) to retrieve.
+     * @param int $limitnum The number of rows to retrieve.
+     * @return array The data rows.
+     */
+    private function get_direct_data(int $batchindex, int $limitnum): array {
         global $DB;
 
+        // Execute the SQL query with pagination.
         $recordset = $DB->get_recordset_sql(
             $this->sql_builder->get_select_sql(),
             $this->sql_builder->get_params(),
-            $limitfrom,
+            $batchindex * $limitnum,
             $limitnum
         );
 
         $rows = [];
         foreach ($recordset as $record) {
             $row = [];
+            // Map each field to its header.
             foreach ($this->headers as $field => $header) {
                 $row[$header] = $record->$field ?? "";
             }
+            // Add constants as additional columns.
             foreach ($this->constants as $header => $value) {
                 $row[$header] = $value;
             }
+            // Optionally add human-readable time.
             if (!empty($this->humantime)) {
                 $row[$this->humantime] = isset($record->timecreated) ? date("Y-m-d H:i:s", $record->timecreated) : "";
             }
@@ -156,110 +249,161 @@ class report {
 
         return $rows;
     }
+
+    /**
+     * Retrieves dedication data for a specific batch and calculates total pages for pagination.
+     *
+     * @param int $batchindex The index of the batch (page) to retrieve.
+     * @param int $limitnum The number of rows per batch.
+     * @param int $dedicationmintime Minimum dedication time required to keep a session (in seconds).
+     * @param int $dedicationmaxtime Maximum time allowed between activities to consider the same session (in seconds).
+     * @return array An array containing:
+     *               - rows: The rows for the requested batch.
+     *               - batchcount: The total number of available batches/pages.
+     */
     private function get_dedication_data(
-        int $limitfrom,
+        int $batchindex,
         int $limitnum,
         int $dedicationmintime = 60,
         int $dedicationmaxtime = 900
     ): array {
-        $rows = [];
-        $processedcount = 0;
-        // Explicitly initialize as null. Null meand either first or last session.
-        $session = null;
+        global $DB;
 
-        while ($processedcount < $limitnum && $limitfrom < $this->get_row_count() - 1) {
-            global $DB;
+        // Calculate the starting point for the current batch.
+        $limitfrom = $batchindex * $limitnum;
+        $sessionindex = 0; // Tracks the total number of finalized sessions processed.
 
-            // Fetch records in batches.
-            $recordset = $DB->get_recordset_sql(
-                $this->sql_builder->get_select_sql(),
-                $this->sql_builder->get_params(),
-                $limitfrom,
-                MOD_SRG_DEDICATION_BATCH_SIZE
-            );
+        $rows = [];       // Stores the rows for the current batch.
+        $batchcount = 0;  // Tracks the total number of batches/pages available.
 
-            foreach ($recordset as $record) {
-                // Iterate recordcounter.
-                $limitfrom++;
+        $session = null;  // Tracks the current session being processed.
 
-                // Skip unusable records.
-                $recordunusable = !isset($record->timecreated) || (
-                    !empty($dedicationtarget) &&
-                    !isset($record->$dedicationtarget)
-                );
-                if ($recordunusable) {
-                    continue;
-                }
+        // Fetch all records to determine total sessions for pagination.
+        $recordset = $DB->get_recordset_sql(
+            $this->sql_builder->get_select_sql(),
+            $this->sql_builder->get_params()
+        );
 
-                // Is this the first session?
-                if ($session === null) {
-                    $session = $this->initialize_session($record);
-                    continue;
-                }
+        foreach ($recordset as $record) {
+            // Skip unusable records based on required fields.
+            if ($this->unusable($record)) {
+                continue;
+            }
 
-                // Update the session with the current row record.
-                if ($this->is_same_session($session, $record, $dedicationmaxtime)) {
-                    $session = $this->update_session($session, $record);
-                    continue;
-                }
-
-                if ($this->should_keep_session($session, $dedicationmintime)) {
-                    $rows[] = $this->finalize_row($session);
-                    $processedcount++;
-
-                    // Reset $session to null after processing the finalized row.
-                    $session = null;
-
-                    if ($processedcount >= $limitnum) {
-                        break;
-                    }
-                }
-
+            // Start a new session if none exists.
+            if ($session === null) {
                 $session = $this->initialize_session($record);
+                continue;
             }
 
-            // The recordset has no entries.
-            if (!$recordset->valid()) {
-                $recordset->close();
-                break;
+            // Check if the current record belongs to the same session.
+            if ($this->is_same_session($session, $record, $dedicationmaxtime)) {
+                $session = $this->update_session($session, $record);
+                continue;
             }
 
-            $recordset->close();
+            // Finalize the current session if it meets the minimum dedication time.
+            if ($this->should_keep_session($session, $dedicationmintime)) {
+                if ($sessionindex >= $limitfrom && count($rows) < $limitnum) {
+                    $rows[] = $this->finalize_row($session);
+                }
+                $sessionindex++; // Increment the session counter.
+            }
+
+            // Start a new session after finalizing the previous one.
+            $session = $this->initialize_session($record);
         }
 
-        // We ran out of records before the total processedcount was >= limitnum.
+        $recordset->close();
+
+        // Finalize any remaining session after the loop ends.
         if ($session !== null && $this->should_keep_session($session, $dedicationmintime)) {
-            $rows[] = $this->finalize_row($session);
-            $processedcount++;
-            $session = null;
+            if ($sessionindex >= $limitfrom && count($rows) < $limitnum) {
+                $rows[] = $this->finalize_row($session);
+            }
+            $sessionindex++; // Increment the session counter for the final session.
         }
 
-        return [$rows, $limitfrom + 1];
+        // Calculate the total number of batches/pages based on session count.
+        $batchcount = (int)ceil($sessionindex / $limitnum);
+
+        // Return both the rows for the current batch and the total number of pages.
+        return [$rows, $batchcount];
     }
 
+    /**
+     * Checks if a record is unusable for session processing.
+     *
+     * A record is considered unusable if it lacks the `timecreated` field or,
+     * if a specific `dedicationtarget` is set, does not include that target field.
+     *
+     * @param mixed $record The record to check.
+     * @return bool True if the record is unusable, false otherwise.
+     */
+    private function unusable(mixed $record): bool {
+        // Records are unusable if the `timecreated` field is missing or if the target
+        // dedication field is required and not present in the record.
+        return !isset($record->timecreated) ||
+            ($this->dedicationtarget !== '' && !isset($record->{$this->dedicationtarget}));
+    }
+
+    /**
+     * Determines if a record belongs to the same session as the current session.
+     *
+     * A record is considered part of the same session if:
+     * - The time gap between the record and the current session does not exceed $dedicationmaxtime.
+     * - The `dedicationtarget` is either empty (no target) or matches between the record and session.
+     *
+     * @param array $session The current session data.
+     * @param mixed $record The record to compare.
+     * @param int $dedicationmaxtime Maximum allowed time between activities to consider the same session (in seconds).
+     * @return bool True if the record belongs to the same session, false otherwise.
+     */
     private function is_same_session(array $session, mixed $record, int $dedicationmaxtime): bool {
         $currenttime = $record->timecreated;
         $sessiontime = $session['lastactivitytime'];
 
-        // The time difference between the session and this record is too large, > $dedicationmaxtime.
+        // Sessions are not the same if the time gap exceeds the max allowed time.
         if ($currenttime - $sessiontime > $dedicationmaxtime) {
             return false;
         }
 
-        // We do not care about a component.
+        // If no specific target, any record within the time range belongs to the session.
         if ($this->dedicationtarget === '') {
             return true;
         }
 
-        // We care about same component, it is the same session only if the component matches.
+        // If a specific target is set, only match records with the same target value.
         return $session[$this->dedicationtarget] === $record->{$this->dedicationtarget};
     }
+
+    /**
+     * Determines if a session should be kept based on its dedication time.
+     *
+     * A session is kept if the difference between `lastactivitytime` and `sessionstarttime`
+     * meets or exceeds the minimum dedication time.
+     *
+     * @param array $session The session data.
+     * @param int $dedicationmintime Minimum dedication time required to keep a session (in seconds).
+     * @return bool True if the session should be kept, false otherwise.
+     */
     private function should_keep_session(array $session, int $dedicationmintime): bool {
+        // A session is worth keeping if its duration meets or exceeds the minimum dedication time.
         $dedicationtime = $session['lastactivitytime'] - $session['sessionstarttime'];
         return $dedicationtime >= $dedicationmintime;
     }
 
-    private function initialize_session($record): array {
+    /**
+     * Initializes a new session based on a record.
+     *
+     * The session includes data from the record, predefined headers, constants,
+     * and tracks the start and last activity times.
+     *
+     * @param mixed $record The record used to initialize the session.
+     * @return array The initialized session array.
+     */
+    private function initialize_session(mixed $record): array {
+        // Initialize a session with record data and constants.
         $session = [];
         foreach ($this->headers as $field => $header) {
             $session[$field] = $record->$field ?? "";
@@ -267,26 +411,53 @@ class report {
         foreach ($this->constants as $header => $value) {
             $session[$header] = $value;
         }
+
+        // Add a human-readable time field if configured.
         if (!empty($this->humantime)) {
             $session[$this->humantime] = date("Y-m-d H:i:s", $record->timecreated);
         }
+
+        // Track session start and last activity times.
         $session['sessionstarttime'] = $record->timecreated;
         $session['lastactivitytime'] = $record->timecreated;
+
         return $session;
     }
 
-    private function update_session(array $session, $record): array {
+    /**
+     * Updates an existing session with data from a new record.
+     *
+     * Updates the `lastactivitytime` to reflect the latest activity in the session.
+     *
+     * @param array $session The current session data.
+     * @param mixed $record The record used to update the session.
+     * @return array The updated session array.
+     */
+    private function update_session(array $session, mixed $record): array {
+        // Update the last activity time for the session.
         $session['lastactivitytime'] = $record->timecreated;
         return $session;
     }
 
+    /**
+     * Finalizes a session for output.
+     *
+     * Calculates the total dedication time, formats it, and removes internal tracking fields.
+     *
+     * @param array $session The session to finalize.
+     * @return array The finalized session array ready for output.
+     */
     private function finalize_row(array $session): array {
+        // Calculate the total dedication time for the session.
         $dedicationtime = $session['lastactivitytime'] - $session['sessionstarttime'];
         $session[$this->dedication] = $this->format_time($dedicationtime);
-        unset($session['sessionstarttime'], $session['lastactivitytime']); // Remove internal tracking field.
+
+        // Remove internal tracking fields.
+        unset($session['sessionstarttime'], $session['lastactivitytime']);
 
         return array_values($session);
     }
+
 
     /**
      * Convert a duration in seconds to a human-readable string.

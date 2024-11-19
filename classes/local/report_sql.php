@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * TODO DESCRIPTION
+ * Provides SQL generation utilities to fetch and process course-related data for reporting in Moodle.
  * 
  * @package     mod_srg
  * @copyright   2024 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
@@ -26,8 +26,22 @@ namespace mod_srg\local;
 
 use mod_srg\local\sql_generator;
 
+/**
+ * This class contains static methods to generate SQL queries
+ * and their corresponding parameters for various reporting needs in Moodle.
+ * The methods facilitate the retrieval of data from logstore_standard_log and related tables,
+ * enabling detailed analysis of course activities, user interactions, grading interests,
+ * forum activities, H5P content usage, badges, and chatbot history.
+ */
 class report_sql {
 
+    /**
+     * Generates SQL and parameters to retrieve all log entries for a specific user in a specific course.
+     *
+     * @param int $userid ID of the user whose log entries are being queried.
+     * @param int $courseid ID of the course for which logs are being retrieved.
+     * @return array An array containing the SQL SELECT, FROM, WHERE clauses, and their associated parameters.
+     */
     public static function get_course_sql_and_params($userid, $courseid): array {
         // WHERE sql.
         $params = [
@@ -68,6 +82,15 @@ class report_sql {
         return [$select, $from, $where, $params];
     }
 
+    /**
+     * Generates SQL and parameters to retrieve log entries for specific course modules and actions.
+     *
+     * Includes conditions to filter logs by module types, actions, and associated object names.
+     *
+     * @param int $userid ID of the user whose log entries are being queried.
+     * @param int $courseid ID of the course for which logs are being retrieved.
+     * @return array An array containing the SQL SELECT, FROM, WHERE clauses, and their associated parameters.
+     */
     public static function get_course_module_log_sql_and_params($userid, $courseid): array {
         global $DB;
 
@@ -168,6 +191,15 @@ class report_sql {
         return [$select, $from, $where, $params];
     }
 
+    /**
+     * Generates SQL and parameters to retrieve grading-related log entries for a specific user and course.
+     *
+     * Focuses on events related to grade reports and assignment grading views.
+     *
+     * @param int $userid ID of the user whose grading-related logs are being queried.
+     * @param int $courseid ID of the course for which logs are being retrieved.
+     * @return array An array containing the SQL SELECT, FROM, WHERE clauses, and their associated parameters.
+     */
     public static function get_grading_interest_sql_and_params($userid, $courseid): array {
         global $DB;
 
@@ -211,6 +243,15 @@ class report_sql {
         return [$select, $from, $where, $params];
     }
 
+    /**
+     * Generates SQL and parameters to retrieve forum-related log entries for a specific user and course.
+     *
+     * Includes conditions to resolve object names for forum posts and discussions.
+     *
+     * @param int $userid ID of the user whose forum-related logs are being queried.
+     * @param int $courseid ID of the course for which logs are being retrieved.
+     * @return array An array containing the SQL SELECT, FROM, WHERE clauses, and their associated parameters.
+     */
     public static function get_forum_activity_sql_and_params($userid, $courseid): array {
         // WHERE sql.
         $params = [
@@ -288,6 +329,15 @@ class report_sql {
         return [$select, $from, $where, $params];
     }
 
+    /**
+     * Generates SQL and parameters to retrieve H5P activity data for a specific user and course.
+     *
+     * Includes details about interactions, scores, and associated content.
+     *
+     * @param int $userid ID of the user whose H5P-related logs are being queried.
+     * @param int $courseid ID of the course for which logs are being retrieved.
+     * @return array An array containing the SQL SELECT, FROM, WHERE clauses, and their associated parameters.
+     */
     public static function get_hvp_sql_and_params($userid, $courseid): array {
         // WHERE sql.
         $params = [
@@ -327,6 +377,15 @@ class report_sql {
         return [$select, $from, $where, $params];
     }
 
+    /**
+     * Generates SQL and parameters to retrieve badge issuance data for a specific user and course.
+     *
+     * Includes badge details and their issuance history.
+     *
+     * @param int $userid ID of the user whose badge-related data is being queried.
+     * @param int $courseid ID of the course for which badge data is being retrieved.
+     * @return array An array containing the SQL SELECT, FROM, WHERE clauses, and their associated parameters.
+     */
     public static function get_badges_sql_and_params($userid, $courseid): array {
         // WHERE sql.
         $params = [
@@ -363,6 +422,15 @@ class report_sql {
         return [$select, $from, $where, $params];
     }
 
+    /**
+     * Generates SQL and parameters to retrieve chatbot conversation history for a specific user and course.
+     *
+     * Includes details about speakers, messages, and actions within the chatbot interface.
+     *
+     * @param int $userid ID of the user whose chatbot history is being queried.
+     * @param int $courseid ID of the course for which chatbot history is being retrieved.
+     * @return array An array containing the SQL SELECT, FROM, WHERE clauses, and their associated parameters.
+     */
     public static function get_chatbot_history_sql_and_params($userid, $courseid): array {
         // WHERE sql.
         $params = [

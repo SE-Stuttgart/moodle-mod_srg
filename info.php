@@ -131,7 +131,7 @@ if ($mode == 'print') { // Download data as CSV in .zip.
     $templatedata = [];
     foreach ($reportlist as $index => $report) {
         $headers = $report->get_headers();
-        list($data, $newlimitfrom) = $report->get_data(0, MOD_SRG_TARGET_TABLE_MAX_COUNT);
+        list($data, $pagecount) = $report->get_data(0, MOD_SRG_TARGET_TABLE_MAX_COUNT);
 
         $table = new stdClass();
         $table->index = format_text(strval($index), FORMAT_HTML);

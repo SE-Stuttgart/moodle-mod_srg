@@ -30,7 +30,7 @@ class sql_builder {
     /**
      * @var callable|null Function that generates SQL components dynamically.
      * We use a callable to only load the sql at need.
-     * Because some sql generation requires one or multiple DataBase calls-
+     * Because some sql generation requires one or multiple DataBase calls.
      */
     private $sqlgenerationcallable;
 

@@ -64,7 +64,16 @@ $PAGE->set_heading(get_string('info_heading', 'mod_srg'));
 $PAGE->set_context($modulecontext);
 
 // SQL Queries -> get Data.
-$filelist = srg_get_file_list($USER, $course);
+$reportlist = [];
+foreach (srg_get_report_list() as $reportid) {
+    $report = srg_get_report($reportid, $USER, $course);
+
+    if (!$report) {
+        continue;
+    }
+
+    $reportlist[] = $report;
+}
 
 if ($mode == 'print') { // Download data as CSV in .zip.
     // Trigger event\log_data_downloaded.
@@ -80,8 +89,8 @@ if ($mode == 'print') { // Download data as CSV in .zip.
         $zipwriter = \core_files\archive_writer::get_stream_writer($zipfilename, \core_files\archive_writer::ZIP_WRITER);
         if ($zipwriter instanceof \core_files\local\archive_writer\zip_writer) {
             // Stream the files into the zip.
-            foreach ($filelist as $file) {
-                $zipwriter->add_file_from_string($file['filename'], $file['report_table']->get_as_csv_table());
+            foreach ($reportlist as $report) {
+                $zipwriter->add_file_from_string($report->get_file_name(), $report->get_as_csv_table(0, MOD_SRG_TARGET_TABLE_MAX_COUNT));
                 unset($file);
             }
 
@@ -99,17 +108,13 @@ if ($mode == 'print') { // Download data as CSV in .zip.
 
         $exporttmpdir = make_request_directory();
 
-        foreach ($filelist as $file) {
-            if (!$file['report_table']) {
-                continue;
-            }
-
-            $csvfilepath = $exporttmpdir . DIRECTORY_SEPARATOR . $file['filename'];
-            if (!file_put_contents($csvfilepath, $file['report_table']->get_as_csv_table())) {
+        foreach ($reportlist as $report) {
+            $csvfilepath = $exporttmpdir . DIRECTORY_SEPARATOR . $report->get_file_name();
+            if (!file_put_contents($csvfilepath, $report->get_as_csv_table(0, MOD_SRG_TARGET_TABLE_MAX_COUNT))) {
                 throw new moodle_exception(get_string('error_creating_csv_file', 'mod_srg'));
             }
-            $zipfiles[$file['filename']] = $csvfilepath;
-            unset($file);
+            $zipfiles[$report->get_file_name()] = $csvfilepath;
+            unset($report);
         }
         $zipfilepath = $exporttmpdir . DIRECTORY_SEPARATOR . $zipfilename;
         $zip->archive_to_pathname($zipfiles, $zipfilepath);
@@ -124,13 +129,13 @@ if ($mode == 'print') { // Download data as CSV in .zip.
     $pagelength = 50;
 
     $templatedata = [];
-    foreach ($filelist as $index => $file) {
-        $headers = $file['report_table']->get_headers();
-        $data = $file['report_table']->get_data();
+    foreach ($reportlist as $index => $report) {
+        $headers = $report->get_headers();
+        list($data, $newlimitfrom) = $report->get_data(0, MOD_SRG_TARGET_TABLE_MAX_COUNT);
 
         $table = new stdClass();
         $table->index = format_text(strval($index), FORMAT_HTML);
-        $table->name = format_text(strval($file['name']), FORMAT_HTML);
+        $table->name = format_text(strval($report->get_report_name()), FORMAT_HTML);
         $table->pagecount = format_text(strval(((int)ceil(count($data) / $pagelength))), FORMAT_HTML);
         $table->head = base64_encode(json_encode($headers));
         $table->data = base64_encode(json_encode($data));

@@ -73,6 +73,8 @@ $string['last'] = 'last';
 // Report strings.
 $string['zipfilename'] = 'moodle-mod_srg';
 // Report file names.
+$string['course_log'] = 'Course Log';
+$string['course_log_csv'] = 'course_log.csv';
 $string['course_dedication_log'] = 'Course Dedication Log';
 $string['course_dedication_log_csv'] = 'course_dedication_log.csv';
 $string['course_module_log'] = 'Course Module Log';
@@ -89,10 +91,38 @@ $string['badges'] = 'User Earned Badges';
 $string['badges_csv'] = 'badges.csv';
 $string['chatbot_history'] = 'Chatbot History';
 $string['chatbot_history_csv'] = 'chatbot_history.csv';
+
 // Report header names.
-$string['time'] = 'Time';
+// General.
+$string['id'] = 'ID';
+$string['timecreated'] = 'Time created';
+$string['courseid'] = 'Course ID';
+// Special.
+$string['object_name'] = 'Object Name';
 $string['course_shortname'] = 'Course Shortname';
 $string['course_fullname'] = 'Course Fullname';
+$string['time'] = 'Time';
 $string['dedication'] = 'Dedication';
-$string['object_name'] = 'Object Name';
-$string['eventname'] = 'Eventname';
+// Table logstore_standard_log.
+$string['eventname'] = 'Event name';
+$string['component'] = 'Component';
+$string['action'] = 'Action';
+$string['target'] = 'Target';
+$string['objecttable'] = 'Object table';
+$string['objectid'] = 'Object ID';
+$string['contextid'] = 'Context ID';
+$string['contextlevel'] = 'Context level';
+$string['contextinstanceid'] = 'Context instance ID';
+// Table forum_activity.
+$string['name'] = 'Name';
+// Table hvp_report.
+$string['content_id'] = 'Content ID';
+$string['interaction_type'] = 'Interaction type';
+$string['raw_score'] = 'Raw score';
+$string['max_score'] = 'Max score';
+// Table badge_report.
+$string['badgeid'] = 'Badge ID';
+// Table chatbot_history.
+$string['speaker'] = 'Speaker';
+$string['message'] = 'Message';
+$string['act'] = 'Act';

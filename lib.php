@@ -22,6 +22,19 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+define("MOD_SRG_TARGET_TABLE_MAX_COUNT", 1000);
+define("MOD_SRG_DEDICATION_BATCH_SIZE", 100000);
+
+define("MOD_SRG_REPORT_COURSE_LOG", -1);
+define("MOD_SRG_REPORT_COURSE_DEDICATION", 0);
+define("MOD_SRG_REPORT_COURSE_MODULE_LOG", 1);
+define("MOD_SRG_REPORT_COURSE_MODULE_DEDICATION", 2);
+define("MOD_SRG_REPORT_GRADE_INSPECTION", 3);
+define("MOD_SRG_REPORT_FORUM_ACTIVITY", 4);
+define("MOD_SRG_REPORT_HVP", 5);
+define("MOD_SRG_REPORT_BADGES", 6);
+define("MOD_SRG_REPORT_CHATBOT_HISTORY", 7);
+
 /**
  * Supported features
  *

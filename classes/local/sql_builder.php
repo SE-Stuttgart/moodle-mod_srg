@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * TODO DESCRIPTION
+ *  Utility class for dynamically generating and managing SQL queries.
  *
  * @package     mod_srg
  * @copyright   2024 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
@@ -26,6 +26,20 @@ namespace mod_srg\local;
 
 use moodle_exception;
 
+/**
+ * A class for dynamically generating and managing SQL query components.
+ *
+ * This class provides a flexible way to construct SQL queries by using a callable function
+ * that generates the `SELECT`, `FROM`, `WHERE`, and parameter components. This approach 
+ * allows delayed query construction, which is useful when SQL generation requires 
+ * additional database operations or context-specific inputs.
+ *
+ * Key Features:
+ * - Supports lazy initialization of SQL query components.
+ * - Encapsulates the `SELECT`, `FROM`, and `WHERE` parts of an SQL query.
+ * - Maintains parameters required for safe query execution.
+ * - Handles dynamic arguments like user ID and course ID for context-specific queries.
+ */
 class sql_builder {
     /**
      * @var callable|null Function that generates SQL components dynamically.
@@ -70,11 +84,15 @@ class sql_builder {
     private bool $initialized;
 
     /**
-     * Constructor.
+     * Initializes a new instance of the `sql_builder` class.
      *
-     * @param callable $sqlgenerationcallable Function that generates SQL components.
-     * @param array $callableargs Arguments to pass to the callable.
+     * @param callable $sqlgenerationcallable A function that generates SQL components 
+     *                                        (`SELECT`, `FROM`, `WHERE`, and parameters).
+     *                                        The callable is executed only when needed.
+     * @param int $userid The ID of the current user, passed as an argument to the callable.
+     * @param int $courseid The ID of the current course, passed as an argument to the callable.
      */
+
     public function __construct(callable $sqlgenerationcallable, int $userid, int $courseid) {
         $this->sqlgenerationcallable = $sqlgenerationcallable;
         $this->userid = $userid;

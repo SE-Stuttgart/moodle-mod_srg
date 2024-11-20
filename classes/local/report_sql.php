@@ -16,7 +16,7 @@
 
 /**
  * Provides SQL generation utilities to fetch and process course-related data for reporting in Moodle.
- * 
+ *
  * @package     mod_srg
  * @copyright   2024 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -127,7 +127,6 @@ class report_sql {
                 AND logstore_standard_log.action {$actionconstraint}
         ";
 
-
         // List of tables connected to logstore_standard_log, found in logstore_standard_log.objecttable.
         $defaultfields = sql_generator::get_default_tables_from_field(
             "SELECT DISTINCT logstore_standard_log.objecttable FROM {logstore_standard_log} logstore_standard_log {$where}",
@@ -185,7 +184,6 @@ class report_sql {
                 {book_chapters} book_chapters_custom
                 ON logstore_standard_log.objecttable = 'book_chapters'
                 AND logstore_standard_log.objectid = book_chapters_custom.id
-            
         ";
 
         return [$select, $from, $where, $params];

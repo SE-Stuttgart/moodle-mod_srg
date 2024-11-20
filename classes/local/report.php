@@ -117,10 +117,10 @@ class report {
     /**
      * Retrieves a batch of data preprocessed for display in a template.
      *
-     * This function returns an indexed array with three elements, designed to be unpacked using `list()`. 
+     * This function returns an indexed array with three elements, designed to be unpacked using `list()`.
      * The array includes:
      *
-     * - **[0] data**: A nested array containing rows of data, where each row is represented as 
+     * - **[0] data**: A nested array containing rows of data, where each row is represented as
      *   `["columns" => [["value" => value]]]`.
      * - **[1] headers**: An array of column headers, each represented as `["value" => value]`.
      * - **[2] pagecount**: An integer representing the total number of pages available.
@@ -309,7 +309,7 @@ class report {
     /**
      * Retrieves the headers for the report.
      *
-     * Combines field headers, constant headers, optional human-readable time header, 
+     * Combines field headers, constant headers, optional human-readable time header,
      * and dedication column (if set).
      *
      * @return array The report headers.

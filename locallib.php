@@ -103,8 +103,8 @@ function srg_get_report(int $reportid, $USER, $course): ?report {
 
 /**
  * Handles the "View Report" button click.
- * 
- * This function triggers the `event\log_data_viewed` event to log that a report was viewed 
+ *
+ * This function triggers the `event\log_data_viewed` event to log that a report was viewed
  * and returns a `moodle_url` for the report viewing page with default parameters.
  *
  * @param stdClass $activityinstance The activity instance object associated with the report.
@@ -122,8 +122,8 @@ function srg_on_click_view_report($activityinstance, $context, $wwwroot, $cmid):
 
 /**
  * Handles the "Download Report" button click.
- * 
- * This function triggers the `event\log_data_downloaded` event to log that a report was downloaded 
+ *
+ * This function triggers the `event\log_data_downloaded` event to log that a report was downloaded
  * and returns a `moodle_url` for the report downloading endpoint.
  *
  * @param stdClass $activityinstance The activity instance object associated with the report.

@@ -25,8 +25,6 @@
 use mod_srg\local\report;
 use mod_srg\local\report_generator;
 
-use stdClass;
-
 /**
  * Get the saved insctruction to be displayed on the view page.
  * @param int $id Id of the activity.

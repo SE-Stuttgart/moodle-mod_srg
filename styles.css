@@ -1,4 +1,4 @@
-.srg-tab-container .srg-tab-active {
+#srg-tab-container .srg-tab-active {
     font-weight: bold;
     border-bottom: 2px solid #0073e6;
 }

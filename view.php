@@ -72,14 +72,14 @@ echo html_writer::start_div(
 
 // Display results on info page.
 echo $OUTPUT->single_button(
-    new moodle_url($CFG->wwwroot . '/mod/srg/info.php', ['id' => $cm->id, 'mode' => 'view']),
+    srg_on_click_view_report($srg, $modulecontext, $CFG->wwwroot, $cm->id),
     get_string('view_all_button_name', 'mod_srg'),
     'get'
 );
 
 // Skip display and download results.
 echo $OUTPUT->single_button(
-    new moodle_url($CFG->wwwroot . '/mod/srg/info.php', ['id' => $cm->id, 'mode' => 'print']),
+    srg_on_click_download_report($srg, $modulecontext, $CFG->wwwroot, $cm->id),
     get_string('print_all_button_name', 'mod_srg'),
     'get'
 );

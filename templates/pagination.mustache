@@ -27,51 +27,123 @@
 
     Example context (json):
     {
+        "coursemoduleid": 0,
+        "activetabindex": 0,
+        "activepageindex": 0,
         "pages": [
-            { "index": 0 }
+            { 
+                "index": 0,
+                "viewindex": 1
+            }
         ]
     }
 }}
-<nav class="srg-page-navigation" aria-label="{{#str}}page_navigation, mod_srg{{/str}}">
-  <ul class="pagination justify-content-center">
-    <li class="page-item srg-page-nav-first">
-        <a class="page-link" href="#" aria-label="{{#str}}first, mod_srg{{/str}}">
-            <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-        </a>
-    </li>
-    <li class="page-item srg-page-nav-previous">
-        <a class="page-link" href="#" aria-label="{{#str}}previous, mod_srg{{/str}}">
-            <i class="fa fa-angle-left" aria-hidden="true"></i>
-        </a>
-    </li>
-    <li class="page-item disabled srg-page-nav-ellipsis-left">
-        <a class="page-link" href="#" aria-hidden="true">
-            <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
-        </a>
-    </li>
-    
-    {{#pages}}
-    <li class="page-item srg-page-nav-page">
-        <a class="page-link" href="#" aria-label="{{#str}}page, mod_srg{{/str}} {{index}}">
-            {{index}}
-        </a>
-    </li>
-    {{/pages}}
+<div
+    id="srg-pagination-container"
+    class="srg-hidden"
+    data-coursemoduleid="{{coursemoduleid}}"
+    data-activetabindex="{{activetabindex}}"
+    data-activepageindex="{{activepageindex}}">
+    <nav 
+        class="srg-page-navigation" 
+        aria-label="{{#str}}page_navigation, mod_srg{{/str}}">
+        <ul 
+            class="pagination justify-content-center">
+            
+            <li 
+                class="page-item srg-page-nav-first">
+                <a 
+                    class="page-link" 
+                    href="#" 
+                    aria-label="{{#str}}first, mod_srg{{/str}}">
+                    <i 
+                        class="fa fa-angle-double-left" 
+                        aria-hidden="true">
+                    </i>
+                </a>
+            </li>
+            
+            <li 
+                class="page-item srg-page-nav-previous">
+                <a 
+                    class="page-link" 
+                    href="#" 
+                    aria-label="{{#str}}previous, mod_srg{{/str}}">
+                    <i 
+                        class="fa fa-angle-left" 
+                        aria-hidden="true">
+                    </i>
+                </a>
+            </li>
+            
+            <li 
+                class="page-item disabled srg-page-nav-ellipsis-left">
+                <a 
+                    class="page-link" 
+                    href="#" 
+                    aria-hidden="true">
+                    <i 
+                        class="fa fa-ellipsis-h" 
+                        aria-hidden="true">
+                    </i>
+                </a>
+            </li>
+            
+            {{#pages}}
+            <li 
+                class="page-item srg-page-nav-page srg-hidden">
+                <a 
+                    class="page-link" 
+                    href="#" 
+                    aria-label="{{#str}}page, mod_srg{{/str}} {{index}}">
+                    {{viewindex}}
+                </a>
+            </li>
+            {{/pages}}
+            
+            <li 
+                class="page-item disabled srg-page-nav-ellipsis-right">
+                <a 
+                    class="page-link" 
+                    href="#" 
+                    aria-hidden="true">
+                    <i 
+                        class="fa fa-ellipsis-h" 
+                        aria-hidden="true">
+                    </i>
+                </a>
+            </li>
+            
+            <li 
+                class="page-item srg-page-nav-next">
+                <a 
+                    class="page-link" 
+                    href="#" 
+                    aria-label="{{#str}}next, mod_srg{{/str}}">
+                    <i 
+                        class="fa fa-angle-right" 
+                        aria-hidden="true">
+                    </i>
+                </a>
+            </li>
+            
+            <li 
+                class="page-item srg-page-nav-last">
+                <a 
+                    class="page-link" 
+                    href="#" 
+                    aria-label="{{#str}}last, mod_srg{{/str}}">
+                    <i 
+                        class="fa fa-angle-double-right" 
+                        aria-hidden="true">
+                    </i>
+                </a>
+            </li>
 
-    <li class="page-item disabled srg-page-nav-ellipsis-right">
-        <a class="page-link" href="#" aria-hidden="true">
-            <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
-        </a>
-    </li>
-    <li class="page-item srg-page-nav-next">
-        <a class="page-link" href="#" aria-label="{{#str}}next, mod_srg{{/str}}">
-            <i class="fa fa-angle-right" aria-hidden="true"></i>
-        </a>
-    </li>
-    <li class="page-item srg-page-nav-last">
-        <a class="page-link" href="#" aria-label="{{#str}}last, mod_srg{{/str}}">
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-        </a>
-    </li>
-  </ul>
-</nav>
+        </ul>
+    </nav>
+</div>
+
+{{#js}}
+require(['mod_srg/pagination'], (module) => module.init());
+{{/js}}

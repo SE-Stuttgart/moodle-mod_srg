@@ -27,47 +27,43 @@
 
     Example context (json):
     {
-        "filelist": [
+        "coursemoduleid": 0,
+        "activetabindex": 0,
+        "tabdata": [
             {
                 "index": 0,
-                "name": "tablename",
-                "pagecount": 5,
-                "head": "encoded_string",
-                "data": "encoded_string"
+                "name": "tablename"
             }
-        ],
-        "pagelength": 50
+        ]
     }
 }}
-<div class="srg-tab-container">
-    <ul class="nav nav-tabs" role="tablist">
-        {{#filelist}}
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" 
-               id="srg-tab-{{index}}" 
-               data-index="{{index}}" 
-               href="#" 
-               role="tab" 
-               aria-selected="false"
-               data-head="{{ head }}" 
-               data-content="{{ data }}"
-               data-page-count="{{ pagecount }}">
+<div 
+    id="srg-tab-container"
+    class="srg-hidden"
+    data-coursemoduleid="{{coursemoduleid}}"
+    data-activetabindex="{{activetabindex}}">
+    <ul 
+        class="nav nav-tabs" role="tablist">
+        {{#tabdata}}
+        <li 
+            class="nav-item" 
+            role="presentation">
+            <a 
+                class="nav-link"
+                href="#"
+                data-index="{{ index }}"
+                data-name="{{ name }}"
+                role="tab"
+                id="srg-tab-{{index}}"
+                aria-selected="false">
                 {{name}}
             </a>
         </li>
-        {{/filelist}}
+        {{/tabdata}}
     </ul>
 </div>
 
-<div class="srg-page-container"
-    data-page-length="{{ pagelength }}" 
-    data-active-file-index="0" 
-    data-active-page-index="0">
-    <div class="srg-page-navigation-container-top"></div>
-    <div class="srg-tab-content-container"></div>
-    <div class="srg-page-navigation-container-bottom"></div>
-</div>
 
 {{#js}}
-require(['mod_srg/data_view'], (module) => module.init());
+require(['mod_srg/tabs'], (module) => module.init());
 {{/js}}

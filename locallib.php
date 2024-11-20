@@ -22,9 +22,8 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use mod_srg\local\report_system;
-
-use stdClass;
+use mod_srg\local\report;
+use mod_srg\local\report_generator;
 
 /**
  * Get the saved insctruction to be displayed on the view page.
@@ -42,104 +41,100 @@ function srg_get_instruction($id) {
 }
 
 /**
- * Hardcoded Selected Logs Metadata
- * @param mixed $USER The current user.
- * @param stdClass $course The course of this activity.
- * @return array Array of log data packets. Each packet has a name an advised filename and the log as array.
+ * Retrieves a list of available report identifiers for the SRG module.
+ *
+ * The function dynamically checks for the presence of optional plugins
+ * like H5P (`mod_hvp`) and Chatbot (`block_chatbot`) to include their reports.
+ *
+ * @return array A list of report identifiers supported by the SRG module.
  */
-function srg_get_file_list($USER, $course) {
-    $filelist = [];
+function srg_get_report_list() {
+    $reportlist = [];
 
-    try {
-        $reportsystem = new report_system();
-    } catch (\Throwable $th) {
-        debugging($th);
-        return $filelist;
-    }
-
-    try {
-        $filelist[] = [
-            'name' => get_string('course_dedication_log', 'mod_srg'),
-            'filename' => get_string('course_dedication_log_csv', 'mod_srg'),
-            'report_table' => $reportsystem->get_course_dedication($USER, $course),
-        ];
-    } catch (\Throwable $th) {
-        debugging($th);
-    }
-
-    try {
-        $filelist[] = [
-            'name' => get_string('course_module_log', 'mod_srg'),
-            'filename' => get_string('course_module_log_csv', 'mod_srg'),
-            'report_table' => $reportsystem->get_course_module_log($USER, $course),
-        ];
-    } catch (\Throwable $th) {
-        debugging($th);
-    }
-
-    try {
-        $filelist[] = [
-            'name' => get_string('course_module_dedication', 'mod_srg'),
-            'filename' => get_string('course_module_dedication_csv', 'mod_srg'),
-            'report_table' => $reportsystem->get_course_module_dedication($USER, $course),
-        ];
-    } catch (\Throwable $th) {
-        debugging($th);
-    }
-
-    try {
-        $filelist[] = [
-            'name' => get_string('grade_inspections', 'mod_srg'),
-            'filename' => get_string('grade_inspections_csv', 'mod_srg'),
-            'report_table' => $reportsystem->get_grading_interest($USER, $course),
-        ];
-    } catch (\Throwable $th) {
-        debugging($th);
-    }
-
-    try {
-        $filelist[] = [
-            'name' => get_string('forum_activities', 'mod_srg'),
-            'filename' => get_string('forum_activities_csv', 'mod_srg'),
-            'report_table' => $reportsystem->get_forum_activity($USER, $course),
-        ];
-    } catch (\Throwable $th) {
-        debugging($th);
-    }
-
+    $reportlist[] = MOD_SRG_REPORT_COURSE_DEDICATION;
+    $reportlist[] = MOD_SRG_REPORT_COURSE_MODULE_LOG;
+    $reportlist[] = MOD_SRG_REPORT_COURSE_MODULE_DEDICATION;
+    $reportlist[] = MOD_SRG_REPORT_GRADE_INSPECTION;
+    $reportlist[] = MOD_SRG_REPORT_FORUM_ACTIVITY;
     if (core_plugin_manager::instance()->get_plugin_info('mod_hvp')) {
-        try {
-            $filelist[] = [
-                'name' => get_string('hvp_scores', 'mod_srg'),
-                'filename' => get_string('hvp_scores_csv', 'mod_srg'),
-                'report_table' => $reportsystem->get_hvp($USER, $course),
-            ];
-        } catch (\Throwable $th) {
-            debugging($th);
-        }
+        $reportlist[] = MOD_SRG_REPORT_HVP;
     }
-
-    try {
-        $filelist[] = [
-            'name' => get_string('badges', 'mod_srg'),
-            'filename' => get_string('badges_csv', 'mod_srg'),
-            'report_table' => $reportsystem->get_badges($USER, $course),
-        ];
-    } catch (\Throwable $th) {
-        debugging($th);
-    }
-
+    $reportlist[] = MOD_SRG_REPORT_BADGES;
     if (core_plugin_manager::instance()->get_plugin_info('block_chatbot')) {
-        try {
-            $filelist[] = [
-                'name' => get_string('chatbot_history', 'mod_srg'),
-                'filename' => get_string('chatbot_history_csv', 'mod_srg'),
-                'report_table' => $reportsystem->get_chatbot_history($USER, $course),
-            ];
-        } catch (\Throwable $th) {
-            debugging($th);
-        }
+        $reportlist[] = MOD_SRG_REPORT_CHATBOT_HISTORY;
     }
 
-    return $filelist;
+    return $reportlist;
+}
+
+/**
+ * Retrieves a specific report object based on the provided report ID, user, and course.
+ *
+ * The function maps the report ID to its corresponding report generation method in `report_generator`.
+ * If the report ID is invalid, it returns null.
+ *
+ * @param int $reportid The ID of the report to retrieve.
+ * @param stdClass $USER The user object for whom the report is being generated.
+ * @param stdClass $course The course object associated with the report.
+ * @return report|null The corresponding report object, or null if the ID is invalid.
+ */
+function srg_get_report(int $reportid, $USER, $course): ?report {
+    switch ($reportid) {
+        case MOD_SRG_REPORT_COURSE_DEDICATION:
+            return report_generator::get_course_dedication_report($USER, $course);
+        case MOD_SRG_REPORT_COURSE_MODULE_LOG:
+            return report_generator::get_course_module_log_report($USER, $course);
+        case MOD_SRG_REPORT_COURSE_MODULE_DEDICATION:
+            return report_generator::get_course_module_dedication_report($USER, $course);
+        case MOD_SRG_REPORT_GRADE_INSPECTION:
+            return report_generator::get_grading_interest_report($USER, $course);
+        case MOD_SRG_REPORT_FORUM_ACTIVITY:
+            return report_generator::get_forum_activity_report($USER, $course);
+        case MOD_SRG_REPORT_HVP:
+            return report_generator::get_hvp_report($USER, $course);
+        case MOD_SRG_REPORT_BADGES:
+            return report_generator::get_badges_report($USER, $course);
+        case MOD_SRG_REPORT_CHATBOT_HISTORY:
+            return report_generator::get_chatbot_history_report($USER, $course);
+        default:
+            return null;
+    }
+}
+
+/**
+ * Handles the "View Report" button click.
+ *
+ * This function triggers the `event\log_data_viewed` event to log that a report was viewed
+ * and returns a `moodle_url` for the report viewing page with default parameters.
+ *
+ * @param stdClass $activityinstance The activity instance object associated with the report.
+ * @param context_module $context The context of the activity instance.
+ * @param string $wwwroot The Moodle site's base URL.
+ * @param int $cmid The course module ID associated with the activity instance.
+ * @return moodle_url The URL pointing to the report viewing page with `report_id` set to 0 and `page_index` set to 0.
+ */
+function srg_on_click_view_report($activityinstance, $context, $wwwroot, $cmid): moodle_url {
+    // Trigger the event for logging data view.
+    srg_log_data_view($activityinstance, $context);
+
+    return new moodle_url($wwwroot . '/mod/srg/report_view.php', ['id' => $cmid, 'report_id' => 0, 'page_index' => 0]);
+}
+
+/**
+ * Handles the "Download Report" button click.
+ *
+ * This function triggers the `event\log_data_downloaded` event to log that a report was downloaded
+ * and returns a `moodle_url` for the report downloading endpoint.
+ *
+ * @param stdClass $activityinstance The activity instance object associated with the report.
+ * @param context_module $context The context of the activity instance.
+ * @param string $wwwroot The Moodle site's base URL.
+ * @param int $cmid The course module ID associated with the activity instance.
+ * @return moodle_url The URL pointing to the report download endpoint.
+ */
+function srg_on_click_download_report($activityinstance, $context, $wwwroot, $cmid) {
+    // Trigger the event for logging data download.
+    srg_log_data_download($activityinstance, $context);
+
+    return new moodle_url($wwwroot . '/mod/srg/download.php', ['id' => $cmid]);
 }

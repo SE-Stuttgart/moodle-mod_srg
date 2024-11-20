@@ -22,10 +22,15 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+define("MOD_SRG_DATA_VIEW", 0);
+define("MOD_SRG_DATA_DOWNLOAD", 1);
+
+define("MOD_SRG_DEDICATION_MIN_TIME", 60);
+define("MOD_SRG_DEDICATION_MAX_TIME", 900);
+
 define("MOD_SRG_TARGET_TABLE_MAX_COUNT", 100);
 define("MOD_SRG_DEDICATION_BATCH_SIZE", 100000);
 
-define("MOD_SRG_REPORT_COURSE_LOG", -1);
 define("MOD_SRG_REPORT_COURSE_DEDICATION", 0);
 define("MOD_SRG_REPORT_COURSE_MODULE_LOG", 1);
 define("MOD_SRG_REPORT_COURSE_MODULE_DEDICATION", 2);

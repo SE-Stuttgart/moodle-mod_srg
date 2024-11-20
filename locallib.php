@@ -53,7 +53,6 @@ function srg_get_instruction($id) {
 function srg_get_report_list() {
     $reportlist = [];
 
-    $reportlist[] = MOD_SRG_REPORT_COURSE_LOG;
     $reportlist[] = MOD_SRG_REPORT_COURSE_DEDICATION;
     $reportlist[] = MOD_SRG_REPORT_COURSE_MODULE_LOG;
     $reportlist[] = MOD_SRG_REPORT_COURSE_MODULE_DEDICATION;
@@ -83,8 +82,6 @@ function srg_get_report_list() {
  */
 function srg_get_report(int $reportid, $USER, $course): ?report {
     switch ($reportid) {
-        case MOD_SRG_REPORT_COURSE_LOG:
-            return report_generator::get_course_report($USER, $course);
         case MOD_SRG_REPORT_COURSE_DEDICATION:
             return report_generator::get_course_dedication_report($USER, $course);
         case MOD_SRG_REPORT_COURSE_MODULE_LOG:
@@ -106,17 +103,40 @@ function srg_get_report(int $reportid, $USER, $course): ?report {
     }
 }
 
-
+/**
+ * Handles the "View Report" button click.
+ * 
+ * This function triggers the `event\log_data_viewed` event to log that a report was viewed 
+ * and returns a `moodle_url` for the report viewing page with default parameters.
+ *
+ * @param stdClass $activityinstance The activity instance object associated with the report.
+ * @param context_module $context The context of the activity instance.
+ * @param string $wwwroot The Moodle site's base URL.
+ * @param int $cmid The course module ID associated with the activity instance.
+ * @return moodle_url The URL pointing to the report viewing page with `report_id` set to 0 and `page_index` set to 0.
+ */
 function srg_on_click_view_report($activityinstance, $context, $wwwroot, $cmid): moodle_url {
-    // Trigger event\log_data_viewed.
+    // Trigger the event for logging data view.
     srg_log_data_view($activityinstance, $context);
 
     return new moodle_url($wwwroot . '/mod/srg/report_view.php', ['id' => $cmid, 'report_id' => 0, 'page_index' => 0]);
 }
 
+/**
+ * Handles the "Download Report" button click.
+ * 
+ * This function triggers the `event\log_data_downloaded` event to log that a report was downloaded 
+ * and returns a `moodle_url` for the report downloading endpoint.
+ *
+ * @param stdClass $activityinstance The activity instance object associated with the report.
+ * @param context_module $context The context of the activity instance.
+ * @param string $wwwroot The Moodle site's base URL.
+ * @param int $cmid The course module ID associated with the activity instance.
+ * @return moodle_url The URL pointing to the report download endpoint.
+ */
 function srg_on_click_download_report($activityinstance, $context, $wwwroot, $cmid) {
-    // Trigger event\log_data_downloaded.
+    // Trigger the event for logging data download.
     srg_log_data_download($activityinstance, $context);
 
-    return new moodle_url($wwwroot . '/mod/srg/info.php', ['id' => $cmid]);
+    return new moodle_url($wwwroot . '/mod/srg/download.php', ['id' => $cmid]);
 }

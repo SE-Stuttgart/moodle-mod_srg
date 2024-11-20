@@ -15,14 +15,12 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Version details and info
+ * Dummy page that is called and then killed. Calling this page downloads the report content as .csv in a .kib3 (.zip) folder.
  *
  * @package     mod_srg
- * @copyright   2023 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
+ * @copyright   2024 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use stdClass;
 
 require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
@@ -56,9 +54,9 @@ $systemcontext = context_system::instance();
 $modulecontext = context_module::instance($cm->id);
 $usercontext = context_user::instance($USER->id);
 
-$PAGE->set_url('/mod/srg/info.php',  ['id' => $cm->id]);
-$PAGE->set_title(get_string('info_title', 'mod_srg'));
-$PAGE->set_heading(get_string('info_heading', 'mod_srg'));
+$PAGE->set_url('/mod/srg/download.php',  ['id' => $cm->id]);
+$PAGE->set_title(get_string('download_title', 'mod_srg'));
+$PAGE->set_heading(get_string('download_heading', 'mod_srg'));
 $PAGE->set_context($modulecontext);
 
 // SQL Queries -> get Data.
@@ -76,45 +74,46 @@ foreach (srg_get_report_list() as $reportid) {
 
 $zipfilename = get_string('zipfilename', 'mod_srg') . '.kib3';
 
-// Use Moodle 3.11 functionality.
-if ($CFG->version >= 2021050000) {
-    require_once($CFG->dirroot . '/files/classes/archive_writer.php');
-    require_once($CFG->dirroot . '/files/classes/local/archive_writer/zip_writer.php');
+// Create a temporary directory for files.
+$exporttmpdir = make_request_directory();
+$zippath = $exporttmpdir . DIRECTORY_SEPARATOR . $zipfilename;
+$tempfiles = [];
 
-    $zipwriter = \core_files\archive_writer::get_stream_writer($zipfilename, \core_files\archive_writer::ZIP_WRITER);
-    if ($zipwriter instanceof \core_files\local\archive_writer\zip_writer) {
-        // Stream the files into the zip.
-        foreach ($reportlist as $report) {
-            $zipwriter->add_file_from_string($report->get_file_name(), $report->get_as_csv_table(0, MOD_SRG_TARGET_TABLE_MAX_COUNT));
-            unset($file);
-        }
+try {
+    // Iterate through each report.
+    foreach ($reportlist as $index => $report) {
+        $filename = $report->get_file_name();
+        $tempfile = $exporttmpdir . DIRECTORY_SEPARATOR . $filename;
 
-        // Finish the archive.
-        $zipwriter->finish();
-        gc_collect_cycles();
-    } else {
-        throw new Exception("Wrong Writer!");
+        // Write table rows to tempfile.
+        $report->write_data_to_file($tempfile);
+
+        // Store the file with its name as the key.
+        $tempfiles[$filename] = $tempfile;
     }
-} else { // Use Moodle 3.10 functionality.
-    require_once($CFG->dirroot . '/lib/filelib.php');
 
-    $zip = new \zip_packer();
-    $zipfiles = [];
+    // Create a ZIP file with the temp files.
+    $zippacker = new \zip_packer();
 
-    $exporttmpdir = make_request_directory();
-
-    foreach ($reportlist as $report) {
-        $csvfilepath = $exporttmpdir . DIRECTORY_SEPARATOR . $report->get_file_name();
-        if (!file_put_contents($csvfilepath, $report->get_as_csv_table(0, MOD_SRG_TARGET_TABLE_MAX_COUNT))) {
-            throw new moodle_exception(get_string('error_creating_csv_file', 'mod_srg'));
-        }
-        $zipfiles[$report->get_file_name()] = $csvfilepath;
-        unset($report);
+    if (!$zippacker->archive_to_pathname($tempfiles, $zippath)) {
+        throw new moodle_exception(get_string('error_download_zipcreationfailed', 'mod_srg'));
     }
-    $zipfilepath = $exporttmpdir . DIRECTORY_SEPARATOR . $zipfilename;
-    $zip->archive_to_pathname($zipfiles, $zipfilepath);
-    send_temp_file($zipfilepath, $zipfilename);
-    gc_collect_cycles();
+
+    // Send ZIP file for download.
+    send_file($zippath, $zipfilename);
+} catch (\Throwable $th) {
+    debugging($th, DEBUG_DEVELOPER);
+    throw new moodle_exception($th . "\n" . get_string('error_download_failed', 'mod_srg'));
+} finally {
+    // Cleanup temporary files and directory.
+    foreach ($tempfiles as $file) {
+        unlink($file);
+    }
+    if (file_exists($zippath)) {
+        unlink($zippath);
+    }
+    rmdir($tempdir);
 }
+
 gc_collect_cycles();
-die; // Important!
+die;

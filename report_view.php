@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Prints an instance of mod_srg.
+ * A page to view the data collected by this activity.
  *
  * @package     mod_srg
  * @copyright   2024 University of Stuttgart <kasra.habib@iste.uni-stuttgart.de>
@@ -61,8 +61,8 @@ $modulecontext = context_module::instance($cm->id);
 $usercontext = context_user::instance($USER->id);
 
 $PAGE->set_url('/mod/srg/report_view.php', ['id' => $cm->id, 'report_id' => $reportid, 'page_index' => $pageindex]);
-$PAGE->set_title(get_string('info_title', 'mod_srg'));
-$PAGE->set_heading(get_string('info_heading', 'mod_srg'));
+$PAGE->set_title(get_string('report_view_title', 'mod_srg'));
+$PAGE->set_heading(get_string('report_view_heading', 'mod_srg'));
 $PAGE->set_context($modulecontext);
 
 // Gather reports.
@@ -93,7 +93,7 @@ $data = [];
 $headers = [];
 $pagecount = 0;
 try {
-    list($data, $headers, $pagecount) = $reportlist[$reportid]->get_as_template_table($pagecount, MOD_SRG_TARGET_TABLE_MAX_COUNT);
+    list($data, $headers, $pagecount) = $reportlist[$reportid]->get_template_table_data($pagecount, MOD_SRG_TARGET_TABLE_MAX_COUNT);
 } catch (\Throwable $th) {
     debugging($th, DEBUG_DEVELOPER);
     throw new moodle_exception(get_string('error_report_data_could_not_be_accessed', 'mod_srg'));

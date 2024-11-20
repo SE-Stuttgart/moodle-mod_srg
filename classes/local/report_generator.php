@@ -37,46 +37,6 @@ use mod_srg\local\report_sql;
 class report_generator {
 
     /**
-     * Creates a course log report.
-     *
-     * @param stdClass $USER The user object for the current user.
-     * @param stdClass $course The course object for which the report is generated.
-     * @return report Configured report object containing course logs.
-     */
-    public static function get_course_report($USER, $course): report {
-        $report = new report(
-            get_string('course_log', 'mod_srg'),
-            get_string('course_log_csv', 'mod_srg'),
-            new sql_builder(
-                [report_sql::class, 'get_course_sql_and_params'],
-                $USER->id,
-                $course->id
-            ),
-            [
-                "id" => get_string('id', 'mod_srg'),
-                "timecreated" => get_string('timecreated', 'mod_srg'),
-                "courseid" => get_string('courseid', 'mod_srg'),
-                "eventname" => get_string('eventname', 'mod_srg'),
-                "component" => get_string('component', 'mod_srg'),
-                "action" => get_string('action', 'mod_srg'),
-                "target" => get_string('target', 'mod_srg'),
-                "objecttable" => get_string('objecttable', 'mod_srg'),
-                "objectid" => get_string('objectid', 'mod_srg'),
-                "contextid" => get_string('contextid', 'mod_srg'),
-                "contextlevel" => get_string('contextlevel', 'mod_srg'),
-                "contextinstanceid" => get_string('contextinstanceid', 'mod_srg'),
-            ],
-            [
-                get_string('course_shortname', 'mod_srg') => $course->shortname,
-                get_string('course_fullname', 'mod_srg') => $course->fullname,
-            ],
-            get_string('time', 'mod_srg')
-        );
-
-        return $report;
-    }
-
-    /**
      * Creates a course dedication report, including time and dedication fields.
      *
      * @param stdClass $USER The user object for the current user.

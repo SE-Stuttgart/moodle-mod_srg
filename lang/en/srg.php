@@ -40,18 +40,30 @@ $string['privacy:metadata'] = 'The Student Report Generation Plugin only shows o
 $string['srg:addinstance'] = 'Add a new Student Report Generation activity';
 $string['srg:view'] = 'View the Student Report Generation activity';
 
-// Error.
+// Page Error.
 $string['error_course_module_id'] = 'Course Module ID misconfigured.';
-$string['error_course_module'] = 'Course Module misconfigured.';
 $string['error_course_not_found'] = 'Course is misconfigured';
+$string['error_course_module'] = 'Course Module misconfigured.';
 $string['error_course_access_denied'] = 'Access to course denied. You are not enrolled.';
-$string['error_creating_csv_file'] = 'There was an error creating the .csv file.';
-$string['error_duplicate_primary_key'] = 'Duplicate value found for given primary key - keyfield ';
-$string['error_accessing_database'] = 'There has been an error when accessing the following database table: ';
+
+// Report View Error.
+$string['error_no_reports_found'] = 'No reports were created.';
+$string['error_report_data_could_not_be_accessed'] = 'Failure in the report data collection.';
+
+// Download Error.
+$string['error_download_zipcreationfailed'] = 'Failed to create zipfile.';
+$string['error_download_failed'] = 'The download system failed.';
+
+// Report Error.
+$string['error_report_generation_unknown_mode'] = 'Unknown access to the report system.';
+$string['error_download_tempfilecreationfailed'] = 'Failed to create a temp file.';
+
 
 // Form Text.
-$string['info_title'] = 'Data Overview';
-$string['info_heading'] = 'Data Overview';
+$string['report_view_title'] = 'Data Overview';
+$string['report_view_heading'] = 'Data Overview';
+$string['download_title'] = 'Data Overview';
+$string['download_heading'] = 'Data Overview';
 $string['content_title'] = 'Instructions';
 $string['content_default'] = "Here, you can view part of your anonymized log data in this Moodle course or download it if needed.
 

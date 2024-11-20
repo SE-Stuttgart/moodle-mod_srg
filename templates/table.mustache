@@ -27,14 +27,14 @@
 
     Example context (json):
     {
-        "head": [
+        "headers": [
             { "value": "ID" },
             { "value": "timecreated" },
             { "value": "courseid" },
             { "value": "Dedication" },
             { "value": "Time" }
         ],
-        "rows": [
+        "data": [
             {
                 "columns": [
                     { "value": "0" },
@@ -51,9 +51,9 @@
     <table class="table table-bordered table-striped generaltable">
         <thead>
             <tr>
-                {{#head}}
+                {{#headers}}
                     <th scope="col">{{value}}</th>
-                {{/head}}
+                {{/headers}}
             </tr>
         </thead>
         <tbody>

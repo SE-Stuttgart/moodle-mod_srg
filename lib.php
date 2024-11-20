@@ -22,7 +22,7 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define("MOD_SRG_TARGET_TABLE_MAX_COUNT", 1000);
+define("MOD_SRG_TARGET_TABLE_MAX_COUNT", 100);
 define("MOD_SRG_DEDICATION_BATCH_SIZE", 100000);
 
 define("MOD_SRG_REPORT_COURSE_LOG", -1);

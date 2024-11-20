@@ -69,6 +69,7 @@ $string['first'] = 'first';
 $string['previous'] = 'previous';
 $string['next'] = 'next';
 $string['last'] = 'last';
+$string['page'] = 'page';
 
 // Report strings.
 $string['zipfilename'] = 'moodle-mod_srg';

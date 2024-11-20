@@ -32,8 +32,6 @@ global $CFG, $USER, $DB;
 
 // Course module id form param.
 $cmid = required_param('id', PARAM_INT);
-// Mode is view or print. Should the data be viewed or downloaded.
-$mode = required_param('mode', PARAM_ALPHAEXT);
 
 // Course Module.
 if (!$cm = get_coursemodule_from_id('srg', $cmid)) {
@@ -58,7 +56,7 @@ $systemcontext = context_system::instance();
 $modulecontext = context_module::instance($cm->id);
 $usercontext = context_user::instance($USER->id);
 
-$PAGE->set_url('/mod/srg/info.php',  ['id' => $cm->id, 'mode' => $mode]);
+$PAGE->set_url('/mod/srg/info.php',  ['id' => $cm->id]);
 $PAGE->set_title(get_string('info_title', 'mod_srg'));
 $PAGE->set_heading(get_string('info_heading', 'mod_srg'));
 $PAGE->set_context($modulecontext);
@@ -75,86 +73,48 @@ foreach (srg_get_report_list() as $reportid) {
     $reportlist[] = $report;
 }
 
-if ($mode == 'print') { // Download data as CSV in .zip.
-    // Trigger event\log_data_downloaded.
-    srg_log_data_download($srg, $modulecontext);
 
-    $zipfilename = get_string('zipfilename', 'mod_srg') . '.kib3';
+$zipfilename = get_string('zipfilename', 'mod_srg') . '.kib3';
 
-    // Use Moodle 3.11 functionality.
-    if ($CFG->version >= 2021050000) {
-        require_once($CFG->dirroot . '/files/classes/archive_writer.php');
-        require_once($CFG->dirroot . '/files/classes/local/archive_writer/zip_writer.php');
+// Use Moodle 3.11 functionality.
+if ($CFG->version >= 2021050000) {
+    require_once($CFG->dirroot . '/files/classes/archive_writer.php');
+    require_once($CFG->dirroot . '/files/classes/local/archive_writer/zip_writer.php');
 
-        $zipwriter = \core_files\archive_writer::get_stream_writer($zipfilename, \core_files\archive_writer::ZIP_WRITER);
-        if ($zipwriter instanceof \core_files\local\archive_writer\zip_writer) {
-            // Stream the files into the zip.
-            foreach ($reportlist as $report) {
-                $zipwriter->add_file_from_string($report->get_file_name(), $report->get_as_csv_table(0, MOD_SRG_TARGET_TABLE_MAX_COUNT));
-                unset($file);
-            }
-
-            // Finish the archive.
-            $zipwriter->finish();
-            gc_collect_cycles();
-        } else {
-            throw new Exception("Wrong Writer!");
-        }
-    } else { // Use Moodle 3.10 functionality.
-        require_once($CFG->dirroot . '/lib/filelib.php');
-
-        $zip = new \zip_packer();
-        $zipfiles = [];
-
-        $exporttmpdir = make_request_directory();
-
+    $zipwriter = \core_files\archive_writer::get_stream_writer($zipfilename, \core_files\archive_writer::ZIP_WRITER);
+    if ($zipwriter instanceof \core_files\local\archive_writer\zip_writer) {
+        // Stream the files into the zip.
         foreach ($reportlist as $report) {
-            $csvfilepath = $exporttmpdir . DIRECTORY_SEPARATOR . $report->get_file_name();
-            if (!file_put_contents($csvfilepath, $report->get_as_csv_table(0, MOD_SRG_TARGET_TABLE_MAX_COUNT))) {
-                throw new moodle_exception(get_string('error_creating_csv_file', 'mod_srg'));
-            }
-            $zipfiles[$report->get_file_name()] = $csvfilepath;
-            unset($report);
+            $zipwriter->add_file_from_string($report->get_file_name(), $report->get_as_csv_table(0, MOD_SRG_TARGET_TABLE_MAX_COUNT));
+            unset($file);
         }
-        $zipfilepath = $exporttmpdir . DIRECTORY_SEPARATOR . $zipfilename;
-        $zip->archive_to_pathname($zipfiles, $zipfilepath);
-        send_temp_file($zipfilepath, $zipfilename);
+
+        // Finish the archive.
+        $zipwriter->finish();
         gc_collect_cycles();
+    } else {
+        throw new Exception("Wrong Writer!");
     }
-    die; // Important!
-} else if ($mode == 'view') { // View data in browser.
-    // Trigger event\log_data_viewed.
-    srg_log_data_view($srg, $modulecontext);
+} else { // Use Moodle 3.10 functionality.
+    require_once($CFG->dirroot . '/lib/filelib.php');
 
-    $pagelength = 50;
+    $zip = new \zip_packer();
+    $zipfiles = [];
 
-    $templatedata = [];
-    foreach ($reportlist as $index => $report) {
-        $headers = $report->get_headers();
-        list($data, $pagecount) = $report->get_data(0, MOD_SRG_TARGET_TABLE_MAX_COUNT);
+    $exporttmpdir = make_request_directory();
 
-        $table = new stdClass();
-        $table->index = format_text(strval($index), FORMAT_HTML);
-        $table->name = format_text(strval($report->get_report_name()), FORMAT_HTML);
-        $table->pagecount = format_text(strval(((int)ceil(count($data) / $pagelength))), FORMAT_HTML);
-        $table->head = base64_encode(json_encode($headers));
-        $table->data = base64_encode(json_encode($data));
-
-        $templatedata[] = $table;
+    foreach ($reportlist as $report) {
+        $csvfilepath = $exporttmpdir . DIRECTORY_SEPARATOR . $report->get_file_name();
+        if (!file_put_contents($csvfilepath, $report->get_as_csv_table(0, MOD_SRG_TARGET_TABLE_MAX_COUNT))) {
+            throw new moodle_exception(get_string('error_creating_csv_file', 'mod_srg'));
+        }
+        $zipfiles[$report->get_file_name()] = $csvfilepath;
+        unset($report);
     }
-    gc_collect_cycles();
-
-    // Register the stylesheet.
-    $PAGE->requires->css('/mod/srg/styles.css');
-
-    echo $OUTPUT->header();
-
-    echo $OUTPUT->render_from_template(
-        'mod_srg/data_view',
-        ['filelist' => $templatedata, 'pagelength' => format_text(strval($pagelength), FORMAT_HTML)]
-    );
-
-    echo $OUTPUT->footer();
-
+    $zipfilepath = $exporttmpdir . DIRECTORY_SEPARATOR . $zipfilename;
+    $zip->archive_to_pathname($zipfiles, $zipfilepath);
+    send_temp_file($zipfilepath, $zipfilename);
     gc_collect_cycles();
 }
+gc_collect_cycles();
+die; // Important!

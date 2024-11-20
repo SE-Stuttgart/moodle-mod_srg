@@ -199,6 +199,28 @@ class report {
         return $csv;
     }
 
+    public function get_as_template_table(int $batchindex, int $limitnum): array {
+        $tempheaders = $this->get_headers();
+        list($tempdata, $batchcount) = $this->get_data($batchindex, $limitnum);
+
+        $headers = [];
+        $data = [];
+
+        foreach ($tempheaders as $header) {
+            $headers[] = ["value" => $header];
+        }
+
+        foreach ($tempdata as $temprow) {
+            $row = [];
+            foreach ($temprow as $cellvalue) {
+                $row[] = ["value" => $cellvalue];
+            }
+            $data[] = ["columns" => $row];
+        }
+
+        return [$data, $headers, $batchcount];
+    }
+
     /**
      * Gets the total row count for the report query.
      *

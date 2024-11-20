@@ -105,3 +105,18 @@ function srg_get_report(int $reportid, $USER, $course): ?report {
             return null;
     }
 }
+
+
+function srg_on_click_view_report($activityinstance, $context, $wwwroot, $cmid): moodle_url {
+    // Trigger event\log_data_viewed.
+    srg_log_data_view($activityinstance, $context);
+
+    return new moodle_url($wwwroot . '/mod/srg/report_view.php', ['id' => $cmid, 'report_id' => 0, 'page_index' => 0]);
+}
+
+function srg_on_click_download_report($activityinstance, $context, $wwwroot, $cmid) {
+    // Trigger event\log_data_downloaded.
+    srg_log_data_download($activityinstance, $context);
+
+    return new moodle_url($wwwroot . '/mod/srg/info.php', ['id' => $cmid]);
+}

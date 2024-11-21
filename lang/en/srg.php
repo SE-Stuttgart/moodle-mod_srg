@@ -86,8 +86,6 @@ $string['page'] = 'page';
 // Report strings.
 $string['zipfilename'] = 'moodle-mod_srg';
 // Report file names.
-$string['course_log'] = 'Course Log';
-$string['course_log_csv'] = 'course_log.csv';
 $string['course_dedication_log'] = 'Course Dedication Log';
 $string['course_dedication_log_csv'] = 'course_dedication_log.csv';
 $string['course_module_log'] = 'Course Module Log';

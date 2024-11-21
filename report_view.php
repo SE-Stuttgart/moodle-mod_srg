@@ -93,7 +93,7 @@ $data = [];
 $headers = [];
 $pagecount = 0;
 try {
-    list($data, $headers, $pagecount) = $reportlist[$reportid]->get_template_table_data($pagecount, MOD_SRG_TARGET_TABLE_MAX_COUNT);
+    list($data, $headers, $pagecount) = $reportlist[$reportid]->get_template_table_data($pageindex, MOD_SRG_TARGET_TABLE_MAX_COUNT);
 } catch (\Throwable $th) {
     debugging($th, DEBUG_DEVELOPER);
     throw new moodle_exception(get_string('error_report_data_could_not_be_accessed', 'mod_srg'));

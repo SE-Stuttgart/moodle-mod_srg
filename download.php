@@ -48,11 +48,10 @@ if (!can_access_course($course)) {
     throw new moodle_exception(get_string('error_course_access_denied', 'mod_srg'));
 }
 
-require_login($course, true, $cm);
-
-$systemcontext = context_system::instance();
 $modulecontext = context_module::instance($cm->id);
-$usercontext = context_user::instance($USER->id);
+
+require_login($course, true, $cm);
+require_capability('mod/srg:view', $modulecontext);
 
 $PAGE->set_url('/mod/srg/download.php',  ['id' => $cm->id]);
 $PAGE->set_title(get_string('download_title', 'mod_srg'));

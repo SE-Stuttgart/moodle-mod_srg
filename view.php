@@ -71,14 +71,14 @@ echo html_writer::start_div(
 
 // Display results on info page.
 echo $OUTPUT->single_button(
-    srg_on_click_view_report($srg, $modulecontext, $CFG->wwwroot, $cm->id),
+    srg_on_click_view_report($srg, $modulecontext, $cm->id),
     get_string('view_all_button_name', 'mod_srg'),
     'get'
 );
 
 // Skip display and download results.
 echo $OUTPUT->single_button(
-    srg_on_click_download_report($srg, $modulecontext, $CFG->wwwroot, $cm->id),
+    srg_on_click_download_report($srg, $modulecontext, $cm->id),
     get_string('print_all_button_name', 'mod_srg'),
     'get'
 );

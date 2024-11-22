@@ -88,6 +88,10 @@ if (!in_array($reportid, array_keys($reportlist))) {
     $PAGE->set_url('/mod/srg/report_view.php', ['id' => $cm->id, 'report_id' => $reportid, 'page_index' => $pageindex]);
 }
 
+// Generate the base URL for this report_view without additional parameters.
+$baseurl = (new moodle_url('/mod/srg/report_view.php'))->out(false);
+
+// Gather data, headers for the data view and the page count for pagination.
 $data = [];
 $headers = [];
 $pagecount = 0;
@@ -107,6 +111,7 @@ foreach ($reportlist as $index => $report) {
     $tabdata[] = $tab;
 }
 $tabtemplatedata = [
+    'baseurl' => $baseurl,
     'coursemoduleid' => $cm->id,
     'activetabindex' => $reportid,
     'tabdata' => $tabdata,
@@ -121,6 +126,7 @@ for ($i = 0; $i < $pagecount; $i++) {
     $pagesdata[] = $page;
 }
 $paginationtemplatedata = [
+    'baseurl' => $baseurl,
     'coursemoduleid' => $cm->id,
     'activetabindex' => $reportid,
     'activepageindex' => $pageindex,

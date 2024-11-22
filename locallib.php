@@ -109,15 +109,14 @@ function srg_get_report(int $reportid, $USER, $course): ?report {
  *
  * @param stdClass $activityinstance The activity instance object associated with the report.
  * @param context_module $context The context of the activity instance.
- * @param string $wwwroot The Moodle site's base URL.
  * @param int $cmid The course module ID associated with the activity instance.
  * @return moodle_url The URL pointing to the report viewing page with `report_id` set to 0 and `page_index` set to 0.
  */
-function srg_on_click_view_report($activityinstance, $context, $wwwroot, $cmid): moodle_url {
+function srg_on_click_view_report($activityinstance, $context, $cmid): moodle_url {
     // Trigger the event for logging data view.
     srg_log_data_view($activityinstance, $context);
 
-    return new moodle_url($wwwroot . '/mod/srg/report_view.php', ['id' => $cmid, 'report_id' => 0, 'page_index' => 0]);
+    return new moodle_url('/mod/srg/report_view.php', ['id' => $cmid, 'report_id' => 0, 'page_index' => 0]);
 }
 
 /**
@@ -128,13 +127,12 @@ function srg_on_click_view_report($activityinstance, $context, $wwwroot, $cmid):
  *
  * @param stdClass $activityinstance The activity instance object associated with the report.
  * @param context_module $context The context of the activity instance.
- * @param string $wwwroot The Moodle site's base URL.
  * @param int $cmid The course module ID associated with the activity instance.
  * @return moodle_url The URL pointing to the report download endpoint.
  */
-function srg_on_click_download_report($activityinstance, $context, $wwwroot, $cmid) {
+function srg_on_click_download_report($activityinstance, $context, $cmid) {
     // Trigger the event for logging data download.
     srg_log_data_download($activityinstance, $context);
 
-    return new moodle_url($wwwroot . '/mod/srg/download.php', ['id' => $cmid]);
+    return new moodle_url('/mod/srg/download.php', ['id' => $cmid]);
 }

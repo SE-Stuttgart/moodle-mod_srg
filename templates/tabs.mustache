@@ -27,6 +27,7 @@
 
     Example context (json):
     {
+        "baseurl": "/mod/srg/report_view.php",
         "coursemoduleid": 0,
         "activetabindex": 0,
         "tabdata": [
@@ -40,6 +41,7 @@
 <div 
     id="srg-tab-container"
     class="srg-hidden"
+    data-baseurl="{{baseurl}}"
     data-coursemoduleid="{{coursemoduleid}}"
     data-activetabindex="{{activetabindex}}">
     <ul 

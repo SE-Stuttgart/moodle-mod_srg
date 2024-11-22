@@ -48,11 +48,10 @@ if (!can_access_course($course)) {
     throw new Exception(get_string('error_course_access_denied', 'mod_srg'));
 }
 
-require_login($course, true, $cm);
-
-$systemcontext = context_system::instance();
 $modulecontext = context_module::instance($cm->id);
-$usercontext = context_user::instance($USER->id);
+
+require_login($course, true, $cm);
+require_capability('mod/srg:view', $modulecontext);
 
 $PAGE->set_url('/mod/srg/view.php', ['id' => $cm->id]);
 $PAGE->set_title(format_string($srg->name));
@@ -72,14 +71,14 @@ echo html_writer::start_div(
 
 // Display results on info page.
 echo $OUTPUT->single_button(
-    srg_on_click_view_report($srg, $modulecontext, $CFG->wwwroot, $cm->id),
+    srg_on_click_view_report($srg, $modulecontext, $cm->id),
     get_string('view_all_button_name', 'mod_srg'),
     'get'
 );
 
 // Skip display and download results.
 echo $OUTPUT->single_button(
-    srg_on_click_download_report($srg, $modulecontext, $CFG->wwwroot, $cm->id),
+    srg_on_click_download_report($srg, $modulecontext, $cm->id),
     get_string('print_all_button_name', 'mod_srg'),
     'get'
 );

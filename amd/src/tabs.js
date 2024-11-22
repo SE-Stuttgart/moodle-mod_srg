@@ -41,6 +41,7 @@ export function init() {
 function initTabListeners() {
     const tabContainer = document.querySelector('#srg-tab-container');
 
+    const baseUrl = tabContainer.dataset.baseurl;
     const courseModuleId = parseInt(tabContainer.dataset.coursemoduleid, 10);
 
     // Get all tab links within the container.
@@ -52,7 +53,7 @@ function initTabListeners() {
             event.preventDefault();
 
             const reportId = tab.dataset.index;
-            const newUrl = new URL('/mod/srg/report_view.php', window.location.origin);
+            const newUrl = new URL(baseUrl, window.location.origin);
             newUrl.searchParams.set('id', courseModuleId);
             newUrl.searchParams.set('report_id', reportId);
             newUrl.searchParams.set('page_index', 0);

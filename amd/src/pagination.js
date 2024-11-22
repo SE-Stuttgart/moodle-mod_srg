@@ -47,6 +47,7 @@ export function init() {
 function initPaginationListeners() {
     const paginationContainer = document.querySelector('#srg-pagination-container');
 
+    const baseUrl = paginationContainer.dataset.baseurl;
     const courseModuleId = parseInt(paginationContainer.dataset.coursemoduleid, 10);
     const activeTabIndex = parseInt(paginationContainer.dataset.activetabindex, 10);
     const activePageIndex = parseInt(paginationContainer.dataset.activepageindex, 10);
@@ -62,7 +63,7 @@ function initPaginationListeners() {
     first.addEventListener("click", (event) => {
         event.preventDefault();
 
-        const newUrl = new URL('/mod/srg/report_view.php', window.location.origin);
+        const newUrl = new URL(baseUrl, window.location.origin);
         newUrl.searchParams.set('id', courseModuleId);
         newUrl.searchParams.set('report_id', activeTabIndex);
         newUrl.searchParams.set('page_index', 0);
@@ -74,7 +75,7 @@ function initPaginationListeners() {
     previous.addEventListener("click", (event) => {
         event.preventDefault();
 
-        const newUrl = new URL('/mod/srg/report_view.php', window.location.origin);
+        const newUrl = new URL(baseUrl, window.location.origin);
         newUrl.searchParams.set('id', courseModuleId);
         newUrl.searchParams.set('report_id', activeTabIndex);
         newUrl.searchParams.set('page_index', activePageIndex - 1);
@@ -87,7 +88,7 @@ function initPaginationListeners() {
         page.addEventListener("click", (event) => {
             event.preventDefault();
 
-            const newUrl = new URL('/mod/srg/report_view.php', window.location.origin);
+            const newUrl = new URL(baseUrl, window.location.origin);
             newUrl.searchParams.set('id', courseModuleId);
             newUrl.searchParams.set('report_id', activeTabIndex);
             newUrl.searchParams.set('page_index', index);
@@ -100,7 +101,7 @@ function initPaginationListeners() {
     next.addEventListener("click", (event) => {
         event.preventDefault();
 
-        const newUrl = new URL('/mod/srg/report_view.php', window.location.origin);
+        const newUrl = new URL(baseUrl, window.location.origin);
         newUrl.searchParams.set('id', courseModuleId);
         newUrl.searchParams.set('report_id', activeTabIndex);
         newUrl.searchParams.set('page_index', activePageIndex + 1);
@@ -112,7 +113,7 @@ function initPaginationListeners() {
     last.addEventListener("click", (event) => {
         event.preventDefault();
 
-        const newUrl = new URL('/mod/srg/report_view.php', window.location.origin);
+        const newUrl = new URL(baseUrl, window.location.origin);
         newUrl.searchParams.set('id', courseModuleId);
         newUrl.searchParams.set('report_id', activeTabIndex);
         newUrl.searchParams.set('page_index', pages.length - 1);
